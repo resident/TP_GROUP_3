@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
+using System.Text.Json;
+using System.IO;
+using Server.RequestHandlers;
 
 namespace Server
 {
@@ -39,28 +44,54 @@ namespace Server
 
             try
             {
-                using var stream = client.GetStream();
+                var stream = client.GetStream();
                 var buffer = new byte[1024];
                 int bytesRead;
 
                 while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                 {
-                    var receivedData = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"Received: {receivedData}");
+                    try
+                    {
+                        var json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        Console.WriteLine($"Received: {json}");
 
+                        var request = Request.FromJson(json) ?? new Request();
 
-                    var response = Encoding.ASCII.GetBytes($"Server response: {receivedData}");
-                    await stream.WriteAsync(response, 0, response.Length);
+                        Console.WriteLine($"test: {UsersRepository.OnlineUsers.GetUserByMetadata("TcpClient", client)}");
+
+                        RequestHandlersProvider.Handle(client, request, new DefaultRequestHandler());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO error: {ex.Message}");
+            }
+            catch (SocketException ex)
+            {
+                Console.WriteLine($"Socket error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error: {ex.ToString()}");
             }
             finally
             {
+                Console.WriteLine($"Client disconnected: {client.Client.RemoteEndPoint}");
+
                 client.Close();
             }
+        }
+
+        public static async void SendResponse(TcpClient client, Response response)
+        {
+            var stream = client.GetStream();
+            var responseBytes = Encoding.UTF8.GetBytes(response.ToJson());
+            await stream.WriteAsync(responseBytes, 0, responseBytes.Length);
         }
     }
 }
