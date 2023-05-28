@@ -13,23 +13,41 @@ namespace Client
     {
         private readonly string _ipAddress;
         private readonly int _port;
-        public readonly TcpClient TcpClient;
+        private TcpClient _tcpClient = new TcpClient();
 
         public ChatTcpClient(string ipAddress, int port)
         {
             _ipAddress = ipAddress;
             _port = port;
-            TcpClient = new TcpClient();
         }
 
         public async void Connect()
         {
-            await TcpClient.ConnectAsync(_ipAddress, _port);
+            _tcpClient = new TcpClient();
+            
+            await _tcpClient.ConnectAsync(_ipAddress, _port);
+        }
+
+        public async void Disconnect()
+        {
+            await _tcpClient.Client.DisconnectAsync(false);
+            
+            _tcpClient.Close();
+        }
+
+        public bool IsConnected()
+        {
+            return _tcpClient.Connected;
+        }
+
+        public bool IsDisconnected()
+        {
+            return !IsConnected();
         }
 
         public async void SendMessage(string message)
         {
-            var stream = TcpClient.GetStream();
+            var stream = _tcpClient.GetStream();
             var data = Encoding.UTF8.GetBytes(message);
             
             await stream.WriteAsync(data, 0, data.Length);
@@ -37,7 +55,7 @@ namespace Client
 
         public async Task<string> ReceiveMessage()
         {
-            var stream = TcpClient.GetStream();
+            var stream = _tcpClient.GetStream();
             var responseBuffer = new byte[1024];
             var bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
             var response = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
@@ -47,7 +65,7 @@ namespace Client
 
         public void Close()
         {
-            TcpClient.Close();
+            _tcpClient.Close();
         }
     }
 }
