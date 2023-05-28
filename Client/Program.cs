@@ -14,7 +14,7 @@ namespace Client
             Application.ThreadException += Application_ThreadException;
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
