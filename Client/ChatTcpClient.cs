@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Client
 {
@@ -14,6 +15,7 @@ namespace Client
         private readonly string _ipAddress;
         private readonly int _port;
         private TcpClient _tcpClient = new TcpClient();
+        private IAsyncEnumerable<string> _responses;
 
         public ChatTcpClient(string ipAddress, int port)
         {
@@ -26,6 +28,8 @@ namespace Client
             _tcpClient = new TcpClient();
             
             await _tcpClient.ConnectAsync(_ipAddress, _port);
+
+            _responses = NetworkMessageReader.Read(_tcpClient);
         }
 
         public async void Disconnect()
@@ -55,12 +59,10 @@ namespace Client
 
         public async Task<string> ReceiveMessage()
         {
-            var stream = _tcpClient.GetStream();
-            var responseBuffer = new byte[1024];
-            var bytesRead = await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length);
-            var response = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
+            await using var enumerator = _responses.GetAsyncEnumerator();
+            await enumerator.MoveNextAsync();
 
-            return response;
+            return enumerator.Current;
         }
 
         public void Close()
