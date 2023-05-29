@@ -9,6 +9,6 @@ namespace Server
 {
     public static class ChatsRepository
     {
-        public static List<Chat> Items = new List<Chat>();
+        public static readonly ChatsCollection Items = new ChatsCollection();
     }
 }

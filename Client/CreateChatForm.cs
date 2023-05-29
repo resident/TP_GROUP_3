@@ -34,8 +34,6 @@ namespace Client
                 var chat = new Chat(tbChatTitle.Text, users);
 
                 mainForm.Chats.Add(chat);
-
-                //mainForm.lbChats.Items.Add(chat);
             }
 
             this.Close();
