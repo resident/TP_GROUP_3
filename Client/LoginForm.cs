@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Shared;
 
 namespace Client
@@ -44,7 +45,8 @@ namespace Client
 
                 if (response.IsStatusOk() )
                 {
-                    mainForm.User = new User(login, password);
+                    var userJson = response.Payload["user"].ToString() ?? throw new ArgumentNullException("user");
+                    mainForm.User = JsonConvert.DeserializeObject<User>(userJson);
                     MessageBox.Show(response.Message);
                     this.Close();
                 }

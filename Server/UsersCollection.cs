@@ -23,6 +23,11 @@ namespace Server
             return UserExists(login) ? _users.First(pair => pair.Key.Login == login) : null;
         }
 
+        public KeyValuePair<User, Dictionary<string, object>>? GetPair(User user)
+        {
+            return UserExists(user) ? _users.First(pair => pair.Key == user) : null;
+        }
+
         public KeyValuePair<User, Dictionary<string, object>>? GetPair(string login, string passwordHash)
         {
             return UserExists(login, passwordHash) ? _users.FirstOrDefault(pair => pair.Key.Login == login && pair.Key.PasswordHash == passwordHash) : null;
@@ -51,6 +56,11 @@ namespace Server
             return _users.Exists(pair => pair.Key.Login == login);
         }
 
+        public bool UserExists(User user)
+        {
+            return _users.Exists(pair => pair.Key == user);
+        }
+
         public bool UserExists(string login, string passwordHash)
         {
             return _users.Exists(pair => pair.Key.Login == login && pair.Key.PasswordHash == passwordHash);
@@ -69,6 +79,11 @@ namespace Server
         public void AddUserMetadata(string login, string key, object metadata)
         {
             GetPair(login)?.Value.Add(key, metadata);
+        }
+        
+        public void AddUserMetadata(User user, string key, object metadata)
+        {
+            GetPair(user)?.Value.Add(key, metadata);
         }
 
         public object? GetUserMetadata(string login, string key)

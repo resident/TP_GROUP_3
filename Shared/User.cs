@@ -2,7 +2,7 @@
 
 namespace Shared;
 
-public class User
+public class User : ICloneable
 {
     public string Login = string.Empty;
     public string PasswordHash = string.Empty;
@@ -25,6 +25,10 @@ public class User
     {
         return JsonConvert.DeserializeObject<User>(json);
     }
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
 
     public string ToJson()
     {
@@ -33,6 +37,6 @@ public class User
 
     public override string ToString()
     {
-        return ToJson();
+        return Login;
     }
 }

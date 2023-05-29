@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             lbMessages = new ListBox();
-            textBox1 = new TextBox();
+            tbMessage = new TextBox();
             btnSend = new Button();
             lblMessages = new Label();
             btnAttachFile = new Button();
@@ -67,14 +67,14 @@
             lbMessages.Size = new Size(611, 364);
             lbMessages.TabIndex = 3;
             // 
-            // textBox1
+            // tbMessage
             // 
-            textBox1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(202, 402);
-            textBox1.Margin = new Padding(2);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(446, 32);
-            textBox1.TabIndex = 4;
+            tbMessage.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            tbMessage.Location = new Point(202, 402);
+            tbMessage.Margin = new Padding(2);
+            tbMessage.Name = "tbMessage";
+            tbMessage.Size = new Size(446, 32);
+            tbMessage.TabIndex = 4;
             // 
             // btnSend
             // 
@@ -85,6 +85,7 @@
             btnSend.TabIndex = 5;
             btnSend.Text = "Send";
             btnSend.UseVisualStyleBackColor = true;
+            btnSend.Click += btnSend_Click;
             // 
             // lblMessages
             // 
@@ -105,6 +106,7 @@
             btnAttachFile.TabIndex = 11;
             btnAttachFile.Text = "Attach File";
             btnAttachFile.UseVisualStyleBackColor = true;
+            btnAttachFile.Click += btnAttachFile_Click;
             // 
             // lblChats
             // 
@@ -125,6 +127,7 @@
             lbChats.Name = "lbChats";
             lbChats.Size = new Size(180, 364);
             lbChats.TabIndex = 12;
+            lbChats.SelectedIndexChanged += lbChats_SelectedIndexChanged;
             // 
             // btnCreateChat
             // 
@@ -188,7 +191,7 @@
             // 
             registerToolStripMenuItem.Enabled = false;
             registerToolStripMenuItem.Name = "registerToolStripMenuItem";
-            registerToolStripMenuItem.Size = new Size(180, 22);
+            registerToolStripMenuItem.Size = new Size(116, 22);
             registerToolStripMenuItem.Text = "Register";
             registerToolStripMenuItem.Click += registerToolStripMenuItem_Click;
             // 
@@ -196,7 +199,7 @@
             // 
             loginToolStripMenuItem.Enabled = false;
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(180, 22);
+            loginToolStripMenuItem.Size = new Size(116, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
@@ -204,7 +207,7 @@
             // 
             logoutToolStripMenuItem.Enabled = false;
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(180, 22);
+            logoutToolStripMenuItem.Size = new Size(116, 22);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
@@ -247,7 +250,7 @@
             // pnlChat
             // 
             pnlChat.Controls.Add(lbMessages);
-            pnlChat.Controls.Add(textBox1);
+            pnlChat.Controls.Add(tbMessage);
             pnlChat.Controls.Add(btnRemoveChat);
             pnlChat.Controls.Add(btnSend);
             pnlChat.Controls.Add(btnCreateChat);
@@ -287,7 +290,7 @@
 
         #endregion
         private ListBox lbMessages;
-        private TextBox textBox1;
+        private TextBox tbMessage;
         private Button btnSend;
         private Label lblMessages;
         private Button btnAttachFile;

@@ -24,6 +24,14 @@ namespace Server
             _ipAddress = ipAddress;
             _port = port;
             _listener = new TcpListener(IPAddress.Parse(ipAddress), port);
+
+            // Add default admin account
+            UsersRepository.RegisteredUsers.AddUser(new User("admin", "password"){IsAdmin = true});
+            Alert.Show($"Default admin account: admin:password");
+
+            // Add default chat for all messages
+            ChatsRepository.Items.Add(new Chat("General"));
+            Alert.Show("Chat 'General' added");
         }
 
         public async Task Start()
@@ -57,8 +65,6 @@ namespace Server
 
                         var request = Request.FromJson(json) ?? new Request();
 
-                        Console.WriteLine($"test: {UsersRepository.OnlineUsers.GetUserByMetadata("TcpClient", client)}");
-
                         RequestHandlersProvider.Handle(client, request, new DefaultRequestHandler());
                     }
                     catch (Exception ex)
@@ -82,6 +88,10 @@ namespace Server
             finally
             {
                 Console.WriteLine($"Client disconnected: {client.Client.RemoteEndPoint}");
+
+                var user = UsersRepository.OnlineUsers.GetUserByMetadata("TcpClient", client);
+
+                if (null != user) UsersRepository.OnlineUsers.RemoveUser(user);
 
                 client.Close();
             }
