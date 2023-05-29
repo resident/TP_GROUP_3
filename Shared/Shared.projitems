@@ -12,11 +12,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Chat.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChatFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChatMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ChatsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Request.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Response.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UsersCollection.cs" />
   </ItemGroup>
 </Project>

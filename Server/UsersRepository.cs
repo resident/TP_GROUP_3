@@ -1,4 +1,6 @@
-﻿namespace Server;
+﻿using Shared;
+
+namespace Server;
 
 public static class UsersRepository
 {

@@ -20,8 +20,7 @@ namespace Server.RequestHandlers
             {
                 var json = request.Payload["message"].ToString() ?? throw new ArgumentNullException("message");
                 var message = JsonConvert.DeserializeObject<ChatMessage>(json) ?? throw new ArgumentNullException("message");
-
-                var chat = ChatsRepository.Items.Find(c => c.Title == message.ChatTitle) ?? throw new RequestHandlerException($"Chat '{message.ChatTitle}' not found in server");
+                var chat = ChatsRepository.Items.Find(message.ChatTitle) ?? throw new RequestHandlerException($"Chat '{message.ChatTitle}' not found in server");
 
                 chat.Messages.Add(message);
 

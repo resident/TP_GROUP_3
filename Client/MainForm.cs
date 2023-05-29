@@ -13,8 +13,8 @@ namespace Client
         private event EventHandler UserChanged;
         public bool LoggedIn;
         private string? _attachedFilePath;
-        public BindingList<User> RegisteredUsers = new BindingList<User>() { new User() { Login = "user1" } };
-        public BindingList<Chat> Chats = new BindingList<Chat>();
+        public readonly UsersCollection RegisteredUsers = new UsersCollection();
+        public readonly ChatsCollection Chats = new ChatsCollection();
         public readonly Chat GeneralChat = new Chat("General");
         public Chat CurrentChat;
 
