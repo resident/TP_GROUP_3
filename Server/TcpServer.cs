@@ -27,17 +27,17 @@ namespace Server
 
             // Add default admin account
             UsersRepository.RegisteredUsers.AddUser(new User("admin", "password"){IsAdmin = true});
-            Alert.Show($"Default admin account: admin:password");
+            Alert.Successful($"Default admin account: admin:password");
 
             // Add default chat for all messages
             ChatsRepository.Items.Add(new Chat("General"));
-            Alert.Show("Chat 'General' added");
+            Alert.Successful("Chat 'General' added");
         }
 
         public async Task Start()
         {
             _listener.Start();
-            Console.WriteLine($"Server started. Waiting for connections on {_ipAddress}:{_port}...");
+            Alert.Successful($"Server started. Waiting for connections on {_ipAddress}:{_port}...");
 
             while (true)
             {
@@ -48,46 +48,36 @@ namespace Server
 
         private static async Task HandleClientAsync(TcpClient client)
         {
-            Console.WriteLine($"Client connected {client.Client.RemoteEndPoint}");
+            Alert.Successful($"Client connected {client.Client.RemoteEndPoint}");
 
             try
             {
-                var stream = client.GetStream();
-                var buffer = new byte[1024];
-                int bytesRead;
+                var requests = NetworkMessageReader.Read(client);
 
-                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                await foreach (var requestJson in requests)
                 {
-                    try
-                    {
-                        var json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Console.WriteLine($"Received: {json}");
+                    Alert.Show($"Received: {requestJson}");
 
-                        var request = Request.FromJson(json) ?? new Request();
+                    var request = Request.FromJson(requestJson.ToString()) ?? new Request();
 
-                        RequestHandlersProvider.Handle(client, request, new DefaultRequestHandler());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    RequestHandlersProvider.Handle(client, request, new DefaultRequestHandler());
                 }
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"IO error: {ex.Message}");
+                Alert.Error($"IO error: {ex.Message}");
             }
             catch (SocketException ex)
             {
-                Console.WriteLine($"Socket error: {ex.Message}");
+                Alert.Error($"Socket error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.ToString()}");
+                Alert.Error($"Error: {ex.ToString()}");
             }
             finally
             {
-                Console.WriteLine($"Client disconnected: {client.Client.RemoteEndPoint}");
+                Alert.Error($"Client disconnected: {client.Client.RemoteEndPoint}");
 
                 var user = UsersRepository.OnlineUsers.GetUserByMetadata("TcpClient", client);
 
