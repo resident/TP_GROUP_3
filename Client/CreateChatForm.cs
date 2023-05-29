@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Shared;
 
 namespace Client
 {
@@ -17,11 +18,24 @@ namespace Client
             InitializeComponent();
         }
 
+        private void CreateChatForm_Load(object sender, EventArgs e)
+        {
+            if (this.Owner is MainForm mainForm)
+            {
+                lbUsers.DataSource = mainForm.RegisteredUsers;
+            }
+        }
+
         private void btnCreateChat_Click(object sender, EventArgs e)
         {
             if (this.Owner is MainForm mainForm)
             {
-                mainForm.lbChats.Items.Add(tbChatTitle.Text);
+                var users = lbUsers.SelectedItems.Cast<User>().ToList();
+                var chat = new Chat(tbChatTitle.Text, users);
+
+                mainForm.Chats.Add(chat);
+
+                //mainForm.lbChats.Items.Add(chat);
             }
 
             this.Close();

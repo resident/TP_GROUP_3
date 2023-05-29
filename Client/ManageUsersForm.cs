@@ -16,5 +16,13 @@ namespace Client
         {
             InitializeComponent();
         }
+
+        private void ManageUsersForm_Load(object sender, EventArgs e)
+        {
+            if (this.Owner is MainForm mainForm)
+            {
+                lbUsers.DataSource = mainForm.RegisteredUsers;
+            }
+        }
     }
 }

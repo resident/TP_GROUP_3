@@ -95,8 +95,10 @@
             Controls.Add(tbChatTitle);
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(2);
             Name = "CreateChatForm";
+            Load += CreateChatForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

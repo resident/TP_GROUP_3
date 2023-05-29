@@ -96,6 +96,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "ManageUsersForm";
             Text = "Manage Users";
+            Load += ManageUsersForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

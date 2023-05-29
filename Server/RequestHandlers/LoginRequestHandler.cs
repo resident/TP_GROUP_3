@@ -17,18 +17,18 @@ public class LoginRequestHandler : RequestHandler
                 throw new RequestHandlerException("User already logged in");
 
             var json = request.Payload["auth"].ToString() ?? throw new ArgumentNullException("auth");
-            var auth = JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? throw new ArgumentNullException("auth"); ;
+            var auth = JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? throw new ArgumentNullException("auth");
             var login = auth["login"];
             var passwordHash = Hash.Make(auth["password"], login);
-            var user = UsersRepository.RegisteredUsers.GetUser(login, passwordHash);
 
-            if (null != user)
+            if (UsersRepository.RegisteredUsers.GetUser(login, passwordHash)?.Clone() is User user)
             {
                 UsersRepository.OnlineUsers.AddUser(user);
-                UsersRepository.OnlineUsers.AddUserMetadata(login, "TcpClient", client);
+                UsersRepository.OnlineUsers.AddUserMetadata(user, "TcpClient", client);
 
                 response.Status = Response.StatusOk;
                 response.Message = "User successfully logged in";
+                response.Payload.Add("user", user);
             }
             else
             {
