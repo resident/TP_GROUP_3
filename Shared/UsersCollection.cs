@@ -10,6 +10,11 @@ public class UsersCollection : BindingList<KeyValuePair<User, Dictionary<string,
         Add(new KeyValuePair<User, Dictionary<string, object>>(user, new()));
     }
 
+    public void AddUsers(IEnumerable<User> users)
+    {
+        foreach (var user in users) AddUser(user);
+    }
+
     public bool UserExists(string login)
     {
         return this.Any(pair => pair.Key.Login == login);

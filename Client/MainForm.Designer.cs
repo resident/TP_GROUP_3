@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lbMessages = new ListBox();
             tbMessage = new TextBox();
             btnSend = new Button();
@@ -51,6 +52,7 @@
             statusLabelConnected = new ToolStripStatusLabel();
             statusLabelLoggedAs = new ToolStripStatusLabel();
             pnlChat = new Panel();
+            timerSync = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -264,6 +266,11 @@
             pnlChat.Size = new Size(829, 450);
             pnlChat.TabIndex = 18;
             // 
+            // timerSync
+            // 
+            timerSync.Interval = 2000;
+            timerSync.Tick += timerSync_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -312,5 +319,6 @@
         private ToolStripStatusLabel statusLabelLoggedAs;
         private Panel pnlChat;
         private ToolStripMenuItem manageUsersToolStripMenuItem;
+        private System.Windows.Forms.Timer timerSync;
     }
 }

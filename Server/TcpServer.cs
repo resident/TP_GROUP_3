@@ -35,10 +35,10 @@ namespace Server
             UsersRepository.RegisteredUsers.AddUser(admin);
             Alert.Successful($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
 
-            // Add default chat for all messages
-            var generalChatTitle = Settings.Get<string>("general_chat_title") ?? throw new ArgumentNullException("general_chat_title");
-            ChatsRepository.Items.Add(new Chat(generalChatTitle));
-            Alert.Successful($"Chat '{generalChatTitle}' added");
+            Alert.Show($"ChatsCount: {ChatsRepository.Items.Count}");
+
+            foreach (var chat in ChatsRepository.Items)
+                Alert.Show($"ID: {chat.Id} Title: {chat.Title} Messages: {chat.Messages.Count}");
         }
 
         public async Task Start()

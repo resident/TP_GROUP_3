@@ -20,9 +20,11 @@ namespace Server.RequestHandlers
             {
                 var json = request.Payload["message"].ToString() ?? throw new ArgumentNullException("message");
                 var message = JsonConvert.DeserializeObject<ChatMessage>(json) ?? throw new ArgumentNullException("message");
-                var chat = ChatsRepository.Items.Find(message.ChatTitle) ?? throw new RequestHandlerException($"Chat '{message.ChatTitle}' not found in server");
+                var chat = ChatsRepository.Items.Find(message.ChatId) ?? throw new RequestHandlerException($"Chat '{message.ChatId}' not found in server");
 
                 chat.Messages.Add(message);
+
+                chat.SaveFull();
 
                 response.Status = Response.StatusOk;
                 response.Message = "Message successfully sent";

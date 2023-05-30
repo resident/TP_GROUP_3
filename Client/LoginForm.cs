@@ -39,7 +39,7 @@ namespace Client
                 };
 
                 request.Payload.Add("auth", auth);
-                mainForm.Client.SendMessage(request.ToString());
+                mainForm.Client.SendMessage(request.ToJson());
 
                 var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 

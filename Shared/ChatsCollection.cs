@@ -5,10 +5,9 @@ namespace Shared;
 
 public class ChatsCollection : BindingList<Chat>
 {
-    public void AddNew(Chat item)
+    public void AddChats(IEnumerable<Chat> chats)
     {
-        int index = this.Count;
-        InsertItem(index, item);
+        foreach (var chat in chats) Add(chat);
     }
 
     public bool Exists(string title)
@@ -21,9 +20,9 @@ public class ChatsCollection : BindingList<Chat>
         return this.Any(c => c == chat);
     }
 
-    public Chat? Find(string title)
+    public Chat? Find(string id)
     {
-        return this.FirstOrDefault(c => c.Title == title);
+        return this.FirstOrDefault(c => c.Id == id);
     }
 
     public Chat? Find(Chat chat)
