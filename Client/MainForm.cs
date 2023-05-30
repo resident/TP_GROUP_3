@@ -256,11 +256,8 @@ namespace Client
 
             if (response.IsStatusOk())
             {
-                var usersJson = response.Payload["users"].ToString() ?? throw new ArgumentNullException("users");
-                var chatsJson = response.Payload["chats"].ToString() ?? throw new ArgumentNullException("chats");
-
-                var users = JsonConvert.DeserializeObject<List<User>>(usersJson);
-                var chats = JsonConvert.DeserializeObject<List<Chat>>(chatsJson);
+                var users = response.Get<List<User>>("users");
+                var chats = response.Get<List<Chat>>("chats");
 
                 RegisteredUsers.Clear();
                 RegisteredUsers.AddUsers(users);

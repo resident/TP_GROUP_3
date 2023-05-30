@@ -45,8 +45,8 @@ namespace Client
 
                 if (response.IsStatusOk() )
                 {
-                    var userJson = response.Payload["user"].ToString() ?? throw new ArgumentNullException("user");
-                    mainForm.User = JsonConvert.DeserializeObject<User>(userJson);
+                    mainForm.User = response.Get<User>("user");
+
                     MessageBox.Show(response.Message);
                     this.Close();
                 }

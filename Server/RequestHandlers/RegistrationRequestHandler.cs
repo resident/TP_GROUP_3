@@ -18,10 +18,9 @@ namespace Server.RequestHandlers
 
             try
             {
-                var json = request.Payload["user"].ToString() ?? throw new ArgumentNullException("user");
-                var user = User.FromJson(json) ?? throw new ArgumentNullException("user"); ;
+                var user = request.Get<User>("user");
 
-                if (UsersRepository.RegisteredUsers.UserExists(user.Login))
+                if (UsersRepository.RegisteredUsers.UserExists(user!.Login))
                 {
                     throw new RequestHandlerException("User already exists");
                 }

@@ -18,16 +18,13 @@ namespace Server.RequestHandlers
 
             try
             {
-                var lastSyncTime = DateTime.Parse(request.Payload["lastSyncTime"].ToString() ?? throw new ArgumentNullException("lastSyncTime"));
-                var userJson = request.Payload["user"].ToString() ?? throw new ArgumentNullException("user");
-                var user = JsonConvert.DeserializeObject<User>(userJson) ?? throw new ArgumentNullException("user");
-
+                var lastSyncTime = DateTime.Parse(request.Get("lastSyncTime"));
+                var user = request.Get<User>("user");
+                var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.Any(u => u.Id == user!.Id)).ToList();
                 var users = new List<User>();
 
                 foreach (var (item, metadata) in UsersRepository.RegisteredUsers) users.Add(item);
-
-                var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.Any(u => u.Id == user.Id)).ToList();
-
+                
                 response.Status = Response.StatusOk;
                 response.Message = "Fresh data sent";
                 response.Payload.Add("users", users);
