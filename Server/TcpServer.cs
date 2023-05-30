@@ -26,12 +26,19 @@ namespace Server
             _listener = new TcpListener(IPAddress.Parse(ipAddress), port);
 
             // Add default admin account
-            UsersRepository.RegisteredUsers.AddUser(new User("admin", "password"){IsAdmin = true});
-            Alert.Successful($"Default admin account: admin:password");
+            var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? throw new ArgumentNullException("default_admin_credentials");
+            var admin = new User(adminCredentials["login"], adminCredentials["password"])
+            {
+                IsAdmin = true
+            };
+
+            UsersRepository.RegisteredUsers.AddUser(admin);
+            Alert.Successful($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
 
             // Add default chat for all messages
-            ChatsRepository.Items.Add(new Chat("General"));
-            Alert.Successful("Chat 'General' added");
+            var generalChatTitle = Settings.Get<string>("general_chat_title") ?? throw new ArgumentNullException("general_chat_title");
+            ChatsRepository.Items.Add(new Chat(generalChatTitle));
+            Alert.Successful($"Chat '{generalChatTitle}' added");
         }
 
         public async Task Start()
