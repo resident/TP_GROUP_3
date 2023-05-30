@@ -4,6 +4,7 @@ namespace Shared;
 
 public class User : ICloneable
 {
+    public string Id;
     public string Login = string.Empty;
     public string PasswordHash = string.Empty;
     public bool IsAdmin = false;
@@ -13,9 +14,10 @@ public class User : ICloneable
 
     public User()
     {
+        Id = Guid.NewGuid().ToString();
     }
 
-    public User(string login, string password)
+    public User(string login, string password) : this()
     {
         Login = login;
         PasswordHash = Hash.Make(password, login);

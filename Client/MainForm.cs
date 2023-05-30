@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Newtonsoft.Json;
 using Shared;
@@ -15,8 +16,9 @@ namespace Client
         private string? _attachedFilePath;
         public readonly UsersCollection RegisteredUsers = new UsersCollection();
         public readonly ChatsCollection Chats = new ChatsCollection();
-        public readonly Chat GeneralChat = new Chat("General");
+        public Chat GeneralChat;
         public Chat CurrentChat;
+        public DateTime LastSyncTime = DateTime.MinValue;
 
         public bool Connected
         {
@@ -68,6 +70,8 @@ namespace Client
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
                 pnlChat.Enabled = Connected && LoggedIn;
+
+                timerSync.Enabled = Connected && LoggedIn;
             };
 
             UserChanged += (sender, args) =>
@@ -80,6 +84,8 @@ namespace Client
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
                 pnlChat.Enabled = Connected && LoggedIn;
 
+                timerSync.Enabled = Connected && LoggedIn;
+
                 manageUsersToolStripMenuItem.Enabled = LoggedIn && User!.IsAdmin;
                 manageUsersToolStripMenuItem.Visible = LoggedIn && User!.IsAdmin;
             };
@@ -87,10 +93,6 @@ namespace Client
             InitializeComponent();
 
             lbChats.DataSource = Chats;
-
-            CurrentChat = GeneralChat;
-
-            Chats.Add(GeneralChat);
         }
 
         private void btnCreateChat_Click(object sender, EventArgs e)
@@ -168,6 +170,8 @@ namespace Client
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             User = null;
+            Chats.Clear();
+            lbMessages.Items.Clear();
         }
 
         private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -198,14 +202,16 @@ namespace Client
                 return;
             }
 
-            var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
             var chat = lbChats.SelectedItem as Chat ?? GeneralChat;
-            var chatMessage = new ChatMessage(User, chat.Title, tbMessage.Text, chatFile);
+            var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
+            var chatMessage = new ChatMessage(User, chat, tbMessage.Text, chatFile);
 
             var request = new Request("SendChatMessage");
             request.Payload.Add("message", chatMessage);
 
-            Client.SendMessage(request.ToString());
+            Client.SendMessage(request.ToJson());
+
+            tbMessage.Text = string.Empty;
 
             _attachedFilePath = null;
 
@@ -233,6 +239,47 @@ namespace Client
             {
                 lbMessages.Items.Add(message);
             }
+        }
+
+        private async void timerSync_Tick(object sender, EventArgs e)
+        {
+            if (!Connected) return;
+
+            var request = new Request("Sync");
+
+            request.Payload.Add("lastSyncTime", LastSyncTime);
+            request.Payload.Add("user", User);
+
+            Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusOk())
+            {
+                var usersJson = response.Payload["users"].ToString() ?? throw new ArgumentNullException("users");
+                var chatsJson = response.Payload["chats"].ToString() ?? throw new ArgumentNullException("chats");
+
+                var users = JsonConvert.DeserializeObject<List<User>>(usersJson);
+                var chats = JsonConvert.DeserializeObject<List<Chat>>(chatsJson);
+
+                RegisteredUsers.Clear();
+                RegisteredUsers.AddUsers(users);
+
+                Chats.Clear();
+                Chats.AddChats(chats);
+
+                if (Chats.Count > 0)
+                {
+                    GeneralChat = Chats.ElementAt(0);
+                    CurrentChat = GeneralChat;
+                }
+            }
+            else
+            {
+                Alert.Error($"{response.Message}");
+            }
+
+            LastSyncTime = DateTime.Now;
         }
     }
 }

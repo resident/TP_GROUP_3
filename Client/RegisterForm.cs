@@ -33,7 +33,7 @@ namespace Client
                 var password = tbPassword.Text;
                 var user = new User(login, password);
                 request.Payload.Add("user", user);
-                mainForm.Client.SendMessage(request.ToString());
+                mainForm.Client.SendMessage(request.ToJson());
 
                 var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
