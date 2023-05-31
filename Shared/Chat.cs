@@ -7,24 +7,24 @@ public class Chat
 {
     public string Id;
     public string Title;
-    public List<User> Users;
-    public List<ChatMessage> Messages;
+    public UsersCollection Users = new();
+    public List<ChatMessage> Messages = new();
 
     public Chat()
     {
         Id = Guid.NewGuid().ToString();
     }
 
-    public Chat(string title, List<User>? users = null, List<ChatMessage>? messages = null) : this()
+    public Chat(string title, UsersCollection? users = null, List<ChatMessage>? messages = null) : this()
     {
         Title = title;
-        Users = users ?? new List<User>();
-        Messages = messages ?? new List<ChatMessage>();
+        Users = users ?? new();
+        Messages = messages ?? new();
     }
 
     public void AddMessage(ChatMessage message)
     {
-        Messages ??= new List<ChatMessage>();
+        Messages ??= new();
 
         Messages.Add(message);
     }
@@ -44,9 +44,11 @@ public class Chat
         return $"{GetChatDirectoryPath()}/chat.json";
     }
 
-    private string[] GetChatMessageDirectories()
+    private IEnumerable<string> GetChatMessageDirectories()
     {
-        return Directory.GetDirectories(GetChatMessagesDirectoryPath());
+        var chatMessagesDirectoryPath = GetChatMessagesDirectoryPath();
+
+        return Directory.Exists(chatMessagesDirectoryPath) ? Directory.GetDirectories(GetChatMessagesDirectoryPath()) : new string[]{};
     }
 
     public void Save(bool force = false)
@@ -66,13 +68,26 @@ public class Chat
         Messages.ForEach(m => m.Save(force));
     }
 
+    public void Remove()
+    {
+        var chatDirectoryPath = GetChatDirectoryPath();
+
+        if (Directory.Exists(chatDirectoryPath))
+            Directory.Delete(chatDirectoryPath, true);
+    }
+
     public static Chat Load(string path, bool full = false)
     {
         var chat = FromJson(File.ReadAllText(path));
 
         if (full)
             foreach (var directory in chat.GetChatMessageDirectories())
-                chat.AddMessage(ChatMessage.Load($"{directory}/message.json"));
+            {
+                var messageFilePath = $"{directory}/message.json";
+                
+                if (File.Exists(messageFilePath))
+                    chat.AddMessage(ChatMessage.Load(messageFilePath));
+            }
 
         return chat;
     }

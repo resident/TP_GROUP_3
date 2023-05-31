@@ -20,13 +20,24 @@ namespace Server.RequestHandlers
             {
                 var lastSyncTime = DateTime.Parse(request.Get("lastSyncTime"));
                 var user = request.Get<User>("user");
-                var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.Any(u => u.Id == user!.Id)).ToList();
-                var users = UsersRepository.RegisteredUsers.ToList();
-                
-                response.Status = Response.StatusOk;
-                response.Message = "Fresh data sent";
-                response.Payload.Add("users", users);
-                response.Payload.Add("chats", chats);
+
+                if (lastSyncTime < Sync.GetLastChangeTime())
+                {
+                    var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.ExistsById(user!.Id)).ToList();
+                    var users = UsersRepository.RegisteredUsers.ToList();
+
+                    response.Status = Response.StatusOk;
+                    response.Message = "Fresh data sent";
+                    response.Payload.Add("syncStatus", "updates");
+                    response.Payload.Add("users", users);
+                    response.Payload.Add("chats", chats);
+                }
+                else
+                {
+                    response.Status = Response.StatusOk;
+                    response.Payload.Add("syncStatus", "no updates");
+                    response.Message = "Don't have fresh data";
+                }
             }
             catch (Exception ex)
             {

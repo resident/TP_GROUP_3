@@ -24,4 +24,9 @@ public class ChatsCollection : Collection<Chat>
     {
         return this.FirstOrDefault(c => c.Id == id);
     }
+
+    public void RemoveById(string id)
+    {
+        RemoveAll(u => u.Id == id);
+    }
 }

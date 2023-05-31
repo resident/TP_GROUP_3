@@ -104,6 +104,23 @@ namespace Client
             form.ShowDialog();
         }
 
+        private async void btnRemoveChat_Click(object sender, EventArgs e)
+        {
+            var request = new Request("RemoveChat");
+
+            request.Payload.Add("user", User!);
+            request.Payload.Add("chat", CurrentChat);
+
+            Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusOk())
+                Chats.Remove(CurrentChat);
+            else
+                Alert.Error(response.Message);
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -248,7 +265,7 @@ namespace Client
             var request = new Request("Sync");
 
             request.Payload.Add("lastSyncTime", LastSyncTime);
-            request.Payload.Add("user", User);
+            request.Payload.Add("user", User!);
 
             Client.SendMessage(request.ToJson());
 
@@ -256,24 +273,29 @@ namespace Client
 
             if (response.IsStatusOk())
             {
-                var users = response.Get<List<User>>("users");
-                var chats = response.Get<List<Chat>>("chats");
+                var syncStatus = response.Get("syncStatus");
 
-                RegisteredUsers.Clear();
-                RegisteredUsers.AddUsers(users!);
-
-                Chats.Clear();
-                Chats.AddChats(chats!);
-
-                if (Chats.Count > 0)
+                if (syncStatus == "updates")
                 {
-                    GeneralChat = Chats.ElementAt(0);
-                    CurrentChat = GeneralChat;
+                    var users = response.Get<List<User>>("users");
+                    var chats = response.Get<List<Chat>>("chats");
+
+                    RegisteredUsers.Clear();
+                    RegisteredUsers.AddUsers(users!);
+
+                    Chats.Clear();
+                    Chats.AddChats(chats!);
+
+                    if (Chats.Count > 0)
+                    {
+                        GeneralChat = Chats.ElementAt(0);
+                        CurrentChat = GeneralChat;
+                    }
                 }
             }
             else
             {
-                Alert.Error($"{response.Message}");
+                Alert.Error(response.Message);
             }
 
             LastSyncTime = DateTime.Now;

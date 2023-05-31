@@ -39,4 +39,9 @@ public class UsersCollection : Collection<User>
     {
         return Items.FirstOrDefault(u => u.Metadata.ContainsKey(key) && u.Metadata[key] == value);
     }
+
+    public void RemoveById(string id)
+    {
+        RemoveAll(u => u.Id == id);
+    }
 }

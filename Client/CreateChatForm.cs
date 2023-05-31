@@ -37,8 +37,10 @@ namespace Client
             if (this.Owner is MainForm mainForm)
             {
                 var request = new Request("CreateChat");
-                var users = (from User user in lbUsers.SelectedItems select user).ToList();
+                var users = new UsersCollection();
                 var chat = new Chat(tbChatTitle.Text, users);
+
+                users.AddUsers(from User user in lbUsers.SelectedItems select user);
 
                 request.Payload.Add("chat", chat);
 
@@ -54,7 +56,7 @@ namespace Client
                 }
                 else
                 {
-                    Alert.Error(response.Error);
+                    Alert.Error(response.Message);
                     return;
                 }
             }

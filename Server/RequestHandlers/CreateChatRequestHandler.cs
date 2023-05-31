@@ -21,13 +21,15 @@ namespace Server.RequestHandlers
                 ChatsRepository.Items.Add(chat!);
                 chat!.Save();
 
+                Sync.UpdateLastChangeTime();
+
                 response.Status = Response.StatusOk;
                 response.Message = "Chat Successfully added";
             }
             catch (Exception ex)
             {
                 response.Status = Response.StatusError;
-                response.Error = ex.Message;
+                response.Message = ex.Message;
             }
 
             TcpServer.SendResponse(client, response);
