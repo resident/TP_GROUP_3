@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ChatFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChatMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ChatsCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />

@@ -20,13 +20,13 @@ namespace Server.RequestHandlers
             {
                 var user = request.Get<User>("user");
 
-                if (UsersRepository.RegisteredUsers.UserExists(user!.Login))
+                if (UsersRepository.RegisteredUsers.ExistsByLogin(user!.Login))
                 {
                     throw new RequestHandlerException("User already exists");
                 }
                 else
                 {
-                    UsersRepository.RegisteredUsers.AddUser(user);
+                    UsersRepository.RegisteredUsers.Add(user);
 
                     response.Status = Response.StatusOk;
                     response.Message = "User successfully registered";

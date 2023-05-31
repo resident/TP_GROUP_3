@@ -32,7 +32,7 @@ namespace Server
                 IsAdmin = true
             };
 
-            UsersRepository.RegisteredUsers.AddUser(admin);
+            UsersRepository.RegisteredUsers.Add(admin);
             Alert.Successful($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
 
             Alert.Show($"ChatsCount: {ChatsRepository.Items.Count}");
@@ -88,7 +88,7 @@ namespace Server
 
                 var user = UsersRepository.OnlineUsers.GetUserByMetadata("TcpClient", client);
 
-                if (null != user) UsersRepository.OnlineUsers.RemoveUser(user);
+                if (null != user) UsersRepository.OnlineUsers.Remove(user);
 
                 client.Close();
             }

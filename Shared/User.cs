@@ -7,6 +7,7 @@ public class User : ICloneable
     public string Id;
     public string Login = string.Empty;
     public string PasswordHash = string.Empty;
+    public Dictionary<string, object> Metadata = new();
     public bool IsAdmin = false;
     public bool IsBanned = false;
     public DateTime BannedAt;

@@ -21,9 +21,7 @@ namespace Server.RequestHandlers
                 var lastSyncTime = DateTime.Parse(request.Get("lastSyncTime"));
                 var user = request.Get<User>("user");
                 var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.Any(u => u.Id == user!.Id)).ToList();
-                var users = new List<User>();
-
-                foreach (var (item, metadata) in UsersRepository.RegisteredUsers) users.Add(item);
+                var users = UsersRepository.RegisteredUsers.ToList();
                 
                 response.Status = Response.StatusOk;
                 response.Message = "Fresh data sent";
