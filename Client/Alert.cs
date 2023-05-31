@@ -18,6 +18,11 @@ namespace Client
             MessageBox.Show(message, "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public static void Warning(string message)
+        {
+            MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         public static void Error(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

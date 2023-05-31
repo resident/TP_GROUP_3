@@ -32,6 +32,11 @@ namespace Server
             Message(message, ConsoleColor.Green);
         }
 
+        public static void Warning(string message)
+        {
+            Message(message, ConsoleColor.Yellow);
+        }
+
         public static void Error(string message)
         {
             Message(message, ConsoleColor.Red);
