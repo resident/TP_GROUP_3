@@ -22,7 +22,11 @@ namespace Server
                 }
             },
             {
-                "general_chat_title", "General"
+                "general_chat", new Dictionary<string, string>
+                {
+                    {"id", Guid.NewGuid().ToString()},
+                    {"title", "General"},
+                }
             }
         };
 
@@ -44,9 +48,13 @@ namespace Server
             File.WriteAllText("settings.json", ToJson());
         }
 
-        public static T? Get<T>(string key)
+        public static T? Get<T>(string key, bool throwIfNull = true)
         {
-            return _settings[key] is T ? (T) _settings[key] : JsonConvert.DeserializeObject<T>(_settings[key].ToString() ?? "{}");
+            var value = _settings[key] is T ? (T) _settings[key] : JsonConvert.DeserializeObject<T>(_settings[key].ToString() ?? "{}");
+
+            if (throwIfNull && value == null) throw new ArgumentNullException(key);
+
+            return value;
         }
 
         public static void Set<T>(string key, T value)

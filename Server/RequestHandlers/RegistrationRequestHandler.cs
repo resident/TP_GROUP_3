@@ -28,6 +28,8 @@ namespace Server.RequestHandlers
                 {
                     UsersRepository.RegisteredUsers.Add(user);
 
+                    Sync.UpdateLastChangeTime();
+
                     response.Status = Response.StatusOk;
                     response.Message = "User successfully registered";
                 }

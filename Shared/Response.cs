@@ -11,7 +11,6 @@ namespace Shared
         public const string StatusError = "ERROR";
 
         public string Status = string.Empty;
-        public string Error = string.Empty;
         public string Message = string.Empty;
 
         public bool IsStatusOk()

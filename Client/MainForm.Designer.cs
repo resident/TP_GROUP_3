@@ -151,6 +151,7 @@
             btnRemoveChat.TabIndex = 15;
             btnRemoveChat.Text = "Remove";
             btnRemoveChat.UseVisualStyleBackColor = true;
+            btnRemoveChat.Click += btnRemoveChat_Click;
             // 
             // menu
             // 

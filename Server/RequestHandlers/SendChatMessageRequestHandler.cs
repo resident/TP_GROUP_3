@@ -26,6 +26,8 @@ namespace Server.RequestHandlers
 
                 chat.SaveFull();
 
+                Sync.UpdateLastChangeTime();
+
                 response.Status = Response.StatusOk;
                 response.Message = "Message successfully sent";
             }
