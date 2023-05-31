@@ -20,7 +20,7 @@ namespace Server.RequestHandlers
             {
                 var message = request.Get<ChatMessage>("message");
 
-                var chat = ChatsRepository.Items.Find(message!.ChatId) ?? throw new RequestHandlerException($"Chat '{message.ChatId}' not found in server");
+                var chat = ChatsRepository.Items.GetById(message!.ChatId) ?? throw new RequestHandlerException($"Chat '{message.ChatId}' not found in server");
 
                 chat.Messages.Add(message);
 

@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Data;
+using System.Net.Sockets;
 using Newtonsoft.Json;
 using Server.Exceptions;
 using Shared;
@@ -23,8 +24,13 @@ public class LoginRequestHandler : RequestHandler
 
             if (UsersRepository.RegisteredUsers.GetUser(login, passwordHash)?.Clone() is User user)
             {
-                UsersRepository.OnlineUsers.AddUser(user);
-                UsersRepository.OnlineUsers.AddUserMetadata(user, "TcpClient", client);
+                user.Metadata.Add("TcpClient", client);
+
+                UsersRepository.OnlineUsers.Add(user);
+
+                user = user.Clone() as User ?? throw new NoNullAllowedException();
+
+                user.Metadata.Remove("TcpClient");
 
                 response.Status = Response.StatusOk;
                 response.Message = "User successfully logged in";

@@ -37,7 +37,7 @@ namespace Client
             if (this.Owner is MainForm mainForm)
             {
                 var request = new Request("CreateChat");
-                var users = (from KeyValuePair<User, Dictionary<string, object>> pair in lbUsers.SelectedItems select pair.Key).ToList();
+                var users = (from User user in lbUsers.SelectedItems select user).ToList();
                 var chat = new Chat(tbChatTitle.Text, users);
 
                 request.Payload.Add("chat", chat);

@@ -3,30 +3,25 @@ using System.ComponentModel;
 
 namespace Shared;
 
-public class ChatsCollection : BindingList<Chat>
+public class ChatsCollection : Collection<Chat>
 {
     public void AddChats(IEnumerable<Chat> chats)
     {
-        foreach (var chat in chats) Add(chat);
+        AddItems(chats);
     }
 
-    public bool Exists(string title)
+    public bool ExistsByTitle(string title)
     {
-        return this.Any(c => c.Title == title);
+        return Items.Any(c => c.Title == title);
     }
 
-    public bool Exists(Chat chat)
-    {
-        return this.Any(c => c == chat);
-    }
-
-    public Chat? Find(string id)
-    {
-        return this.FirstOrDefault(c => c.Id == id);
-    }
-
-    public Chat? Find(Chat chat)
+    public Chat? GetByChat(Chat chat)
     {
         return this.FirstOrDefault(c => c == chat);
+    }
+
+    public Chat? GetById(string id)
+    {
+        return this.FirstOrDefault(c => c.Id == id);
     }
 }

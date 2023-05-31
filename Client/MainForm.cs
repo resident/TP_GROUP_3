@@ -260,10 +260,10 @@ namespace Client
                 var chats = response.Get<List<Chat>>("chats");
 
                 RegisteredUsers.Clear();
-                RegisteredUsers.AddUsers(users);
+                RegisteredUsers.AddUsers(users!);
 
                 Chats.Clear();
-                Chats.AddChats(chats);
+                Chats.AddChats(chats!);
 
                 if (Chats.Count > 0)
                 {
