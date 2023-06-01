@@ -9,6 +9,7 @@ public class Chat
     public string Title;
     public UsersCollection Users = new();
     public List<ChatMessage> Messages = new();
+    public DateTime CreatedAt = DateTime.Now;
 
     public Chat()
     {

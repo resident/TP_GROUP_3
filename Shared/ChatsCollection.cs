@@ -10,6 +10,11 @@ public class ChatsCollection : Collection<Chat>
         AddItems(chats);
     }
 
+    public bool ExistsById(string id)
+    {
+        return Items.Any(c => c.Id == id);
+    }
+
     public bool ExistsByTitle(string title)
     {
         return Items.Any(c => c.Title == title);

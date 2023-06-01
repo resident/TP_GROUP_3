@@ -1,6 +1,3 @@
-using System;
-using System.ComponentModel;
-using Newtonsoft.Json;
 using Shared;
 
 namespace Client
@@ -16,8 +13,8 @@ namespace Client
         private string? _attachedFilePath;
         public readonly UsersCollection RegisteredUsers = new UsersCollection();
         public readonly ChatsCollection Chats = new ChatsCollection();
-        public Chat GeneralChat;
-        public Chat CurrentChat;
+        public Chat? GeneralChat;
+        public Chat? CurrentChat;
         public DateTime LastSyncTime = DateTime.MinValue;
 
         public bool Connected
@@ -106,6 +103,8 @@ namespace Client
 
         private async void btnRemoveChat_Click(object sender, EventArgs e)
         {
+            if (null == CurrentChat) return;
+
             var request = new Request("RemoveChat");
 
             request.Payload.Add("user", User!);
@@ -252,10 +251,9 @@ namespace Client
 
             lbMessages.Items.Clear();
 
-            foreach (var message in CurrentChat.Messages)
-            {
-                lbMessages.Items.Add(message);
-            }
+            if (null == CurrentChat) return;
+
+            foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
         }
 
         private async void timerSync_Tick(object sender, EventArgs e)
@@ -277,19 +275,36 @@ namespace Client
 
                 if (syncStatus == "updates")
                 {
-                    var users = response.Get<List<User>>("users");
-                    var chats = response.Get<List<Chat>>("chats");
+                    var users = response.Get<UsersCollection>("users");
+                    var chats = response.Get<ChatsCollection>("chats");
 
                     RegisteredUsers.Clear();
-                    RegisteredUsers.AddUsers(users!);
+
+                    if (users != null) RegisteredUsers.AddUsers(users);
+
+                    var selectedChat = CurrentChat;
 
                     Chats.Clear();
-                    Chats.AddChats(chats!);
 
+                    if (chats != null)
+                    {
+                        Chats.AddChats(chats!);
+
+                        if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
+                    }
+                    
                     if (Chats.Count > 0)
                     {
                         GeneralChat = Chats.ElementAt(0);
-                        CurrentChat = GeneralChat;
+                        CurrentChat ??= GeneralChat;
+
+                        CurrentChat = Chats.GetById(CurrentChat.Id) ?? GeneralChat;
+
+                        lbChats.SelectedItem = CurrentChat;
+
+                        lbMessages.Items.Clear();
+
+                        foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
                     }
                 }
             }
