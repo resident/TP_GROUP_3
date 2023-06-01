@@ -12,6 +12,7 @@ public class User : ICloneable
     public bool IsBanned = false;
     public DateTime BannedAt;
     public DateTime BanExpiration;
+    public DateTime CreatedAt = DateTime.Now;
 
     public User()
     {
@@ -24,10 +25,44 @@ public class User : ICloneable
         PasswordHash = Hash.Make(password, login);
     }
 
-    public static User? FromJson(string json)
+    private string GetUserDirectoryPath()
     {
-        return JsonConvert.DeserializeObject<User>(json);
+        return $"Users/{Id}";
     }
+
+    private string GetUserFilePath()
+    {
+        return $"{GetUserDirectoryPath()}/user.json";
+    }
+
+    public void Save(bool force = false)
+    {
+        var userDirectoryPath = GetUserDirectoryPath();
+        var userFilePath = GetUserFilePath();
+
+        if (!Directory.Exists(userDirectoryPath)) Directory.CreateDirectory(userDirectoryPath);
+
+        if (!File.Exists(userFilePath) || force) File.WriteAllText(userFilePath, ToJson());
+    }
+
+    public static User Load(string path)
+    {
+        return FromJson(File.ReadAllText(path));
+    }
+
+    public void Remove()
+    {
+        var userDirectoryPath = GetUserDirectoryPath();
+
+        if (Directory.Exists(userDirectoryPath))
+            Directory.Delete(userDirectoryPath, true);
+    }
+
+    public static User FromJson(string json)
+    {
+        return JsonConvert.DeserializeObject<User>(json) ?? throw new ArgumentNullException("User"); ;
+    }
+
     public object Clone()
     {
         return this.MemberwiseClone();

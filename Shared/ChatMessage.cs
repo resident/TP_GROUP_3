@@ -11,6 +11,7 @@ public class ChatMessage
     public string Message;
     public bool HasFile;
     public ChatFile? ChatFile;
+    public DateTime CreatedAt = DateTime.Now;
 
     public ChatMessage()
     {

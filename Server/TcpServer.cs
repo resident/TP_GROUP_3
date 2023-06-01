@@ -25,18 +25,13 @@ namespace Server
             _port = port;
             _listener = new TcpListener(IPAddress.Parse(ipAddress), port);
 
-            // Add default admin account
             var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? new();
-            var admin = new User(adminCredentials["login"], adminCredentials["password"])
-            {
-                IsAdmin = true
-            };
 
-            UsersRepository.RegisteredUsers.Add(admin);
+            Alert.Warning($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
 
-            Alert.Successful($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
+            Alert.Warning($"Registered users: {UsersRepository.RegisteredUsers.Count}");
 
-            Alert.Show($"ChatsCount: {ChatsRepository.Items.Count}");
+            Alert.Warning($"ChatsCount: {ChatsRepository.Items.Count}");
 
             foreach (var chat in ChatsRepository.Items)
                 Alert.Show($"ID: {chat.Id} Title: {chat.Title} Messages: {chat.Messages.Count}");
