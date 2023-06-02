@@ -29,7 +29,12 @@ public class UsersCollection : Collection<User>
     {
         return this.FirstOrDefault(user => user.Login == login);
     }
-    
+
+    public User? GetById(string id)
+    {
+        return this.FirstOrDefault(u => u.Id == id);
+    }
+
     public User? GetUser(string login, string passwordHash)
     {
         return Items.FirstOrDefault(u => u.Login == login && u.PasswordHash == passwordHash);

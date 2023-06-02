@@ -20,7 +20,8 @@ public static class UsersRepository
             var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? new();
             var admin = new User(adminCredentials["login"], adminCredentials["password"])
             {
-                IsAdmin = true
+                IsAdmin = true,
+                IsActive = true
             };
 
             admin.Save();

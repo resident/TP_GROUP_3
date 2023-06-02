@@ -79,12 +79,14 @@ namespace Client
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
-                pnlChat.Enabled = Connected && LoggedIn;
+                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive; 
 
                 timerSync.Enabled = Connected && LoggedIn;
 
                 manageUsersToolStripMenuItem.Enabled = LoggedIn && User!.IsAdmin;
                 manageUsersToolStripMenuItem.Visible = LoggedIn && User!.IsAdmin;
+
+                userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
             };
 
             InitializeComponent();
@@ -282,29 +284,35 @@ namespace Client
 
                     if (users != null) RegisteredUsers.AddUsers(users);
 
+                    User = RegisteredUsers.GetById(User!.Id);
+
                     var selectedChat = CurrentChat;
 
                     Chats.Clear();
+                    lbMessages.Items.Clear();
 
-                    if (chats != null)
+                    if (User != null && User.IsActive)
                     {
-                        Chats.AddChats(chats!);
+                        if (chats != null)
+                        {
+                            Chats.AddChats(chats!);
 
-                        if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
-                    }
-                    
-                    if (Chats.Count > 0)
-                    {
-                        GeneralChat = Chats.ElementAt(0);
-                        CurrentChat ??= GeneralChat;
+                            if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
+                        }
 
-                        CurrentChat = Chats.GetById(CurrentChat.Id) ?? GeneralChat;
+                        if (Chats.Count > 0)
+                        {
+                            GeneralChat = Chats.ElementAt(0);
+                            CurrentChat ??= GeneralChat;
 
-                        lbChats.SelectedItem = CurrentChat;
+                            CurrentChat = Chats.GetById(CurrentChat.Id) ?? GeneralChat;
 
-                        lbMessages.Items.Clear();
+                            lbChats.SelectedItem = CurrentChat;
 
-                        foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                            lbMessages.Items.Clear();
+
+                            foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                        }
                     }
                 }
             }
