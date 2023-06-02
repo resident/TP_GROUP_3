@@ -53,6 +53,7 @@
             statusLabelLoggedAs = new ToolStripStatusLabel();
             pnlChat = new Panel();
             timerSync = new System.Windows.Forms.Timer(components);
+            userStatus = new ToolStripStatusLabel();
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -232,7 +233,7 @@
             // 
             // status
             // 
-            status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs });
+            status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs, userStatus });
             status.Location = new Point(0, 494);
             status.Name = "status";
             status.Size = new Size(853, 22);
@@ -271,6 +272,11 @@
             // 
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
+            // 
+            // userStatus
+            // 
+            userStatus.Name = "userStatus";
+            userStatus.Size = new Size(0, 17);
             // 
             // MainForm
             // 
@@ -321,5 +327,6 @@
         private Panel pnlChat;
         private ToolStripMenuItem manageUsersToolStripMenuItem;
         private System.Windows.Forms.Timer timerSync;
+        private ToolStripStatusLabel userStatus;
     }
 }

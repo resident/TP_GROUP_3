@@ -10,6 +10,7 @@ public class User : ICloneable
     public Dictionary<string, object> Metadata = new();
     public bool IsAdmin = false;
     public bool IsBanned = false;
+    public bool IsActive = false;
     public DateTime BannedAt;
     public DateTime BanExpiration;
     public DateTime CreatedAt = DateTime.Now;

@@ -41,6 +41,7 @@
             lbUsers.ItemHeight = 15;
             lbUsers.Location = new Point(12, 35);
             lbUsers.Name = "lbUsers";
+            lbUsers.SelectionMode = SelectionMode.MultiSimple;
             lbUsers.Size = new Size(260, 304);
             lbUsers.TabIndex = 0;
             // 
@@ -62,6 +63,7 @@
             btnApprove.TabIndex = 15;
             btnApprove.Text = "Approve";
             btnApprove.UseVisualStyleBackColor = true;
+            btnApprove.Click += btnApprove_Click;
             // 
             // btnRemove
             // 

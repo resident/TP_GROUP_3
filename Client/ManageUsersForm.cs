@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +23,27 @@ namespace Client
             if (this.Owner is MainForm mainForm)
             {
                 lbUsers.DataSource = mainForm.RegisteredUsers;
+            }
+        }
+
+        private async void btnApprove_Click(object sender, EventArgs e)
+        {
+            if (lbUsers.SelectedItems.Count == 0) return;
+
+            if (this.Owner is MainForm mainForm)
+            {
+                var request = new Request("ActivateUsers");
+
+                request.Payload.Add("users", lbUsers.SelectedItems);
+
+                mainForm.Client.SendMessage(request.ToJson());
+
+                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+
+                if (response.IsStatusOk())
+                    Alert.Successful(response.Message);
+                else
+                    Alert.Error(response.Message);
             }
         }
     }
