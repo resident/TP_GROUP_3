@@ -24,19 +24,6 @@ namespace Server
             _ipAddress = ipAddress;
             _port = port;
             _listener = new TcpListener(IPAddress.Parse(ipAddress), port);
-
-            var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? new();
-
-            Alert.Warning($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
-
-            Alert.Warning($"Registered users: {UsersRepository.RegisteredUsers.Count}");
-
-            Alert.Warning($"ChatsCount: {ChatsRepository.Items.Count}");
-
-            foreach (var chat in ChatsRepository.Items)
-                Alert.Show($"ID: {chat.Id} Title: {chat.Title} Messages: {chat.Messages.Count}");
-
-            Sync.UpdateLastChangeTime();
         }
 
         public async Task Start()

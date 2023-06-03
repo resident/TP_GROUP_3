@@ -47,13 +47,14 @@
             loginToolStripMenuItem = new ToolStripMenuItem();
             logoutToolStripMenuItem = new ToolStripMenuItem();
             manageUsersToolStripMenuItem = new ToolStripMenuItem();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             status = new StatusStrip();
             statusLabelConnected = new ToolStripStatusLabel();
             statusLabelLoggedAs = new ToolStripStatusLabel();
+            userStatus = new ToolStripStatusLabel();
             pnlChat = new Panel();
             timerSync = new System.Windows.Forms.Timer(components);
-            userStatus = new ToolStripStatusLabel();
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -156,7 +157,7 @@
             // 
             // menu
             // 
-            menu.Items.AddRange(new ToolStripItem[] { statusToolStripMenuItem, accountToolStripMenuItem, manageUsersToolStripMenuItem, exitToolStripMenuItem });
+            menu.Items.AddRange(new ToolStripItem[] { statusToolStripMenuItem, accountToolStripMenuItem, manageUsersToolStripMenuItem, settingsToolStripMenuItem, exitToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
             menu.Size = new Size(853, 24);
@@ -224,6 +225,13 @@
             manageUsersToolStripMenuItem.Visible = false;
             manageUsersToolStripMenuItem.Click += manageUsersToolStripMenuItem_Click;
             // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(61, 20);
+            settingsToolStripMenuItem.Text = "Settings";
+            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
+            // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -251,6 +259,11 @@
             statusLabelLoggedAs.Size = new Size(80, 17);
             statusLabelLoggedAs.Text = "Not logged in";
             // 
+            // userStatus
+            // 
+            userStatus.Name = "userStatus";
+            userStatus.Size = new Size(0, 17);
+            // 
             // pnlChat
             // 
             pnlChat.Controls.Add(lbMessages);
@@ -272,11 +285,6 @@
             // 
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
-            // 
-            // userStatus
-            // 
-            userStatus.Name = "userStatus";
-            userStatus.Size = new Size(0, 17);
             // 
             // MainForm
             // 
@@ -328,5 +336,6 @@
         private ToolStripMenuItem manageUsersToolStripMenuItem;
         private System.Windows.Forms.Timer timerSync;
         private ToolStripStatusLabel userStatus;
+        private ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
