@@ -1,3 +1,5 @@
+using Shared;
+
 namespace Client
 {
     internal static class Program
@@ -14,6 +16,13 @@ namespace Client
             Application.ThreadException += Application_ThreadException;
 
             ApplicationConfiguration.Initialize();
+
+            Settings.Load(new Dictionary<string, object>
+            {
+                {"server_ip_address", "127.0.0.1"},
+                {"server_port", 1234}
+            });
+
             Application.Run(new MainForm());
         }
 

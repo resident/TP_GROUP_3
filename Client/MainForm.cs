@@ -4,7 +4,7 @@ namespace Client
 {
     public partial class MainForm : Form
     {
-        internal readonly ChatTcpClient Client;
+        internal ChatTcpClient Client;
         private bool _connected;
         private event EventHandler ConnectionChanged;
         private User? _user;
@@ -55,7 +55,7 @@ namespace Client
 
         public MainForm()
         {
-            Client = new ChatTcpClient("127.0.0.1", 1234);
+            Client = GetFreshClient();
 
             ConnectionChanged += (sender, args) =>
             {
@@ -79,7 +79,7 @@ namespace Client
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
-                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive; 
+                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive;
 
                 timerSync.Enabled = Connected && LoggedIn;
 
@@ -92,6 +92,14 @@ namespace Client
             InitializeComponent();
 
             lbChats.DataSource = Chats;
+        }
+
+        private ChatTcpClient GetFreshClient()
+        {
+            var serverIpAddress = Settings.Get<string>("server_ip_address") ?? "127.0.0.1";
+            var serverPort = Settings.Get<int?>("server_port") ?? 1234;
+
+            return new ChatTcpClient(serverIpAddress, serverPort);
         }
 
         private void btnCreateChat_Click(object sender, EventArgs e)
@@ -122,6 +130,15 @@ namespace Client
                 Alert.Error(response.Message);
         }
 
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new SettingsForm();
+
+            form.Owner = this;
+
+            form.ShowDialog();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -131,8 +148,11 @@ namespace Client
         {
             try
             {
-                if (Client.IsDisconnected())
-                    Client.Connect();
+                if (Client.IsConnected()) return;
+
+                Client = GetFreshClient();
+
+                Client.Connect();
             }
             catch
             {

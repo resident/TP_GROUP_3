@@ -19,6 +19,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Request.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Response.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Storage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UsersCollection.cs" />
   </ItemGroup>
