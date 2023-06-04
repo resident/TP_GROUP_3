@@ -46,5 +46,26 @@ namespace Client
                     Alert.Error(response.Message);
             }
         }
+
+        private async void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (lbUsers.SelectedItems.Count == 0) return;
+
+            if (this.Owner is MainForm mainForm)
+            {
+                var request = new Request("RemoveUsers");
+
+                request.Payload.Add("users", lbUsers.SelectedItems);
+
+                mainForm.Client.SendMessage(request.ToJson());
+
+                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+
+                if (response.IsStatusOk())
+                    Alert.Successful(response.Message);
+                else
+                    Alert.Error(response.Message);
+            }
+        }
     }
 }
