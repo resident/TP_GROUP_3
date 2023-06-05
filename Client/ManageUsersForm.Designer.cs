@@ -41,7 +41,6 @@
             lbUsers.ItemHeight = 15;
             lbUsers.Location = new Point(12, 35);
             lbUsers.Name = "lbUsers";
-            lbUsers.SelectionMode = SelectionMode.MultiSimple;
             lbUsers.Size = new Size(260, 304);
             lbUsers.TabIndex = 0;
             // 
@@ -57,7 +56,7 @@
             // btnApprove
             // 
             btnApprove.Location = new Point(12, 344);
-            btnApprove.Margin = new Padding(2, 2, 2, 2);
+            btnApprove.Margin = new Padding(2);
             btnApprove.Name = "btnApprove";
             btnApprove.Size = new Size(84, 31);
             btnApprove.TabIndex = 15;
@@ -68,7 +67,7 @@
             // btnRemove
             // 
             btnRemove.Location = new Point(100, 344);
-            btnRemove.Margin = new Padding(2, 2, 2, 2);
+            btnRemove.Margin = new Padding(2);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(84, 31);
             btnRemove.TabIndex = 16;
@@ -79,7 +78,7 @@
             // btnBan
             // 
             btnBan.Location = new Point(188, 344);
-            btnBan.Margin = new Padding(2, 2, 2, 2);
+            btnBan.Margin = new Padding(2);
             btnBan.Name = "btnBan";
             btnBan.Size = new Size(84, 31);
             btnBan.TabIndex = 17;
