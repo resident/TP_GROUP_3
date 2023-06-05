@@ -250,6 +250,8 @@ namespace Client
 
             Client.SendMessage(request.ToJson());
 
+            if (chatMessage.ChatFile != null) chatMessage.ChatFile.FileContent = Array.Empty<byte>();
+
             tbMessage.Text = string.Empty;
 
             _attachedFilePath = null;
