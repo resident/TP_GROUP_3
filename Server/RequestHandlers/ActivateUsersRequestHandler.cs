@@ -24,6 +24,7 @@ namespace Server.RequestHandlers
                     if (currentUser != null)
                     {
                         currentUser.IsActive = true;
+                        currentUser.Save(true);
                         activatedUsersCount++;
                     }
                 }
