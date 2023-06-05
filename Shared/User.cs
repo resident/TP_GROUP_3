@@ -76,6 +76,7 @@ public class User : ICloneable
 
     public override string ToString()
     {
-        return Login;
+        if (IsAdmin) return $"{Login} #admin";
+        else return Login;
     }
 }

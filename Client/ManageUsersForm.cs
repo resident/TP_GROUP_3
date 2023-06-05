@@ -67,5 +67,37 @@ namespace Client
                     Alert.Error(response.Message);
             }
         }
+
+        private void btnBan_Click(object sender, EventArgs e)
+        {
+            if (this.Owner is MainForm mainForm)
+            {
+                if (!mainForm.RegisteredUsers[lbUsers.SelectedIndex].IsBanned)
+                {
+                    BanUserForm ban_form = new BanUserForm(mainForm.RegisteredUsers[lbUsers.SelectedIndex]);
+                    ban_form.Owner = this;
+                    ban_form.ShowDialog();
+                }
+                else
+                {
+                    Alert.Error($"This user are already banned");
+                }
+            }
+        }
+
+        private void lbUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.Owner is MainForm mainForm)
+            {
+                if (mainForm.RegisteredUsers[lbUsers.SelectedIndex].IsAdmin)
+                {
+                    btnBan.Enabled = false;
+                }
+                else
+                {
+                    btnBan.Enabled = true;
+                }
+            }
+        }
     }
 }
