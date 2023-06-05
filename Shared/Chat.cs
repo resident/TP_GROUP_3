@@ -81,16 +81,24 @@ public class Chat
     {
         var chat = FromJson(File.ReadAllText(path));
 
-        if (full)
-            foreach (var directory in chat.GetChatMessageDirectories())
-            {
-                var messageFilePath = $"{directory}/message.json";
+        if (!full) return chat;
+
+        foreach (var directory in chat.GetChatMessageDirectories())
+        {
+            var messageFilePath = $"{directory}/message.json";
                 
-                if (File.Exists(messageFilePath))
-                    chat.AddMessage(ChatMessage.Load(messageFilePath));
-            }
+            if (File.Exists(messageFilePath))
+                chat.AddMessage(ChatMessage.Load(messageFilePath));
+        }
+
+        chat.Sort();
 
         return chat;
+    }
+
+    public void Sort()
+    {
+        Messages.Sort((m1, m2) => m1.CreatedAt.CompareTo(m2.CreatedAt));
     }
 
     public string ToJson(bool full = false)

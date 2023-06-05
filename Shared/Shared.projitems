@@ -15,6 +15,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ChatsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Json\Converters\SynchronizedDateTimeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Json\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Request.cs" />
