@@ -67,9 +67,9 @@
             lbMessages.Location = new Point(202, 34);
             lbMessages.Margin = new Padding(2);
             lbMessages.Name = "lbMessages";
-            lbMessages.SelectionMode = SelectionMode.None;
             lbMessages.Size = new Size(611, 364);
             lbMessages.TabIndex = 3;
+            lbMessages.MouseUp += lbMessages_MouseUp;
             // 
             // tbMessage
             // 

@@ -18,12 +18,12 @@ namespace Server.RequestHandlers
 
             try
             {
-                var lastSyncTime = DateTime.Parse(request.Get("lastSyncTime"));
+                var lastSyncTime = DateTime.Parse(request.GetString("lastSyncTime"));
                 var user = request.Get<User>("user");
 
                 if (lastSyncTime < Sync.GetLastChangeTime())
                 {
-                    var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.ExistsById(user!.Id)).ToList();
+                    var chats = ChatsRepository.Items.Where(chat => chat.Users.Count == 0 || chat.Users.ExistsById(user.Id)).ToList();
                     var users = UsersRepository.RegisteredUsers.ToList();
 
                     response.Status = Response.StatusOk;

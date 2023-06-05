@@ -59,7 +59,7 @@ public class ChatMessage
 
     public void SaveChatFile(bool force = false, bool flush = true)
     {
-        if (ChatFile?.FileContent == null) return;
+        if (null == ChatFile || ChatFile.FileContent.Length == 0) return;
 
         var messageChatFilePath = GetMessageChatFilePath();
         var messageChatFileContentPath = GetMessageChatFileContentPath();
@@ -67,7 +67,7 @@ public class ChatMessage
         if (!File.Exists(messageChatFilePath) || force) File.WriteAllText(messageChatFilePath, ChatFile.ToJson());
         if (!File.Exists(messageChatFileContentPath) || force) File.WriteAllBytes(messageChatFileContentPath, ChatFile.FileContent);
 
-        if (flush) ChatFile.FileContent = null;
+        if (flush) ChatFile.FileContent = Array.Empty<byte>();
     }
     
     public static ChatMessage Load(string path, bool full = false)
@@ -81,6 +81,24 @@ public class ChatMessage
         if (full) message.LoadChatFileContent();
 
         return message;
+    }
+
+    public byte[] GetChatFileContentFromDisk()
+    {
+        return HasFile ? File.ReadAllBytes(GetMessageChatFileContentPath()) : Array.Empty<byte>();
+    }
+
+    public ChatFile? GetChatFileFromDisk(bool full = false)
+    {
+        var messageChatFilePath = GetMessageChatFilePath();
+
+        if (!File.Exists(messageChatFilePath)) return null;
+
+        var chatFile = ChatFile.FromJson(File.ReadAllText(messageChatFilePath));
+
+        if (full) chatFile.FileContent = GetChatFileContentFromDisk();
+
+        return chatFile;
     }
 
     public void LoadChatFileContent()

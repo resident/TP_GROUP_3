@@ -20,7 +20,7 @@ namespace Server.RequestHandlers
             {
                 var user = request.Get<User>("user");
 
-                if (UsersRepository.RegisteredUsers.ExistsByLogin(user!.Login))
+                if (UsersRepository.RegisteredUsers.ExistsByLogin(user.Login))
                 {
                     throw new RequestHandlerException("User already exists");
                 }

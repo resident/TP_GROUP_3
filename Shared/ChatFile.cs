@@ -7,8 +7,8 @@ namespace Shared;
 public class ChatFile
 {
     public string Id;
-    public string? Name;
-    public byte[]? FileContent;
+    public string Name;
+    public byte[] FileContent = Array.Empty<byte>();
 
 
     public ChatFile()
