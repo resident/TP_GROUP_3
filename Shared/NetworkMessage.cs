@@ -8,29 +8,25 @@ namespace Shared
 {
     public abstract class NetworkMessage
     {
-        public readonly Dictionary<string, object> Payload = new();
+        public readonly Dictionary<string, object?> Payload = new();
 
         public string GetString(string key, bool throwIfNull = true)
         {
-            var value = Payload[key].ToString();
+            var value = Payload[key]?.ToString();
 
             if (throwIfNull && value == null) throw new NoNullAllowedException(key);
 
             return value ?? "";
         }
 
-        public T? Get<T>(string key, bool throwIfNull)
+        public T? GetNullable<T>(string key)
         {
-            var value = Payload[key] is T ? (T) Payload[key] : JsonConvert.DeserializeObject<T>(Payload[key].ToString() ?? "");
-
-            if (throwIfNull && value == null) throw new NoNullAllowedException(key);
-
-            return value;
+            return Payload[key] is T? ? (T?) Payload[key] : JsonConvert.DeserializeObject<T?>(Payload[key]?.ToString() ?? "");
         }
 
         public T Get<T>(string key)
         {
-            return Get<T>(key, true)!;
+            return GetNullable<T>(key) ?? throw new NoNullAllowedException();
         }
 
         public string ToJson()

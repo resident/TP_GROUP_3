@@ -67,9 +67,9 @@ namespace Client
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
-                pnlChat.Enabled = Connected && LoggedIn;
+                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive && !User!.IsBanned;
 
-                timerSync.Enabled = Connected && LoggedIn;
+                timerSync.Enabled = Connected;
             };
 
             UserChanged += (sender, args) =>
@@ -81,8 +81,6 @@ namespace Client
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
                 pnlChat.Enabled = Connected && LoggedIn && User!.IsActive && !User!.IsBanned;
-
-                timerSync.Enabled = Connected && LoggedIn;
 
                 manageUsersToolStripMenuItem.Enabled = LoggedIn && User!.IsAdmin;
                 manageUsersToolStripMenuItem.Visible = LoggedIn && User!.IsAdmin;
@@ -146,7 +144,7 @@ namespace Client
             Application.Exit();
         }
 
-        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -164,7 +162,6 @@ namespace Client
             {
                 Connected = Client.IsConnected();
             }
-
         }
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -284,65 +281,70 @@ namespace Client
 
         private async void timerSync_Tick(object sender, EventArgs e)
         {
-            if (!Connected || null == User) return;
-
-            var request = new Request("Sync");
-
-            request.Payload.Add("lastSyncTime", LastSyncTime);
-            request.Payload.Add("user", User);
-
-            Client.SendMessage(request.ToJson());
-
-            var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
-
-            if (response.IsStatusOk())
+            try
             {
-                var syncStatus = response.GetString("syncStatus");
+                var request = new Request("Sync");
 
-                if (syncStatus == "updates")
+                request.Payload.Add("lastSyncTime", LastSyncTime);
+                request.Payload.Add("user", User);
+
+                Client.SendMessage(request.ToJson());
+
+                var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+
+                if (response.IsStatusOk())
                 {
-                    var users = response.Get<UsersCollection>("users");
-                    var chats = response.Get<ChatsCollection>("chats");
+                    var syncStatus = response.GetString("syncStatus");
 
-                    RegisteredUsers.Clear();
-
-                    RegisteredUsers.AddUsers(users);
-
-                    User = RegisteredUsers.GetById(User.Id);
-
-                    var selectedChat = CurrentChat;
-
-                    Chats.Clear();
-                    lbMessages.Items.Clear();
-
-                    if (User is { IsActive: true, IsBanned: false })
+                    if (syncStatus == "updates")
                     {
-                        Chats.AddChats(chats!);
+                        var users = response.Get<UsersCollection>("users");
+                        var chats = response.Get<ChatsCollection>("chats");
 
-                        if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
+                        RegisteredUsers.Clear();
 
-                        if (Chats.Count > 0)
+                        RegisteredUsers.AddUsers(users);
+
+                        User = RegisteredUsers.GetById(User.Id);
+
+                        var selectedChat = CurrentChat;
+
+                        Chats.Clear();
+                        lbMessages.Items.Clear();
+
+                        if (User is { IsActive: true, IsBanned: false })
                         {
-                            GeneralChat = Chats.ElementAt(0);
-                            CurrentChat ??= GeneralChat;
+                            Chats.AddChats(chats!);
 
-                            CurrentChat = Chats.GetById(CurrentChat.Id) ?? GeneralChat;
+                            if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
 
-                            lbChats.SelectedItem = CurrentChat;
+                            if (Chats.Count > 0)
+                            {
+                                GeneralChat = Chats.ElementAt(0);
+                                CurrentChat ??= GeneralChat;
 
-                            lbMessages.Items.Clear();
+                                CurrentChat = Chats.GetById(CurrentChat.Id) ?? GeneralChat;
 
-                            foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                                lbChats.SelectedItem = CurrentChat;
+
+                                lbMessages.Items.Clear();
+
+                                foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                            }
                         }
                     }
+
+                    LastSyncTime = DateTime.Now;
+                }
+                else
+                {
+                    Alert.Error(response.Message);
                 }
             }
-            else
+            catch
             {
-                Alert.Error(response.Message);
+                //ignored
             }
-
-            LastSyncTime = DateTime.Now;
         }
 
         private void lbMessages_MouseUp(object sender, MouseEventArgs e)

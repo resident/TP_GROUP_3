@@ -23,18 +23,18 @@ namespace Client
             _port = port;
         }
 
-        public async void Connect()
+        public void Connect()
         {
             _tcpClient = new TcpClient();
             
-            await _tcpClient.ConnectAsync(_ipAddress, _port);
+            _tcpClient.Connect(_ipAddress, _port);
 
             _responses = NetworkMessageReader.Read(_tcpClient);
         }
 
-        public async void Disconnect()
+        public void Disconnect()
         {
-            await _tcpClient.Client.DisconnectAsync(false);
+            _tcpClient.Client.Disconnect(false);
             
             _tcpClient.Close();
         }
