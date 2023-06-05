@@ -54,6 +54,7 @@
             statusLabelConnected = new ToolStripStatusLabel();
             statusLabelLoggedAs = new ToolStripStatusLabel();
             userStatus = new ToolStripStatusLabel();
+            userBanned = new ToolStripStatusLabel();
             pnlChat = new Panel();
             timerSync = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
@@ -183,15 +184,16 @@
             // 
             connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             connectToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.C;
-            connectToolStripMenuItem.Size = new Size(180, 22);
+            connectToolStripMenuItem.Size = new Size(171, 22);
             connectToolStripMenuItem.Text = "Connect";
             connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
             // 
             // disconnectToolStripMenuItem
             // 
+            disconnectToolStripMenuItem.Enabled = false;
             disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
             disconnectToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.D;
-            disconnectToolStripMenuItem.Size = new Size(180, 22);
+            disconnectToolStripMenuItem.Size = new Size(171, 22);
             disconnectToolStripMenuItem.Text = "Disconnect";
             disconnectToolStripMenuItem.Click += disconnectToolStripMenuItem_Click;
             // 
@@ -204,6 +206,7 @@
             // 
             // registerToolStripMenuItem
             // 
+            registerToolStripMenuItem.Enabled = false;
             registerToolStripMenuItem.Name = "registerToolStripMenuItem";
             registerToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.R;
             registerToolStripMenuItem.Size = new Size(180, 22);
@@ -212,6 +215,7 @@
             // 
             // loginToolStripMenuItem
             // 
+            loginToolStripMenuItem.Enabled = false;
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
             loginToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
             loginToolStripMenuItem.Size = new Size(180, 22);
@@ -220,6 +224,7 @@
             // 
             // logoutToolStripMenuItem
             // 
+            logoutToolStripMenuItem.Enabled = false;
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             logoutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.L;
             logoutToolStripMenuItem.Size = new Size(180, 22);
@@ -254,7 +259,7 @@
             // 
             // status
             // 
-            status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs, userStatus });
+            status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs, userStatus, userBanned });
             status.Location = new Point(0, 494);
             status.Name = "status";
             status.Size = new Size(853, 22);
@@ -276,6 +281,11 @@
             // 
             userStatus.Name = "userStatus";
             userStatus.Size = new Size(0, 17);
+            // 
+            // userBanned
+            // 
+            userBanned.Name = "userBanned";
+            userBanned.Size = new Size(0, 17);
             // 
             // pnlChat
             // 
@@ -351,5 +361,6 @@
         private ToolStripMenuItem manageUsersToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripStatusLabel userBanned;
     }
 }

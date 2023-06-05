@@ -41,9 +41,9 @@
             lbUsers.ItemHeight = 15;
             lbUsers.Location = new Point(12, 35);
             lbUsers.Name = "lbUsers";
+            lbUsers.SelectionMode = SelectionMode.MultiSimple;
             lbUsers.Size = new Size(260, 304);
             lbUsers.TabIndex = 0;
-            lbUsers.SelectedIndexChanged += lbUsers_SelectedIndexChanged;
             // 
             // lblUsers
             // 

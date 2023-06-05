@@ -10,7 +10,7 @@ namespace Shared
         public const string StatusOk = "OK";
         public const string StatusError = "ERROR";
 
-        public string Status = string.Empty;
+        public string Status = StatusError;
         public string Message = string.Empty;
 
         public bool IsStatusOk()

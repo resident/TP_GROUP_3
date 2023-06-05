@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text;
+using Newtonsoft.Json;
 
 namespace Shared;
 
@@ -76,7 +77,14 @@ public class User : ICloneable
 
     public override string ToString()
     {
-        if (IsAdmin) return $"{Login} #admin";
-        else return Login;
+        var tags = new List<string>();
+
+        if (IsAdmin) tags.Add("#admin");
+
+        tags.Add(IsActive ? "#active" : "#inactive");
+
+        if (IsBanned) tags.Add("#banned");
+
+        return $"{Login} {string.Join(" ", tags)}";
     }
 }
