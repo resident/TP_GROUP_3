@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Newtonsoft.Json;
+using Shared;
 
 namespace Server
 {
@@ -6,6 +7,8 @@ namespace Server
     {
         static async Task Main(string[] args)
         {
+            Shared.Json.Settings.SetGlobalJsonSettings();
+
             Settings.Load(new Dictionary<string, object>
             {
                 {

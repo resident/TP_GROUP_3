@@ -17,6 +17,8 @@ namespace Client
 
             ApplicationConfiguration.Initialize();
 
+            Shared.Json.Settings.SetGlobalJsonSettings();
+
             Settings.Load(new Dictionary<string, object>
             {
                 {"server_ip_address", "127.0.0.1"},
