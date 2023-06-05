@@ -305,7 +305,7 @@ namespace Client
 
                         RegisteredUsers.AddUsers(users);
 
-                        User = RegisteredUsers.GetById(User.Id);
+                        if (null != User) User = RegisteredUsers.GetById(User.Id);
 
                         var selectedChat = CurrentChat;
 
