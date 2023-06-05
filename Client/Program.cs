@@ -1,9 +1,12 @@
+using System.Net.Sockets;
 using Shared;
 
 namespace Client
 {
     internal static class Program
     {
+        private static readonly MainForm MainForm = new();
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -25,12 +28,21 @@ namespace Client
                 {"server_port", 1234}
             });
 
-            Application.Run(new MainForm());
+            Application.Run(MainForm);
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.Message);
+            switch (e.Exception)
+            {
+                case SocketException:
+                    MainForm.Client.Close();
+                    MainForm.Connected = false;
+                    break;
+                default:
+                    Alert.Error($"{e.Exception.GetType()} - {e.Exception.Message}");
+                    break;
+            }
         }
     }
 }
