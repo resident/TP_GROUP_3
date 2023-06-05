@@ -23,7 +23,7 @@ namespace Client
         {
             if (string.IsNullOrWhiteSpace(tbLogin.Text) || string.IsNullOrWhiteSpace(tbPassword.Text))
             {
-                MessageBox.Show("You need provide login and password");
+                Alert.Warning("You need provide login and password");
                 return;
             }
 
@@ -47,12 +47,12 @@ namespace Client
                 {
                     mainForm.User = response.Get<User>("user");
 
-                    MessageBox.Show(response.Message);
-                    this.Close();
+                    Alert.Successful(response.Message);
+                    Close();
                 }
                 else
                 {
-                    MessageBox.Show($"Error: {response.Message}");
+                    Alert.Error(response.Message);
                 }
             }
         }
