@@ -39,6 +39,7 @@
             btnCreateChat = new Button();
             btnRemoveChat = new Button();
             menu = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
             statusToolStripMenuItem = new ToolStripMenuItem();
             connectToolStripMenuItem = new ToolStripMenuItem();
             disconnectToolStripMenuItem = new ToolStripMenuItem();
@@ -79,6 +80,7 @@
             tbMessage.Name = "tbMessage";
             tbMessage.Size = new Size(446, 32);
             tbMessage.TabIndex = 4;
+            tbMessage.KeyPress += tbMessage_KeyPress;
             // 
             // btnSend
             // 
@@ -86,7 +88,7 @@
             btnSend.Margin = new Padding(2);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(78, 33);
-            btnSend.TabIndex = 5;
+            btnSend.TabIndex = 6;
             btnSend.Text = "Send";
             btnSend.UseVisualStyleBackColor = true;
             btnSend.Click += btnSend_Click;
@@ -107,7 +109,7 @@
             btnAttachFile.Margin = new Padding(2);
             btnAttachFile.Name = "btnAttachFile";
             btnAttachFile.Size = new Size(78, 32);
-            btnAttachFile.TabIndex = 11;
+            btnAttachFile.TabIndex = 5;
             btnAttachFile.Text = "Attach File";
             btnAttachFile.UseVisualStyleBackColor = true;
             btnAttachFile.Click += btnAttachFile_Click;
@@ -157,31 +159,39 @@
             // 
             // menu
             // 
-            menu.Items.AddRange(new ToolStripItem[] { statusToolStripMenuItem, accountToolStripMenuItem, manageUsersToolStripMenuItem, settingsToolStripMenuItem, exitToolStripMenuItem });
+            menu.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
             menu.Size = new Size(853, 24);
             menu.TabIndex = 16;
             // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { statusToolStripMenuItem, accountToolStripMenuItem, manageUsersToolStripMenuItem, settingsToolStripMenuItem, exitToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
             // statusToolStripMenuItem
             // 
             statusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { connectToolStripMenuItem, disconnectToolStripMenuItem });
             statusToolStripMenuItem.Name = "statusToolStripMenuItem";
-            statusToolStripMenuItem.Size = new Size(51, 20);
+            statusToolStripMenuItem.Size = new Size(189, 22);
             statusToolStripMenuItem.Text = "Status";
             // 
             // connectToolStripMenuItem
             // 
             connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-            connectToolStripMenuItem.Size = new Size(133, 22);
+            connectToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.C;
+            connectToolStripMenuItem.Size = new Size(180, 22);
             connectToolStripMenuItem.Text = "Connect";
             connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
             // 
             // disconnectToolStripMenuItem
             // 
-            disconnectToolStripMenuItem.Enabled = false;
             disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            disconnectToolStripMenuItem.Size = new Size(133, 22);
+            disconnectToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.D;
+            disconnectToolStripMenuItem.Size = new Size(180, 22);
             disconnectToolStripMenuItem.Text = "Disconnect";
             disconnectToolStripMenuItem.Click += disconnectToolStripMenuItem_Click;
             // 
@@ -189,30 +199,30 @@
             // 
             accountToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registerToolStripMenuItem, loginToolStripMenuItem, logoutToolStripMenuItem });
             accountToolStripMenuItem.Name = "accountToolStripMenuItem";
-            accountToolStripMenuItem.Size = new Size(64, 20);
+            accountToolStripMenuItem.Size = new Size(189, 22);
             accountToolStripMenuItem.Text = "Account";
             // 
             // registerToolStripMenuItem
             // 
-            registerToolStripMenuItem.Enabled = false;
             registerToolStripMenuItem.Name = "registerToolStripMenuItem";
-            registerToolStripMenuItem.Size = new Size(116, 22);
+            registerToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.R;
+            registerToolStripMenuItem.Size = new Size(180, 22);
             registerToolStripMenuItem.Text = "Register";
             registerToolStripMenuItem.Click += registerToolStripMenuItem_Click;
             // 
             // loginToolStripMenuItem
             // 
-            loginToolStripMenuItem.Enabled = false;
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(116, 22);
+            loginToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
+            loginToolStripMenuItem.Size = new Size(180, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
             // logoutToolStripMenuItem
             // 
-            logoutToolStripMenuItem.Enabled = false;
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(116, 22);
+            logoutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.L;
+            logoutToolStripMenuItem.Size = new Size(180, 22);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
@@ -220,7 +230,8 @@
             // 
             manageUsersToolStripMenuItem.Enabled = false;
             manageUsersToolStripMenuItem.Name = "manageUsersToolStripMenuItem";
-            manageUsersToolStripMenuItem.Size = new Size(93, 20);
+            manageUsersToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.M;
+            manageUsersToolStripMenuItem.Size = new Size(189, 22);
             manageUsersToolStripMenuItem.Text = "Manage Users";
             manageUsersToolStripMenuItem.Visible = false;
             manageUsersToolStripMenuItem.Click += manageUsersToolStripMenuItem_Click;
@@ -228,14 +239,16 @@
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(61, 20);
+            settingsToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
+            settingsToolStripMenuItem.Size = new Size(189, 22);
             settingsToolStripMenuItem.Text = "Settings";
             settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(38, 20);
+            exitToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.E;
+            exitToolStripMenuItem.Size = new Size(189, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -321,6 +334,13 @@
         private Button btnRemoveChat;
         internal ListBox lbChats;
         private MenuStrip menu;
+        private StatusStrip status;
+        private ToolStripStatusLabel statusLabelConnected;
+        private ToolStripStatusLabel statusLabelLoggedAs;
+        private Panel pnlChat;
+        private System.Windows.Forms.Timer timerSync;
+        private ToolStripStatusLabel userStatus;
+        private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem statusToolStripMenuItem;
         private ToolStripMenuItem connectToolStripMenuItem;
         private ToolStripMenuItem disconnectToolStripMenuItem;
@@ -328,14 +348,8 @@
         private ToolStripMenuItem registerToolStripMenuItem;
         private ToolStripMenuItem loginToolStripMenuItem;
         private ToolStripMenuItem logoutToolStripMenuItem;
-        private StatusStrip status;
-        private ToolStripMenuItem exitToolStripMenuItem;
-        private ToolStripStatusLabel statusLabelConnected;
-        private ToolStripStatusLabel statusLabelLoggedAs;
-        private Panel pnlChat;
         private ToolStripMenuItem manageUsersToolStripMenuItem;
-        private System.Windows.Forms.Timer timerSync;
-        private ToolStripStatusLabel userStatus;
         private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }

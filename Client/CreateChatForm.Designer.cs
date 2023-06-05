@@ -98,6 +98,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(2);
             Name = "CreateChatForm";
+            StartPosition = FormStartPosition.CenterParent;
             Load += CreateChatForm_Load;
             ResumeLayout(false);
             PerformLayout();

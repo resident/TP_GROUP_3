@@ -99,6 +99,7 @@
             Controls.Add(lbUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "ManageUsersForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Manage Users";
             Load += ManageUsersForm_Load;
             ResumeLayout(false);

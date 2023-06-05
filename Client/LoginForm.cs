@@ -43,7 +43,7 @@ namespace Client
 
                 var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
-                if (response.IsStatusOk() )
+                if (response.IsStatusOk())
                 {
                     mainForm.User = response.Get<User>("user");
 

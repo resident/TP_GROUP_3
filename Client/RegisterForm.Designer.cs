@@ -92,6 +92,7 @@
             Controls.Add(tbLogin);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "RegisterForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Registration";
             ResumeLayout(false);
             PerformLayout();

@@ -92,6 +92,7 @@
             Controls.Add(tbLogin);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Login";
             ResumeLayout(false);
             PerformLayout();
