@@ -20,7 +20,7 @@ namespace Server.RequestHandlers
                 var user = request.Get<User>("user");
                 var chat = request.Get<Chat>("chat");
 
-                chat = ChatsRepository.Items.GetById(chat!.Id);
+                chat = ChatsRepository.Items.GetById(chat.Id);
 
                 var generalChatSettings = Settings.Get<Dictionary<string, string>>("general_chat");
 

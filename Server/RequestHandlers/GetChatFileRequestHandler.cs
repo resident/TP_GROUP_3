@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Server.Exceptions;
 using Shared;
 
 namespace Server.RequestHandlers
 {
-    public class CreateChatRequestHandler : RequestHandler
+    public class GetChatFileRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
         {
@@ -16,15 +17,14 @@ namespace Server.RequestHandlers
 
             try
             {
-                var chat = request.Get<Chat>("chat");
-                
-                ChatsRepository.Items.Add(chat);
-                chat.Save();
+                var message = request.Get<ChatMessage>("message");
 
-                Sync.UpdateLastChangeTime();
+                var chatFile = message.GetChatFileFromDisk(true);
+
+                response.Payload.Add("chatFile", chatFile);
 
                 response.Status = Response.StatusOk;
-                response.Message = "Chat Successfully added";
+                response.Message = "File successfully sent";
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 using Shared;
+using System.Windows.Forms;
 
 namespace Client
 {
@@ -293,7 +294,7 @@ namespace Client
 
             if (response.IsStatusOk())
             {
-                var syncStatus = response.Get("syncStatus");
+                var syncStatus = response.GetString("syncStatus");
 
                 if (syncStatus == "updates")
                 {
@@ -302,7 +303,7 @@ namespace Client
 
                     RegisteredUsers.Clear();
 
-                    if (users != null) RegisteredUsers.AddUsers(users);
+                    RegisteredUsers.AddUsers(users);
 
                     User = RegisteredUsers.GetById(User!.Id);
 
@@ -311,14 +312,11 @@ namespace Client
                     Chats.Clear();
                     lbMessages.Items.Clear();
 
-                    if (User != null && User.IsActive)
+                    if (User is {IsActive: true})
                     {
-                        if (chats != null)
-                        {
-                            Chats.AddChats(chats!);
+                        Chats.AddChats(chats!);
 
-                            if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
-                        }
+                        if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
 
                         if (Chats.Count > 0)
                         {
@@ -342,6 +340,58 @@ namespace Client
             }
 
             LastSyncTime = DateTime.Now;
+        }
+
+        private void lbMessages_MouseUp(object sender, MouseEventArgs e)
+        {
+            var selectedIndex = lbMessages.IndexFromPoint(e.Location);
+
+            if (ListBox.NoMatches == selectedIndex) return;
+
+            lbMessages.SelectedIndex = selectedIndex;
+            
+            var contextMenuStrip = new ContextMenuStrip();
+
+            if (lbMessages.SelectedItem is ChatMessage {HasFile: true}) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
+
+            contextMenuStrip.Show(lbMessages, e.Location);
+        }
+
+        private async void SaveChatFileMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (lbMessages.SelectedItem is not ChatMessage message) return;
+
+            var chatFile = message.ChatFile ?? new ChatFile();
+
+            var saveFileDialog = new SaveFileDialog()
+            {
+                CheckWriteAccess = true,
+                OverwritePrompt = true,
+                AddExtension = true,
+                DefaultExt = Path.GetExtension(chatFile.Name),
+                FileName = chatFile.Name,
+            };
+
+            if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
+
+            var request = new Request("GetChatFile");
+
+            request.Payload.Add("message", message);
+
+            Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusOk())
+            {
+                chatFile = response.Get<ChatFile>("chatFile");
+
+                await File.WriteAllBytesAsync(saveFileDialog.FileName, chatFile.FileContent);
+            }
+            else
+            {
+                Alert.Error(response.Message);
+            }
         }
     }
 }

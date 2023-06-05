@@ -19,7 +19,7 @@ public class LoginRequestHandler : RequestHandler
             
             var auth = request.Get<Dictionary<string, string>>("auth");
 
-            var login = auth!["login"];
+            var login = auth["login"];
             var passwordHash = Hash.Make(auth["password"], login);
 
             if (UsersRepository.RegisteredUsers.GetUser(login, passwordHash)?.Clone() is User user)
