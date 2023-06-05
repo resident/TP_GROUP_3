@@ -51,7 +51,7 @@ namespace Client
                 if (response.IsStatusOk())
                 {
                     mainForm.Chats.Add(chat);
-                    
+
                     Close();
                 }
                 else

@@ -314,7 +314,7 @@ namespace Client
                     Chats.Clear();
                     lbMessages.Items.Clear();
 
-                    if (User is {IsActive: true})
+                    if (User is { IsActive: true })
                     {
                         Chats.AddChats(chats!);
 
@@ -351,10 +351,10 @@ namespace Client
             if (ListBox.NoMatches == selectedIndex) return;
 
             lbMessages.SelectedIndex = selectedIndex;
-            
+
             var contextMenuStrip = new ContextMenuStrip();
 
-            if (lbMessages.SelectedItem is ChatMessage {HasFile: true}) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
+            if (lbMessages.SelectedItem is ChatMessage { HasFile: true }) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
 
             contextMenuStrip.Show(lbMessages, e.Location);
         }
@@ -393,6 +393,15 @@ namespace Client
             else
             {
                 Alert.Error(response.Message);
+            }
+        }
+
+        private void tbMessage_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnSend.PerformClick();
+                e.Handled = true;
             }
         }
     }

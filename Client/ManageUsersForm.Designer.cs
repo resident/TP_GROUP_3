@@ -38,30 +38,28 @@
             // lbUsers
             // 
             lbUsers.FormattingEnabled = true;
-            lbUsers.ItemHeight = 32;
-            lbUsers.Location = new Point(22, 75);
-            lbUsers.Margin = new Padding(6, 6, 6, 6);
+            lbUsers.ItemHeight = 15;
+            lbUsers.Location = new Point(12, 35);
             lbUsers.Name = "lbUsers";
             lbUsers.SelectionMode = SelectionMode.MultiSimple;
-            lbUsers.Size = new Size(479, 644);
+            lbUsers.Size = new Size(260, 304);
             lbUsers.TabIndex = 0;
             // 
             // lblUsers
             // 
             lblUsers.AutoSize = true;
-            lblUsers.Location = new Point(22, 36);
-            lblUsers.Margin = new Padding(6, 0, 6, 0);
+            lblUsers.Location = new Point(12, 17);
             lblUsers.Name = "lblUsers";
-            lblUsers.Size = new Size(71, 32);
+            lblUsers.Size = new Size(35, 15);
             lblUsers.TabIndex = 1;
             lblUsers.Text = "Users";
             // 
             // btnApprove
             // 
-            btnApprove.Location = new Point(22, 734);
-            btnApprove.Margin = new Padding(4, 4, 4, 4);
+            btnApprove.Location = new Point(12, 344);
+            btnApprove.Margin = new Padding(2, 2, 2, 2);
             btnApprove.Name = "btnApprove";
-            btnApprove.Size = new Size(156, 66);
+            btnApprove.Size = new Size(84, 31);
             btnApprove.TabIndex = 15;
             btnApprove.Text = "Approve";
             btnApprove.UseVisualStyleBackColor = true;
@@ -69,10 +67,10 @@
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(186, 734);
-            btnRemove.Margin = new Padding(4, 4, 4, 4);
+            btnRemove.Location = new Point(100, 344);
+            btnRemove.Margin = new Padding(2, 2, 2, 2);
             btnRemove.Name = "btnRemove";
-            btnRemove.Size = new Size(156, 66);
+            btnRemove.Size = new Size(84, 31);
             btnRemove.TabIndex = 16;
             btnRemove.Text = "Remove";
             btnRemove.UseVisualStyleBackColor = true;
@@ -80,27 +78,27 @@
             // 
             // btnBan
             // 
-            btnBan.Location = new Point(349, 734);
-            btnBan.Margin = new Padding(4, 4, 4, 4);
+            btnBan.Location = new Point(188, 344);
+            btnBan.Margin = new Padding(2, 2, 2, 2);
             btnBan.Name = "btnBan";
-            btnBan.Size = new Size(156, 66);
+            btnBan.Size = new Size(84, 31);
             btnBan.TabIndex = 17;
             btnBan.Text = "Ban";
             btnBan.UseVisualStyleBackColor = true;
             // 
             // ManageUsersForm
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(529, 830);
+            ClientSize = new Size(285, 389);
             Controls.Add(btnBan);
             Controls.Add(btnRemove);
             Controls.Add(btnApprove);
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(6, 6, 6, 6);
             Name = "ManageUsersForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Manage Users";
             Load += ManageUsersForm_Load;
             ResumeLayout(false);
