@@ -72,31 +72,14 @@ namespace Client
         {
             if (this.Owner is MainForm mainForm)
             {
-                if (!mainForm.RegisteredUsers[lbUsers.SelectedIndex].IsBanned)
-                {
-                    BanUserForm ban_form = new BanUserForm(mainForm.RegisteredUsers[lbUsers.SelectedIndex]);
-                    ban_form.Owner = this;
-                    ban_form.ShowDialog();
-                }
-                else
-                {
-                    Alert.Error($"This user are already banned");
-                }
-            }
-        }
+                var users = new UsersCollection();
 
-        private void lbUsers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.Owner is MainForm mainForm)
-            {
-                if (mainForm.RegisteredUsers[lbUsers.SelectedIndex].IsAdmin)
-                {
-                    btnBan.Enabled = false;
-                }
-                else
-                {
-                    btnBan.Enabled = true;
-                }
+                users.AddUsers(lbUsers.SelectedItems.Cast<User>());
+
+                var banUsersForm = new BanUsersForm(users);
+
+                banUsersForm.Owner = this;
+                banUsersForm.ShowDialog();
             }
         }
     }

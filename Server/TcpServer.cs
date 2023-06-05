@@ -31,12 +31,6 @@ namespace Server
             _listener.Start();
             Alert.Successful($"Server started. Waiting for connections on {_ipAddress}:{_port}...");
 
-            System.Timers.Timer ban_timer = new System.Timers.Timer();
-            ban_timer.Interval = 60000;
-            ban_timer.Elapsed += new System.Timers.ElapsedEventHandler(HandleBanExpirations);
-            ban_timer.AutoReset = true;
-            ban_timer.Start();
-
             while (true)
             {
                 var client = await _listener.AcceptTcpClientAsync();
@@ -82,18 +76,6 @@ namespace Server
                 if (null != user) UsersRepository.OnlineUsers.Remove(user);
 
                 client.Close();
-            }
-        }
-
-        private void HandleBanExpirations(object sender, System.Timers.ElapsedEventArgs args)
-        {
-            foreach (var user in UsersRepository.RegisteredUsers)
-            {
-                if (user.BanExpiration <= DateTime.Now)
-                {
-                    user.IsBanned = false;
-                    user.BanExpiration = new DateTime();
-                }
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Client
 {
-    partial class BanUserForm
+    partial class BanUsersForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,11 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            labelUser = new Label();
-            tbSelectedUser = new TextBox();
-            btnCancel = new Button();
-            btnBan = new Button();
-            gbTimeSpan = new GroupBox();
             btnOtherTimeSec = new Button();
             btnOtherTimeDays = new Button();
             rbOther = new RadioButton();
@@ -53,75 +48,13 @@
             rb10Min = new RadioButton();
             rb5Min = new RadioButton();
             rb45Sec = new RadioButton();
+            lbUsers = new ListBox();
+            gbTimeSpan = new GroupBox();
+            btnBan = new Button();
+            btnCancel = new Button();
+            lblUsers = new Label();
             gbTimeSpan.SuspendLayout();
             SuspendLayout();
-            // 
-            // labelUser
-            // 
-            labelUser.AutoSize = true;
-            labelUser.Location = new Point(12, 9);
-            labelUser.Name = "labelUser";
-            labelUser.Size = new Size(77, 15);
-            labelUser.TabIndex = 0;
-            labelUser.Text = "Selected User";
-            // 
-            // tbSelectedUser
-            // 
-            tbSelectedUser.Location = new Point(12, 27);
-            tbSelectedUser.Name = "tbSelectedUser";
-            tbSelectedUser.ReadOnly = true;
-            tbSelectedUser.Size = new Size(284, 23);
-            tbSelectedUser.TabIndex = 1;
-            // 
-            // btnCancel
-            // 
-            btnCancel.Location = new Point(12, 244);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(75, 23);
-            btnCancel.TabIndex = 2;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
-            btnCancel.Click += btnCancel_Click;
-            // 
-            // btnBan
-            // 
-            btnBan.Enabled = false;
-            btnBan.Location = new Point(221, 244);
-            btnBan.Name = "btnBan";
-            btnBan.Size = new Size(75, 23);
-            btnBan.TabIndex = 3;
-            btnBan.Text = "Ban";
-            btnBan.UseVisualStyleBackColor = true;
-            btnBan.Click += btnBan_Click;
-            // 
-            // gbTimeSpan
-            // 
-            gbTimeSpan.Controls.Add(btnOtherTimeSec);
-            gbTimeSpan.Controls.Add(btnOtherTimeDays);
-            gbTimeSpan.Controls.Add(rbOther);
-            gbTimeSpan.Controls.Add(tbOtherTimeSpan);
-            gbTimeSpan.Controls.Add(labelOtherTime);
-            gbTimeSpan.Controls.Add(rbForever);
-            gbTimeSpan.Controls.Add(rb6Month);
-            gbTimeSpan.Controls.Add(rb3Year);
-            gbTimeSpan.Controls.Add(rb1Year);
-            gbTimeSpan.Controls.Add(rb3Month);
-            gbTimeSpan.Controls.Add(rb1Month);
-            gbTimeSpan.Controls.Add(rb1Week);
-            gbTimeSpan.Controls.Add(rb1Day);
-            gbTimeSpan.Controls.Add(rb12H);
-            gbTimeSpan.Controls.Add(rb1H);
-            gbTimeSpan.Controls.Add(rb30Min);
-            gbTimeSpan.Controls.Add(rb15Min);
-            gbTimeSpan.Controls.Add(rb10Min);
-            gbTimeSpan.Controls.Add(rb5Min);
-            gbTimeSpan.Controls.Add(rb45Sec);
-            gbTimeSpan.Location = new Point(12, 65);
-            gbTimeSpan.Name = "gbTimeSpan";
-            gbTimeSpan.Size = new Size(284, 173);
-            gbTimeSpan.TabIndex = 4;
-            gbTimeSpan.TabStop = false;
-            gbTimeSpan.Text = "Time Span";
             // 
             // btnOtherTimeSec
             // 
@@ -164,7 +97,7 @@
             tbOtherTimeSpan.Name = "tbOtherTimeSpan";
             tbOtherTimeSpan.Size = new Size(128, 23);
             tbOtherTimeSpan.TabIndex = 15;
-            tbOtherTimeSpan.Leave += tbOtherTimeSpan_Leave;
+            tbOtherTimeSpan.TextChanged += tbOtherTimeSpan_TextChanged;
             // 
             // labelOtherTime
             // 
@@ -355,18 +288,89 @@
             rb45Sec.UseVisualStyleBackColor = true;
             rb45Sec.CheckedChanged += RadioButtonChanged;
             // 
-            // BanUserForm
+            // lbUsers
+            // 
+            lbUsers.FormattingEnabled = true;
+            lbUsers.ItemHeight = 15;
+            lbUsers.Location = new Point(12, 25);
+            lbUsers.Name = "lbUsers";
+            lbUsers.SelectionMode = SelectionMode.None;
+            lbUsers.Size = new Size(279, 199);
+            lbUsers.TabIndex = 10;
+            // 
+            // gbTimeSpan
+            // 
+            gbTimeSpan.Controls.Add(btnOtherTimeSec);
+            gbTimeSpan.Controls.Add(btnOtherTimeDays);
+            gbTimeSpan.Controls.Add(rbOther);
+            gbTimeSpan.Controls.Add(tbOtherTimeSpan);
+            gbTimeSpan.Controls.Add(labelOtherTime);
+            gbTimeSpan.Controls.Add(rbForever);
+            gbTimeSpan.Controls.Add(rb6Month);
+            gbTimeSpan.Controls.Add(rb3Year);
+            gbTimeSpan.Controls.Add(rb1Year);
+            gbTimeSpan.Controls.Add(rb3Month);
+            gbTimeSpan.Controls.Add(rb1Month);
+            gbTimeSpan.Controls.Add(rb1Week);
+            gbTimeSpan.Controls.Add(rb1Day);
+            gbTimeSpan.Controls.Add(rb12H);
+            gbTimeSpan.Controls.Add(rb1H);
+            gbTimeSpan.Controls.Add(rb30Min);
+            gbTimeSpan.Controls.Add(rb15Min);
+            gbTimeSpan.Controls.Add(rb10Min);
+            gbTimeSpan.Controls.Add(rb5Min);
+            gbTimeSpan.Controls.Add(rb45Sec);
+            gbTimeSpan.Location = new Point(12, 240);
+            gbTimeSpan.Name = "gbTimeSpan";
+            gbTimeSpan.Size = new Size(284, 173);
+            gbTimeSpan.TabIndex = 9;
+            gbTimeSpan.TabStop = false;
+            gbTimeSpan.Text = "Time Span";
+            // 
+            // btnBan
+            // 
+            btnBan.Enabled = false;
+            btnBan.Location = new Point(221, 419);
+            btnBan.Name = "btnBan";
+            btnBan.Size = new Size(75, 23);
+            btnBan.TabIndex = 8;
+            btnBan.Text = "Ban";
+            btnBan.UseVisualStyleBackColor = true;
+            btnBan.Click += btnBan_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(12, 419);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(75, 23);
+            btnCancel.TabIndex = 7;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
+            // lblUsers
+            // 
+            lblUsers.AutoSize = true;
+            lblUsers.Location = new Point(12, 7);
+            lblUsers.Name = "lblUsers";
+            lblUsers.Size = new Size(82, 15);
+            lblUsers.TabIndex = 6;
+            lblUsers.Text = "Selected Users";
+            // 
+            // BanUsersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(303, 272);
+            ClientSize = new Size(308, 457);
+            Controls.Add(lbUsers);
             Controls.Add(gbTimeSpan);
             Controls.Add(btnBan);
             Controls.Add(btnCancel);
-            Controls.Add(tbSelectedUser);
-            Controls.Add(labelUser);
-            Name = "BanUserForm";
-            Text = "Ban User";
+            Controls.Add(lblUsers);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Name = "BanUsersForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Ban Users";
             gbTimeSpan.ResumeLayout(false);
             gbTimeSpan.PerformLayout();
             ResumeLayout(false);
@@ -375,11 +379,16 @@
 
         #endregion
 
-        private Label labelUser;
-        private TextBox tbSelectedUser;
-        private Button btnCancel;
-        private Button btnBan;
-        private GroupBox gbTimeSpan;
+        private Button btnOtherTimeSec;
+        private Button btnOtherTimeDays;
+        private RadioButton rbOther;
+        private TextBox tbOtherTimeSpan;
+        private Label labelOtherTime;
+        private RadioButton rbForever;
+        private RadioButton rb6Month;
+        private RadioButton rb3Year;
+        private RadioButton rb1Year;
+        private RadioButton rb3Month;
         private RadioButton rb1Month;
         private RadioButton rb1Week;
         private RadioButton rb1Day;
@@ -390,15 +399,10 @@
         private RadioButton rb10Min;
         private RadioButton rb5Min;
         private RadioButton rb45Sec;
-        private RadioButton rbForever;
-        private RadioButton rb6Month;
-        private RadioButton rb3Year;
-        private RadioButton rb1Year;
-        private RadioButton rb3Month;
-        private TextBox tbOtherTimeSpan;
-        private Label labelOtherTime;
-        private Button btnOtherTimeSec;
-        private Button btnOtherTimeDays;
-        private RadioButton rbOther;
+        private ListBox lbUsers;
+        private GroupBox gbTimeSpan;
+        private Button btnBan;
+        private Button btnCancel;
+        private Label lblUsers;
     }
 }

@@ -80,7 +80,7 @@ namespace Client
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
-                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive;
+                pnlChat.Enabled = Connected && LoggedIn && User!.IsActive && !User!.IsBanned;
 
                 timerSync.Enabled = Connected && LoggedIn;
 
@@ -88,6 +88,7 @@ namespace Client
                 manageUsersToolStripMenuItem.Visible = LoggedIn && User!.IsAdmin;
 
                 userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
+                userBanned.Text = LoggedIn && User!.IsBanned ? "Banned" : "";
             };
 
             InitializeComponent();
@@ -283,12 +284,12 @@ namespace Client
 
         private async void timerSync_Tick(object sender, EventArgs e)
         {
-            if (!Connected) return;
+            if (!Connected || null == User) return;
 
             var request = new Request("Sync");
 
             request.Payload.Add("lastSyncTime", LastSyncTime);
-            request.Payload.Add("user", User!);
+            request.Payload.Add("user", User);
 
             Client.SendMessage(request.ToJson());
 
@@ -307,14 +308,14 @@ namespace Client
 
                     RegisteredUsers.AddUsers(users);
 
-                    User = RegisteredUsers.GetById(User!.Id);
+                    User = RegisteredUsers.GetById(User.Id);
 
                     var selectedChat = CurrentChat;
 
                     Chats.Clear();
                     lbMessages.Items.Clear();
 
-                    if (User is { IsActive: true })
+                    if (User is { IsActive: true, IsBanned: false })
                     {
                         Chats.AddChats(chats!);
 

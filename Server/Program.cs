@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System.Timers;
 using Shared;
 
 namespace Server
 {
-    internal class Program
+    public class Program
     {
         static async Task Main(string[] args)
         {
@@ -38,6 +39,13 @@ namespace Server
             foreach (var chat in ChatsRepository.Items)
                 Alert.Show($"ID: {chat.Id} Title: {chat.Title} Messages: {chat.Messages.Count}");
 
+            var banTimer = new System.Timers.Timer();
+
+            banTimer.Interval = 1000;
+            banTimer.Elapsed += new ElapsedEventHandler(HandleBanExpiration);
+            banTimer.AutoReset = true;
+            banTimer.Start();
+
             Sync.UpdateLastChangeTime();
 
             RequestHandlersProvider.InitHandlers();
@@ -45,6 +53,22 @@ namespace Server
             var server = new TcpServer("127.0.0.1", 1234);
 
             await server.Start();
+        }
+
+        private static void HandleBanExpiration(object? sender, ElapsedEventArgs args)
+        {
+            foreach (var user in UsersRepository.RegisteredUsers)
+            {
+                if (!user.IsBanned || user.BanExpiration > DateTime.Now) continue;
+
+                user.IsBanned = false;
+                user.BanExpiration = DateTime.MinValue;
+                user.BannedAt = DateTime.MinValue;
+
+                user.Save(true);
+
+                Sync.UpdateLastChangeTime();
+            }
         }
     }
 }
