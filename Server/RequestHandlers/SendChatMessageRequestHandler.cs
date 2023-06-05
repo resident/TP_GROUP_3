@@ -24,7 +24,8 @@ namespace Server.RequestHandlers
 
                 chat.Messages.Add(message);
 
-                chat.SaveFull();
+                message.Save();
+                message.SaveChatFile();
 
                 Sync.UpdateLastChangeTime();
 

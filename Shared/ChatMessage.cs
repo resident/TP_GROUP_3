@@ -52,31 +52,33 @@ public class ChatMessage
     {
         var messageDirectoryPath = GetMessageDirectoryPath();
         var messageFilePath = GetMessageFilePath();
+
+        if (!Directory.Exists(messageDirectoryPath)) Directory.CreateDirectory(messageDirectoryPath);
+        if (!File.Exists(messageFilePath) || force) File.WriteAllText(messageFilePath, ToJson());
+    }
+
+    public void SaveChatFile(bool force = false, bool flush = true)
+    {
+        if (ChatFile?.FileContent == null) return;
+
         var messageChatFilePath = GetMessageChatFilePath();
         var messageChatFileContentPath = GetMessageChatFileContentPath();
 
-        if (!Directory.Exists(messageDirectoryPath)) Directory.CreateDirectory(messageDirectoryPath);
+        if (!File.Exists(messageChatFilePath) || force) File.WriteAllText(messageChatFilePath, ChatFile.ToJson());
+        if (!File.Exists(messageChatFileContentPath) || force) File.WriteAllBytes(messageChatFileContentPath, ChatFile.FileContent);
 
-        if (!File.Exists(messageFilePath) || force) File.WriteAllText(messageFilePath, ToJson());
-
-        if (null != ChatFile && null != ChatFile.FileContent)
-        {
-            if (!File.Exists(messageChatFilePath) || force) File.WriteAllText(messageChatFilePath, ChatFile.ToJson());
-            if (!File.Exists(messageChatFileContentPath) || force) File.WriteAllBytes(messageChatFileContentPath, ChatFile.FileContent);
-        }
-        
+        if (flush) ChatFile.FileContent = null;
     }
-
+    
     public static ChatMessage Load(string path, bool full = false)
     {
         var message = FromJson(File.ReadAllText(path));
 
-        if (message.HasFile)
-        {
-            message.ChatFile = Shared.ChatFile.FromJson(File.ReadAllText(message.GetMessageChatFilePath()));
+        if (!message.HasFile) return message;
 
-            if (full) message.LoadChatFileContent();
-        }
+        message.ChatFile = Shared.ChatFile.FromJson(File.ReadAllText(message.GetMessageChatFilePath()));
+
+        if (full) message.LoadChatFileContent();
 
         return message;
     }
@@ -108,6 +110,6 @@ public class ChatMessage
 
     public override string ToString()
     {
-        return $"{Sender.Login} :: {DateTime.ToString()} :: {Message}";
+        return $"{Sender.Login} :: {DateTime} :: {Message}";
     }
 }
