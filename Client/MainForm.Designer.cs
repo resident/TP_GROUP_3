@@ -57,6 +57,7 @@
             userBanned = new ToolStripStatusLabel();
             pnlChat = new Panel();
             timerSync = new System.Windows.Forms.Timer(components);
+            timerKeepAlive = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -209,7 +210,7 @@
             registerToolStripMenuItem.Enabled = false;
             registerToolStripMenuItem.Name = "registerToolStripMenuItem";
             registerToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.R;
-            registerToolStripMenuItem.Size = new Size(180, 22);
+            registerToolStripMenuItem.Size = new Size(175, 22);
             registerToolStripMenuItem.Text = "Register";
             registerToolStripMenuItem.Click += registerToolStripMenuItem_Click;
             // 
@@ -218,7 +219,7 @@
             loginToolStripMenuItem.Enabled = false;
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
             loginToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            loginToolStripMenuItem.Size = new Size(180, 22);
+            loginToolStripMenuItem.Size = new Size(175, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
@@ -227,7 +228,7 @@
             logoutToolStripMenuItem.Enabled = false;
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
             logoutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.L;
-            logoutToolStripMenuItem.Size = new Size(180, 22);
+            logoutToolStripMenuItem.Size = new Size(175, 22);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
@@ -309,6 +310,11 @@
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
             // 
+            // timerKeepAlive
+            // 
+            timerKeepAlive.Interval = 1500;
+            timerKeepAlive.Tick += timerKeepAlive_Tick;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -362,5 +368,6 @@
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
+        private System.Windows.Forms.Timer timerKeepAlive;
     }
 }

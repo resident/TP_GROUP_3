@@ -69,6 +69,7 @@ namespace Client
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
                 pnlChat.Enabled = Connected && LoggedIn && User!.IsActive && !User!.IsBanned;
 
+                timerKeepAlive.Enabled = Connected;
                 timerSync.Enabled = Connected;
             };
 
@@ -279,8 +280,28 @@ namespace Client
             foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
         }
 
+        private async void timerKeepAlive_Tick(object sender, EventArgs e)
+        {
+            if (!Connected) return;
+
+            try
+            {
+                var request = new Request("KeepAlive");
+
+                Client.SendMessage(request.ToJson());
+
+                var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+            }
+            catch
+            {
+                //ignored
+            }
+        }
+
         private async void timerSync_Tick(object sender, EventArgs e)
         {
+            if (!Connected || null == User) return;
+
             try
             {
                 var request = new Request("Sync");
@@ -312,7 +333,7 @@ namespace Client
                         Chats.Clear();
                         lbMessages.Items.Clear();
 
-                        if (User is { IsActive: true, IsBanned: false })
+                        if (User is {IsActive: true, IsBanned: false})
                         {
                             Chats.AddChats(chats!);
 
