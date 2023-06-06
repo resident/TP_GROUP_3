@@ -45,6 +45,8 @@ namespace Client
 
                 if (response.IsStatusOk())
                 {
+                    Sync.ResetLastChangeTime();
+
                     mainForm.User = response.Get<User>("user");
 
                     Close();
