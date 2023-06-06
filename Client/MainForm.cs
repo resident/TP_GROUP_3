@@ -94,6 +94,8 @@ namespace Client
             InitializeComponent();
 
             lbChats.DataSource = Chats;
+
+            lblMessageLength.Text = tbMessage.MaxLength.ToString();
         }
 
         private ChatTcpClient GetFreshClient()
@@ -374,7 +376,7 @@ namespace Client
         {
             if (e.Button != MouseButtons.Right) return;
 
-                var selectedIndex = lbMessages.IndexFromPoint(e.Location);
+            var selectedIndex = lbMessages.IndexFromPoint(e.Location);
 
             if (ListBox.NoMatches == selectedIndex) return;
 
@@ -443,7 +445,23 @@ namespace Client
 
         private void tbMessage_TextChanged(object sender, EventArgs e)
         {
-            lblMessageLength.Text = (50 - tbMessage.Text.Length).ToString();
+            lblMessageLength.Text = (tbMessage.MaxLength - tbMessage.Text.Length).ToString();
+        }
+
+        private void ChangeLocation()
+        {
+            btnAttachFile.Location = new Point(tbMessage.Location.X + tbMessage.Width + 2, tbMessage.Location.Y);
+            btnSend.Location = new Point(btnAttachFile.Location.X + btnAttachFile.Width + 2, btnAttachFile.Location.Y);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            ChangeLocation();
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            ChangeLocation();
         }
     }
 }

@@ -56,30 +56,34 @@
             userStatus = new ToolStripStatusLabel();
             userBanned = new ToolStripStatusLabel();
             pnlChat = new Panel();
+            pnlBottom = new Panel();
             lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
+            pnlBottom.SuspendLayout();
             SuspendLayout();
             // 
             // lbMessages
             // 
+            lbMessages.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lbMessages.FormattingEnabled = true;
             lbMessages.ItemHeight = 15;
             lbMessages.Location = new Point(202, 34);
             lbMessages.Margin = new Padding(2);
             lbMessages.Name = "lbMessages";
-            lbMessages.Size = new Size(611, 364);
+            lbMessages.Size = new Size(658, 379);
             lbMessages.TabIndex = 3;
             lbMessages.MouseUp += lbMessages_MouseUp;
             // 
             // tbMessage
             // 
+            tbMessage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbMessage.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            tbMessage.Location = new Point(202, 402);
+            tbMessage.Location = new Point(202, 0);
             tbMessage.Margin = new Padding(2);
-            tbMessage.MaxLength = 50;
+            tbMessage.MaxLength = 140;
             tbMessage.Name = "tbMessage";
             tbMessage.Size = new Size(446, 32);
             tbMessage.TabIndex = 4;
@@ -88,10 +92,10 @@
             // 
             // btnSend
             // 
-            btnSend.Location = new Point(733, 400);
+            btnSend.Location = new Point(733, 0);
             btnSend.Margin = new Padding(2);
             btnSend.Name = "btnSend";
-            btnSend.Size = new Size(78, 33);
+            btnSend.Size = new Size(78, 32);
             btnSend.TabIndex = 6;
             btnSend.Text = "Send";
             btnSend.UseVisualStyleBackColor = true;
@@ -109,7 +113,7 @@
             // 
             // btnAttachFile
             // 
-            btnAttachFile.Location = new Point(650, 401);
+            btnAttachFile.Location = new Point(650, 0);
             btnAttachFile.Margin = new Padding(2);
             btnAttachFile.Name = "btnAttachFile";
             btnAttachFile.Size = new Size(78, 32);
@@ -130,21 +134,22 @@
             // 
             // lbChats
             // 
+            lbChats.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             lbChats.FormattingEnabled = true;
             lbChats.ItemHeight = 15;
             lbChats.Location = new Point(13, 34);
             lbChats.Margin = new Padding(2);
             lbChats.Name = "lbChats";
-            lbChats.Size = new Size(180, 364);
+            lbChats.Size = new Size(180, 379);
             lbChats.TabIndex = 12;
             lbChats.SelectedIndexChanged += lbChats_SelectedIndexChanged;
             // 
             // btnCreateChat
             // 
-            btnCreateChat.Location = new Point(13, 402);
+            btnCreateChat.Location = new Point(13, 0);
             btnCreateChat.Margin = new Padding(2);
             btnCreateChat.Name = "btnCreateChat";
-            btnCreateChat.Size = new Size(84, 31);
+            btnCreateChat.Size = new Size(84, 32);
             btnCreateChat.TabIndex = 14;
             btnCreateChat.Text = "Create";
             btnCreateChat.UseVisualStyleBackColor = true;
@@ -152,10 +157,10 @@
             // 
             // btnRemoveChat
             // 
-            btnRemoveChat.Location = new Point(113, 402);
+            btnRemoveChat.Location = new Point(113, 0);
             btnRemoveChat.Margin = new Padding(2);
             btnRemoveChat.Name = "btnRemoveChat";
-            btnRemoveChat.Size = new Size(78, 31);
+            btnRemoveChat.Size = new Size(78, 32);
             btnRemoveChat.TabIndex = 15;
             btnRemoveChat.Text = "Remove";
             btnRemoveChat.UseVisualStyleBackColor = true;
@@ -166,7 +171,7 @@
             menu.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
-            menu.Size = new Size(853, 24);
+            menu.Size = new Size(871, 24);
             menu.TabIndex = 16;
             // 
             // fileToolStripMenuItem
@@ -263,9 +268,9 @@
             // status
             // 
             status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs, userStatus, userBanned });
-            status.Location = new Point(0, 494);
+            status.Location = new Point(0, 499);
             status.Name = "status";
-            status.Size = new Size(853, 22);
+            status.Size = new Size(871, 22);
             status.TabIndex = 17;
             // 
             // statusLabelConnected
@@ -292,31 +297,41 @@
             // 
             // pnlChat
             // 
-            pnlChat.Controls.Add(lblMessageLength);
+            pnlChat.Controls.Add(pnlBottom);
             pnlChat.Controls.Add(lbMessages);
-            pnlChat.Controls.Add(tbMessage);
-            pnlChat.Controls.Add(btnRemoveChat);
-            pnlChat.Controls.Add(btnSend);
-            pnlChat.Controls.Add(btnCreateChat);
             pnlChat.Controls.Add(lblMessages);
             pnlChat.Controls.Add(lblChats);
-            pnlChat.Controls.Add(btnAttachFile);
             pnlChat.Controls.Add(lbChats);
+            pnlChat.Dock = DockStyle.Fill;
             pnlChat.Enabled = false;
-            pnlChat.Location = new Point(12, 27);
+            pnlChat.Location = new Point(0, 24);
             pnlChat.Name = "pnlChat";
-            pnlChat.Size = new Size(829, 464);
+            pnlChat.Size = new Size(871, 475);
             pnlChat.TabIndex = 18;
+            // 
+            // pnlBottom
+            // 
+            pnlBottom.Controls.Add(tbMessage);
+            pnlBottom.Controls.Add(lblMessageLength);
+            pnlBottom.Controls.Add(btnAttachFile);
+            pnlBottom.Controls.Add(btnCreateChat);
+            pnlBottom.Controls.Add(btnSend);
+            pnlBottom.Controls.Add(btnRemoveChat);
+            pnlBottom.Dock = DockStyle.Bottom;
+            pnlBottom.Location = new Point(0, 418);
+            pnlBottom.Name = "pnlBottom";
+            pnlBottom.Size = new Size(871, 57);
+            pnlBottom.TabIndex = 17;
             // 
             // lblMessageLength
             // 
             lblMessageLength.AutoSize = true;
             lblMessageLength.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            lblMessageLength.Location = new Point(202, 436);
+            lblMessageLength.Location = new Point(202, 36);
             lblMessageLength.Name = "lblMessageLength";
-            lblMessageLength.Size = new Size(21, 15);
+            lblMessageLength.Size = new Size(28, 15);
             lblMessageLength.TabIndex = 16;
-            lblMessageLength.Text = "50";
+            lblMessageLength.Text = "140";
             // 
             // timerSync
             // 
@@ -327,22 +342,25 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(853, 516);
+            ClientSize = new Size(871, 521);
             Controls.Add(pnlChat);
             Controls.Add(status);
             Controls.Add(menu);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             MainMenuStrip = menu;
             Margin = new Padding(2);
             Name = "MainForm";
             Text = "Chat";
             FormClosing += MainForm_FormClosing;
+            Load += MainForm_Load;
+            SizeChanged += MainForm_SizeChanged;
             menu.ResumeLayout(false);
             menu.PerformLayout();
             status.ResumeLayout(false);
             status.PerformLayout();
             pnlChat.ResumeLayout(false);
             pnlChat.PerformLayout();
+            pnlBottom.ResumeLayout(false);
+            pnlBottom.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -377,5 +395,6 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
         private Label lblMessageLength;
+        private Panel pnlBottom;
     }
 }
