@@ -8,12 +8,16 @@ namespace Shared;
 public class ChatFile
 {
     public string Id;
-    public string Name;
-    public byte[] FileContent;
-    
-    public ChatFile(string path, string? name = null)
+    public string Name = string.Empty;
+    public byte[] FileContent = Array.Empty<byte>();
+
+    public ChatFile()
     {
         Id = Guid.NewGuid().ToString();
+    }
+
+    public ChatFile(string path, string? name = null) : this()
+    {
         Name = name ?? Path.GetFileName(path);
 
         using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -25,7 +29,7 @@ public class ChatFile
 
     public string ToJson(bool full = false)
     {
-        var file = full ? this : new ChatFile(string.Empty)
+        var file = full ? this : new ChatFile()
         {
             Id = Id,
             Name = Name,
