@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Data;
 using Shared;
 using System.Windows.Forms;
+using Collections;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Client
