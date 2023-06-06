@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class BanUsersRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Data;
+using Newtonsoft.Json;
 using System.Formats.Tar;
 using System.Reflection;
 
@@ -8,16 +9,11 @@ public class ChatFile
 {
     public string Id;
     public string Name;
-    public byte[] FileContent = Array.Empty<byte>();
-
-
-    public ChatFile()
+    public byte[] FileContent;
+    
+    public ChatFile(string path, string? name = null)
     {
         Id = Guid.NewGuid().ToString();
-    }
-
-    public ChatFile(string path, string? name = null) : this()
-    {
         Name = name ?? Path.GetFileName(path);
 
         using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -29,7 +25,7 @@ public class ChatFile
 
     public string ToJson(bool full = false)
     {
-        var file = full ? this : new ChatFile()
+        var file = full ? this : new ChatFile(string.Empty)
         {
             Id = Id,
             Name = Name,
@@ -40,6 +36,6 @@ public class ChatFile
 
     public static ChatFile FromJson(string json)
     {
-        return JsonConvert.DeserializeObject<ChatFile>(json) ?? throw new ArgumentNullException("ChatFile");
+        return JsonConvert.DeserializeObject<ChatFile>(json) ?? throw new NoNullAllowedException();
     }
 }

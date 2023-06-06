@@ -1,6 +1,6 @@
 ﻿namespace Client
 {
-    partial class MainForm
+    sealed partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.

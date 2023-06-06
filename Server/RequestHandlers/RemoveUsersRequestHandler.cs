@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class RemoveUsersRequestHandler:RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
@@ -17,16 +18,17 @@ namespace Server.RequestHandlers
             try
             {
                 var users = request.Get<UsersCollection>("users");
-                int removedUsersCount = 0;
+                var removedUsersCount = 0;
+
                 foreach (var user in users)
                 {
                     var currentUser = UsersRepository.RegisteredUsers.GetById(user.Id);
-                    if (currentUser != null && !currentUser.IsAdmin)
-                    {
-                        UsersRepository.RegisteredUsers.RemoveById(user.Id);
-                        currentUser.Remove();
-                        removedUsersCount++;
-                    }
+
+                    if (currentUser is null or {IsAdmin: true}) continue;
+
+                    UsersRepository.RegisteredUsers.RemoveById(user.Id);
+                    currentUser.Remove();
+                    removedUsersCount++;
                 }
 
                 Sync.UpdateLastChangeTime();

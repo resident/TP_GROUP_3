@@ -15,17 +15,17 @@ namespace Client
 
         public static void Successful(string message)
         {
-            MessageBox.Show(message, "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(message, @"Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public static void Warning(string message)
         {
-            MessageBox.Show(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(message, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public static void Error(string message)
         {
-            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

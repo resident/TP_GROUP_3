@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,8 +15,8 @@ namespace Client
     {
         private readonly string _ipAddress;
         private readonly int _port;
-        private TcpClient _tcpClient = new TcpClient();
-        private IAsyncEnumerable<string> _responses;
+        private TcpClient _tcpClient = new();
+        private IAsyncEnumerable<string>? _responses;
 
         public ChatTcpClient(string ipAddress, int port)
         {
@@ -59,6 +60,8 @@ namespace Client
 
         public async Task<string> ReceiveMessage()
         {
+            if (null == _responses) throw new NoNullAllowedException();
+
             await using var enumerator = _responses.GetAsyncEnumerator();
             await enumerator.MoveNextAsync();
 

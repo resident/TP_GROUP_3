@@ -28,7 +28,7 @@ namespace Server
             else
             {
                 // Add default chat for all messages
-                var generalChat = Settings.Get<Dictionary<string, string>>("general_chat") ?? throw new ArgumentNullException("general_chat");
+                var generalChat = Settings.Get<Dictionary<string, string>>("general_chat");
                 var chat = new Chat(generalChat["title"]){Id = generalChat["id"]};
 
                 chat.Save();

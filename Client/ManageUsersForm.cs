@@ -70,17 +70,16 @@ namespace Client
 
         private void btnBan_Click(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm)
-            {
-                var users = new UsersCollection();
+            if (this.Owner is not MainForm) return;
 
-                users.AddUsers(lbUsers.SelectedItems.Cast<User>());
+            var users = new UsersCollection();
 
-                var banUsersForm = new BanUsersForm(users);
+            users.AddUsers(lbUsers.SelectedItems.Cast<User>());
 
-                banUsersForm.Owner = this;
-                banUsersForm.ShowDialog();
-            }
+            var banUsersForm = new BanUsersForm(users);
+
+            banUsersForm.Owner = this;
+            banUsersForm.ShowDialog();
         }
     }
 }

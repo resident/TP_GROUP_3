@@ -40,7 +40,7 @@ namespace Client
                 if (response.IsStatusOk())
                 {
                     mainForm.User = user;
-                    Alert.Successful(response.Message);
+
                     Close();
                 }
                 else

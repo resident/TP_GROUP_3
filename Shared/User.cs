@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Data;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace Shared;
@@ -62,7 +63,7 @@ public class User : ICloneable
 
     public static User FromJson(string json)
     {
-        return JsonConvert.DeserializeObject<User>(json) ?? throw new ArgumentNullException("User"); ;
+        return JsonConvert.DeserializeObject<User>(json) ?? throw new NoNullAllowedException();
     }
 
     public object Clone()

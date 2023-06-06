@@ -1,11 +1,12 @@
 using System.Collections.Immutable;
+using System.Data;
 using Shared;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Client
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         internal ChatTcpClient Client;
         private bool _connected;
@@ -14,8 +15,8 @@ namespace Client
         private event EventHandler UserChanged;
         public bool LoggedIn;
         private string? _attachedFilePath;
-        public readonly UsersCollection RegisteredUsers = new UsersCollection();
-        public readonly ChatsCollection Chats = new ChatsCollection();
+        public readonly UsersCollection RegisteredUsers = new();
+        public readonly ChatsCollection Chats = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
         public DateTime LastSyncTime = DateTime.MinValue;
@@ -46,12 +47,12 @@ namespace Client
             }
         }
 
-        protected virtual void OnConnectionChanged()
+        private void OnConnectionChanged()
         {
             ConnectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnUserChanged()
+        private void OnUserChanged()
         {
             UserChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -60,7 +61,7 @@ namespace Client
         {
             Client = GetFreshClient();
 
-            ConnectionChanged += (sender, args) =>
+            ConnectionChanged += delegate
             {
                 statusLabelConnected.Text = Connected ? "Connected" : "Disconnected";
 
@@ -74,7 +75,7 @@ namespace Client
                 timerSync.Enabled = Connected;
             };
 
-            UserChanged += (sender, args) =>
+            UserChanged += delegate
             {
                 LoggedIn = User != null;
                 statusLabelLoggedAs.Text = LoggedIn ? $"Logged in as: {User!.Login}" : "Not logged in";
@@ -100,8 +101,8 @@ namespace Client
 
         private ChatTcpClient GetFreshClient()
         {
-            var serverIpAddress = Settings.Get<string>("server_ip_address") ?? "127.0.0.1";
-            var serverPort = Settings.Get<int?>("server_port") ?? 1234;
+            var serverIpAddress = Settings.Get<string>("server_ip_address");
+            var serverPort = Settings.Get<int>("server_port");
 
             return new ChatTcpClient(serverIpAddress, serverPort);
         }
@@ -148,7 +149,7 @@ namespace Client
             System.Windows.Forms.Application.Exit();
         }
 
-        private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -243,7 +244,8 @@ namespace Client
                 return;
             }
 
-            var chat = lbChats.SelectedItem as Chat ?? GeneralChat;
+            if (lbChats.SelectedItem is not Chat chat) return;
+
             var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
             var chatMessage = new ChatMessage(User, chat, tbMessage.Text, chatFile);
 
@@ -295,7 +297,7 @@ namespace Client
 
                 Client.SendMessage(request.ToJson());
 
-                var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+                _ = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
             }
             catch
             {
@@ -401,7 +403,7 @@ namespace Client
         {
             if (lbMessages.SelectedItem is not ChatMessage message) return;
 
-            var chatFile = message.ChatFile ?? new ChatFile();
+            var chatFile = message.ChatFile ?? throw new NoNullAllowedException();
 
             var saveFileDialog = new SaveFileDialog()
             {
@@ -450,8 +452,8 @@ namespace Client
 
         private void ChangeLocation()
         {
-            btnAttachFile.Location = new Point(tbMessage.Location.X + tbMessage.Width + 2, tbMessage.Location.Y);
-            btnSend.Location = new Point(btnAttachFile.Location.X + btnAttachFile.Width + 2, btnAttachFile.Location.Y);
+            btnAttachFile.Location = tbMessage.Location with {X = tbMessage.Location.X + tbMessage.Width + 2};
+            btnSend.Location = btnAttachFile.Location with {X = btnAttachFile.Location.X + btnAttachFile.Width + 2};
         }
 
         private void MainForm_Load(object sender, EventArgs e)

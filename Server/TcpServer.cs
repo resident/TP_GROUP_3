@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -26,6 +27,7 @@ namespace Server
             _listener = new TcpListener(IPAddress.Parse(ipAddress), port);
         }
 
+        [SuppressMessage("ReSharper", "FunctionNeverReturns")]
         public async Task Start()
         {
             _listener.Start();
