@@ -60,6 +60,7 @@
             // 
             tbChatTitle.Location = new Point(8, 25);
             tbChatTitle.Margin = new Padding(2);
+            tbChatTitle.MaxLength = 15;
             tbChatTitle.Name = "tbChatTitle";
             tbChatTitle.Size = new Size(180, 23);
             tbChatTitle.TabIndex = 11;
