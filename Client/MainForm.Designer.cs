@@ -73,7 +73,7 @@
             lbMessages.Location = new Point(202, 34);
             lbMessages.Margin = new Padding(2);
             lbMessages.Name = "lbMessages";
-            lbMessages.Size = new Size(658, 379);
+            lbMessages.Size = new Size(771, 409);
             lbMessages.TabIndex = 3;
             lbMessages.MouseUp += lbMessages_MouseUp;
             // 
@@ -85,14 +85,14 @@
             tbMessage.Margin = new Padding(2);
             tbMessage.MaxLength = 140;
             tbMessage.Name = "tbMessage";
-            tbMessage.Size = new Size(446, 32);
+            tbMessage.Size = new Size(605, 32);
             tbMessage.TabIndex = 4;
             tbMessage.TextChanged += tbMessage_TextChanged;
             tbMessage.KeyPress += tbMessage_KeyPress;
             // 
             // btnSend
             // 
-            btnSend.Location = new Point(733, 0);
+            btnSend.Location = new Point(893, 0);
             btnSend.Margin = new Padding(2);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(78, 32);
@@ -113,7 +113,7 @@
             // 
             // btnAttachFile
             // 
-            btnAttachFile.Location = new Point(650, 0);
+            btnAttachFile.Location = new Point(811, 0);
             btnAttachFile.Margin = new Padding(2);
             btnAttachFile.Name = "btnAttachFile";
             btnAttachFile.Size = new Size(78, 32);
@@ -140,7 +140,7 @@
             lbChats.Location = new Point(13, 34);
             lbChats.Margin = new Padding(2);
             lbChats.Name = "lbChats";
-            lbChats.Size = new Size(180, 379);
+            lbChats.Size = new Size(180, 409);
             lbChats.TabIndex = 12;
             lbChats.SelectedIndexChanged += lbChats_SelectedIndexChanged;
             // 
@@ -171,7 +171,7 @@
             menu.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
-            menu.Size = new Size(871, 24);
+            menu.Size = new Size(984, 24);
             menu.TabIndex = 16;
             // 
             // fileToolStripMenuItem
@@ -268,9 +268,9 @@
             // status
             // 
             status.Items.AddRange(new ToolStripItem[] { statusLabelConnected, statusLabelLoggedAs, userStatus, userBanned });
-            status.Location = new Point(0, 499);
+            status.Location = new Point(0, 539);
             status.Name = "status";
-            status.Size = new Size(871, 22);
+            status.Size = new Size(984, 22);
             status.TabIndex = 17;
             // 
             // statusLabelConnected
@@ -306,7 +306,7 @@
             pnlChat.Enabled = false;
             pnlChat.Location = new Point(0, 24);
             pnlChat.Name = "pnlChat";
-            pnlChat.Size = new Size(871, 475);
+            pnlChat.Size = new Size(984, 515);
             pnlChat.TabIndex = 18;
             // 
             // pnlBottom
@@ -318,9 +318,9 @@
             pnlBottom.Controls.Add(btnSend);
             pnlBottom.Controls.Add(btnRemoveChat);
             pnlBottom.Dock = DockStyle.Bottom;
-            pnlBottom.Location = new Point(0, 418);
+            pnlBottom.Location = new Point(0, 458);
             pnlBottom.Name = "pnlBottom";
-            pnlBottom.Size = new Size(871, 57);
+            pnlBottom.Size = new Size(984, 57);
             pnlBottom.TabIndex = 17;
             // 
             // lblMessageLength
@@ -342,12 +342,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(871, 521);
+            ClientSize = new Size(984, 561);
             Controls.Add(pnlChat);
             Controls.Add(status);
             Controls.Add(menu);
             MainMenuStrip = menu;
             Margin = new Padding(2);
+            MinimumSize = new Size(1000, 600);
             Name = "MainForm";
             Text = "Chat";
             FormClosing += MainForm_FormClosing;
