@@ -21,7 +21,6 @@ namespace Client
         public readonly MessagesCollection Messages = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
-        public DateTime LastSyncTime = DateTime.MinValue;
 
         public bool Connected
         {
@@ -313,7 +312,7 @@ namespace Client
             {
                 var request = new Request("Sync");
 
-                request.Payload.Add("lastSyncTime", LastSyncTime);
+                request.Payload.Add("lastSyncTime", Sync.GetLastChangeTime());
                 request.Payload.Add("user", User);
 
                 Client.SendMessage(request.ToJson());
@@ -364,7 +363,7 @@ namespace Client
                         }
                     }
 
-                    LastSyncTime = DateTime.Now;
+                    Sync.UpdateLastChangeTime();
                 }
                 else
                 {
