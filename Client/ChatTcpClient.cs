@@ -33,10 +33,26 @@ namespace Client
             _responses = NetworkMessageReader.Read(_tcpClient);
         }
 
+        public async Task ConnectAsync()
+        {
+            _tcpClient = new TcpClient();
+
+            await _tcpClient.ConnectAsync(_ipAddress, _port);
+
+            _responses = NetworkMessageReader.Read(_tcpClient);
+        }
+
         public void Disconnect()
         {
             _tcpClient.Client.Disconnect(false);
-            
+
+            _tcpClient.Close();
+        }
+
+        public async Task DisconnectAsync()
+        {
+            await _tcpClient.Client.DisconnectAsync(false);
+
             _tcpClient.Close();
         }
 
@@ -54,7 +70,7 @@ namespace Client
         {
             var stream = _tcpClient.GetStream();
             var data = Encoding.UTF8.GetBytes(message);
-            
+
             await stream.WriteAsync(data, 0, data.Length);
         }
 
