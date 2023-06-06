@@ -129,7 +129,7 @@ namespace Client
                     var x = int.Parse(tbOtherTimeSpan.Text);
                     btnBan.Enabled = true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     tbOtherTimeSpan.Text = "";
                     btnBan.Enabled = false;
