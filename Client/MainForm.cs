@@ -10,7 +10,9 @@ namespace Client
     public sealed partial class MainForm : Form
     {
         internal ChatTcpClient Client;
+        private bool _connecting;
         private bool _connected;
+        private event EventHandler ConnectingChanged;
         private event EventHandler ConnectionChanged;
         private User? _user;
         private event EventHandler UserChanged;
@@ -21,6 +23,20 @@ namespace Client
         public readonly MessagesCollection Messages = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
+        
+
+        public bool Connecting
+        {
+            get => _connecting;
+            set
+            {
+                if (_connecting != value)
+                {
+                    _connecting = value;
+                    OnConnectingChanged();
+                }
+            }
+        }
 
         public bool Connected
         {
@@ -48,6 +64,11 @@ namespace Client
             }
         }
 
+        private void OnConnectingChanged()
+        {
+            ConnectingChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         private void OnConnectionChanged()
         {
             ConnectionChanged?.Invoke(this, EventArgs.Empty);
@@ -62,12 +83,19 @@ namespace Client
         {
             Client = GetFreshClient();
 
+            ConnectingChanged += delegate
+            {
+                statusLabelConnected.Text = Connecting ? "Connecting..." : Connected ? "Connected" : "Disconnected";
+                connectToolStripMenuItem.Enabled = !Connected && !Connecting;
+                disconnectToolStripMenuItem.Enabled = Connected || Connecting;
+            };
+
             ConnectionChanged += delegate
             {
                 statusLabelConnected.Text = Connected ? "Connected" : "Disconnected";
 
-                connectToolStripMenuItem.Enabled = !Connected;
-                disconnectToolStripMenuItem.Enabled = Connected;
+                connectToolStripMenuItem.Enabled = !Connected && !Connecting;
+                disconnectToolStripMenuItem.Enabled = Connected || Connecting;
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
@@ -79,6 +107,12 @@ namespace Client
             UserChanged += delegate
             {
                 LoggedIn = User != null;
+
+                if (LoggedIn)
+                    File.WriteAllText("user.json", User!.ToJson());
+                else
+                    File.Delete("user.json");
+
                 statusLabelLoggedAs.Text = LoggedIn ? $"Logged in as: {User!.Login}" : "Not logged in";
 
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
@@ -92,13 +126,17 @@ namespace Client
                 userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
                 userBanned.Text = LoggedIn && User!.IsBanned ? "Banned" : "";
             };
-
+            
             InitializeComponent();
+
+            if (File.Exists("user.json")) User = User.Load("user.json");
 
             lbChats.DataSource = Chats;
             lbMessages.DataSource = Messages;
 
             lblMessageLength.Text = tbMessage.MaxLength.ToString();
+
+            connectToolStripMenuItem.PerformClick();
         }
 
         private ChatTcpClient GetFreshClient()
@@ -151,32 +189,43 @@ namespace Client
             System.Windows.Forms.Application.Exit();
         }
 
-        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (Client.IsConnected()) return;
+            if (Connecting) return;
 
-                Client = GetFreshClient();
+            Connecting = true;
 
-                Client.Connect();
-            }
-            catch
+            while(Connecting)
             {
-                // ignored
-            }
-            finally
-            {
-                Connected = Client.IsConnected();
+                try
+                {
+                    if (Client.IsConnected()) return;
+
+                    Client = GetFreshClient();
+
+                    await Client.ConnectAsync();
+                }
+                catch
+                {
+                    // ignored
+                }
+                finally
+                {
+                    Connected = Client.IsConnected();
+
+                    Connecting = Connecting ? !Connected : Connected;
+                }
             }
         }
 
-        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
+                Connecting = false;
+
                 if (Client.IsConnected())
-                    Client.Disconnect();
+                    await Client.DisconnectAsync();
             }
             catch
             {
@@ -292,25 +341,20 @@ namespace Client
         private async void timerSync_Tick(object sender, EventArgs e)
         {
             if (!Connected) return;
-
+            
             try
             {
+                // KeepAlive
                 var request = new Request("KeepAlive");
 
                 Client.SendMessage(request.ToJson());
 
                 _ = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
-            }
-            catch
-            {
-                //ignored
-            }
 
-            if (null == User) return;
+                if (null == User) return;
 
-            try
-            {
-                var request = new Request("Sync");
+                // Sync
+                request = new Request("Sync");
 
                 request.Payload.Add("lastSyncTime", Sync.GetLastChangeTime());
                 request.Payload.Add("user", User);
@@ -372,7 +416,9 @@ namespace Client
             }
             catch
             {
-                //ignored
+                await Client.DisconnectAsync();
+                Connected = false;
+                connectToolStripMenuItem.PerformClick();
             }
         }
 

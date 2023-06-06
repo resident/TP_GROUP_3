@@ -13,12 +13,18 @@ namespace Client
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            _ = new Mutex(true, "MyAppMutex", out var isNewInstance);
+
+            if (!isNewInstance) Environment.Exit(0);
+
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += Application_ThreadException;
 
+            // To customize application configuration such as set high DPI settings or default font,
+            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            
 
             Shared.Json.Settings.SetGlobalJsonSettings();
 
