@@ -333,7 +333,7 @@ namespace Client
                         Chats.Clear();
                         lbMessages.Items.Clear();
 
-                        if (User is {IsActive: true, IsBanned: false})
+                        if (User is { IsActive: true, IsBanned: false })
                         {
                             Chats.AddChats(chats!);
 
@@ -427,6 +427,11 @@ namespace Client
                 btnSend.PerformClick();
                 e.Handled = true;
             }
+        }
+
+        private void tbMessage_TextChanged(object sender, EventArgs e)
+        {
+            lblMessageLength.Text = (50 - tbMessage.Text.Length).ToString();
         }
     }
 }

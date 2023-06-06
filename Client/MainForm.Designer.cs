@@ -56,6 +56,7 @@
             userStatus = new ToolStripStatusLabel();
             userBanned = new ToolStripStatusLabel();
             pnlChat = new Panel();
+            lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
             timerKeepAlive = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
@@ -79,9 +80,11 @@
             tbMessage.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             tbMessage.Location = new Point(202, 402);
             tbMessage.Margin = new Padding(2);
+            tbMessage.MaxLength = 50;
             tbMessage.Name = "tbMessage";
             tbMessage.Size = new Size(446, 32);
             tbMessage.TabIndex = 4;
+            tbMessage.TextChanged += tbMessage_TextChanged;
             tbMessage.KeyPress += tbMessage_KeyPress;
             // 
             // btnSend
@@ -290,6 +293,7 @@
             // 
             // pnlChat
             // 
+            pnlChat.Controls.Add(lblMessageLength);
             pnlChat.Controls.Add(lbMessages);
             pnlChat.Controls.Add(tbMessage);
             pnlChat.Controls.Add(btnRemoveChat);
@@ -302,8 +306,18 @@
             pnlChat.Enabled = false;
             pnlChat.Location = new Point(12, 27);
             pnlChat.Name = "pnlChat";
-            pnlChat.Size = new Size(829, 450);
+            pnlChat.Size = new Size(829, 464);
             pnlChat.TabIndex = 18;
+            // 
+            // lblMessageLength
+            // 
+            lblMessageLength.AutoSize = true;
+            lblMessageLength.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            lblMessageLength.Location = new Point(202, 436);
+            lblMessageLength.Name = "lblMessageLength";
+            lblMessageLength.Size = new Size(21, 15);
+            lblMessageLength.TabIndex = 16;
+            lblMessageLength.Text = "50";
             // 
             // timerSync
             // 
@@ -369,5 +383,6 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
         private System.Windows.Forms.Timer timerKeepAlive;
+        private Label lblMessageLength;
     }
 }
