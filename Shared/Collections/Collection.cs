@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Shared;
+namespace Collections;
 
 public class Collection<T> : BindingList<T>
 {
