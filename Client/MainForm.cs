@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Shared;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -332,7 +333,7 @@ namespace Client
 
                         if (User is { IsActive: true, IsBanned: false })
                         {
-                            Chats.AddChats(chats!);
+                            Chats.AddChats(chats);
 
                             if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
 
