@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ChatMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ChatsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Collection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\MessagesCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Converters\SynchronizedDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Settings.cs" />
@@ -26,8 +27,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\UsersCollection.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Collections\" />
   </ItemGroup>
 </Project>

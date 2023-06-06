@@ -18,6 +18,7 @@ namespace Client
         private string? _attachedFilePath;
         public readonly UsersCollection RegisteredUsers = new();
         public readonly ChatsCollection Chats = new();
+        public readonly MessagesCollection Messages = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
         public DateTime LastSyncTime = DateTime.MinValue;
@@ -96,6 +97,7 @@ namespace Client
             InitializeComponent();
 
             lbChats.DataSource = Chats;
+            lbMessages.DataSource = Messages;
 
             lblMessageLength.Text = tbMessage.MaxLength.ToString();
         }
@@ -214,7 +216,7 @@ namespace Client
         {
             User = null;
             Chats.Clear();
-            lbMessages.Items.Clear();
+            Messages.Clear();
         }
 
         private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -267,7 +269,7 @@ namespace Client
             {
                 chat.AddMessage(chatMessage);
 
-                lbMessages.Items.Add(chatMessage);
+                Messages.Add(chatMessage);
             }
             else
             {
@@ -279,13 +281,13 @@ namespace Client
         {
             CurrentChat = lbChats.SelectedItem as Chat ?? GeneralChat;
 
-            lbMessages.Items.Clear();
+            Messages.Clear();
 
             if (null == CurrentChat) return;
 
-            foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+            foreach (var message in CurrentChat.Messages) Messages.Add(message);
 
-            lbMessages.TopIndex = lbMessages.Items.Count - 1;
+            lbMessages.TopIndex = Messages.Count - 1;
         }
 
         private async void timerSync_Tick(object sender, EventArgs e)
@@ -336,7 +338,7 @@ namespace Client
                         var selectedChat = CurrentChat;
 
                         Chats.Clear();
-                        lbMessages.Items.Clear();
+                        Messages.Clear();
 
                         if (User is { IsActive: true, IsBanned: false })
                         {
@@ -353,11 +355,11 @@ namespace Client
 
                                 lbChats.SelectedItem = CurrentChat;
 
-                                lbMessages.Items.Clear();
+                                Messages.Clear();
 
-                                foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                                foreach (var message in CurrentChat.Messages) Messages.Add(message);
 
-                                lbMessages.TopIndex = lbMessages.Items.Count - 1;
+                                lbMessages.TopIndex = Messages.Count - 1;
                             }
                         }
                     }
