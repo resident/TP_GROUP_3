@@ -47,7 +47,6 @@ namespace Client
                 {
                     mainForm.User = response.Get<User>("user");
 
-                    Alert.Successful(response.Message);
                     Close();
                 }
                 else

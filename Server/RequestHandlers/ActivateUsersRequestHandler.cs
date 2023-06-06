@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class ActivateUsersRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)

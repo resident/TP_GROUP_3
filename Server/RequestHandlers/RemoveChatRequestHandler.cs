@@ -9,6 +9,7 @@ using Shared;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class RemoveChatRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
@@ -27,7 +28,7 @@ namespace Server.RequestHandlers
                 if (chat!.Id == generalChatSettings!["id"])
                     throw new RequestHandlerException("Can't delete general chat");
 
-                if (chat!.Users.ExistsById(user!.Id))
+                if (chat.Users.ExistsById(user.Id))
                 {
                     chat.Users.RemoveById(user.Id);
                 }

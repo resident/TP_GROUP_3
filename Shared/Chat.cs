@@ -1,23 +1,20 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Data;
 
 namespace Shared;
 
 public class Chat
 {
     public string Id;
-    public string Title;
-    public UsersCollection Users = new();
-    public List<ChatMessage> Messages = new();
+    public readonly string Title;
+    public readonly UsersCollection Users;
+    public List<ChatMessage> Messages;
     public DateTime CreatedAt = DateTime.Now;
-
-    public Chat()
+    
+    public Chat(string title, UsersCollection? users = null, List<ChatMessage>? messages = null)
     {
         Id = Guid.NewGuid().ToString();
-    }
-
-    public Chat(string title, UsersCollection? users = null, List<ChatMessage>? messages = null) : this()
-    {
         Title = title;
         Users = users ?? new();
         Messages = messages ?? new();
@@ -103,11 +100,9 @@ public class Chat
 
     public string ToJson(bool full = false)
     {
-        var chat = full ? this : new Chat()
+        var chat = full ? this : new Chat(Title, Users)
         {
-            Id = Id,
-            Title = Title,
-            Users = Users,
+            Id = Id
         };
 
         return JsonConvert.SerializeObject(chat);
@@ -115,7 +110,7 @@ public class Chat
 
     public static Chat FromJson(string json)
     {
-        return JsonConvert.DeserializeObject<Chat>(json) ?? throw new ArgumentNullException("Chat");
+        return JsonConvert.DeserializeObject<Chat>(json) ?? throw new NoNullAllowedException();
     }
 
     public override string ToString()

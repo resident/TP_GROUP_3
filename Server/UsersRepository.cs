@@ -17,7 +17,7 @@ public static class UsersRepository
         else
         {
             // Add default admin account
-            var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? new();
+            var adminCredentials = Settings.GetNullable<Dictionary<string, string>>("default_admin_credentials") ?? new();
             var admin = new User(adminCredentials["login"], adminCredentials["password"])
             {
                 IsAdmin = true,
