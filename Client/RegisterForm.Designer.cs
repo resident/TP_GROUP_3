@@ -39,6 +39,7 @@
             // 
             tbLogin.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             tbLogin.Location = new Point(12, 42);
+            tbLogin.MaxLength = 15;
             tbLogin.Name = "tbLogin";
             tbLogin.Size = new Size(176, 32);
             tbLogin.TabIndex = 0;
@@ -50,6 +51,7 @@
             tbPassword.Name = "tbPassword";
             tbPassword.Size = new Size(169, 32);
             tbPassword.TabIndex = 1;
+            tbPassword.UseSystemPasswordChar = true;
             // 
             // btnRegister
             // 
