@@ -279,6 +279,8 @@ namespace Client
             if (null == CurrentChat) return;
 
             foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+
+            lbMessages.TopIndex = lbMessages.Items.Count - 1;
         }
 
         private async void timerSync_Tick(object sender, EventArgs e)
@@ -349,6 +351,8 @@ namespace Client
                                 lbMessages.Items.Clear();
 
                                 foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+
+                                lbMessages.TopIndex = lbMessages.Items.Count - 1;
                             }
                         }
                     }
