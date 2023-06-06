@@ -1,5 +1,6 @@
 using Shared;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Client
 {
@@ -69,7 +70,6 @@ namespace Client
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
                 pnlChat.Enabled = Connected && LoggedIn && User!.IsActive && !User!.IsBanned;
 
-                timerKeepAlive.Enabled = Connected;
                 timerSync.Enabled = Connected;
             };
 
@@ -142,7 +142,7 @@ namespace Client
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            System.Windows.Forms.Application.Exit();
         }
 
         private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -280,7 +280,7 @@ namespace Client
             foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
         }
 
-        private async void timerKeepAlive_Tick(object sender, EventArgs e)
+        private async void timerSync_Tick(object sender, EventArgs e)
         {
             if (!Connected) return;
 
@@ -296,11 +296,8 @@ namespace Client
             {
                 //ignored
             }
-        }
 
-        private async void timerSync_Tick(object sender, EventArgs e)
-        {
-            if (!Connected || null == User) return;
+            if (null == User) return;
 
             try
             {
@@ -370,7 +367,9 @@ namespace Client
 
         private void lbMessages_MouseUp(object sender, MouseEventArgs e)
         {
-            var selectedIndex = lbMessages.IndexFromPoint(e.Location);
+            if (e.Button != MouseButtons.Right) return;
+
+                var selectedIndex = lbMessages.IndexFromPoint(e.Location);
 
             if (ListBox.NoMatches == selectedIndex) return;
 
@@ -378,9 +377,17 @@ namespace Client
 
             var contextMenuStrip = new ContextMenuStrip();
 
+            if (lbMessages.SelectedItem is ChatMessage) (contextMenuStrip.Items.Add("Copy Message")).Click += CopyMessageMenuItem_Click;
             if (lbMessages.SelectedItem is ChatMessage { HasFile: true }) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
 
             contextMenuStrip.Show(lbMessages, e.Location);
+        }
+
+        private void CopyMessageMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (lbMessages.SelectedItem is not ChatMessage message) return;
+
+            Clipboard.SetText(message.Message);
         }
 
         private async void SaveChatFileMenuItem_Click(object? sender, EventArgs e)

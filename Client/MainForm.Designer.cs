@@ -58,7 +58,6 @@
             pnlChat = new Panel();
             lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
-            timerKeepAlive = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -324,11 +323,6 @@
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
             // 
-            // timerKeepAlive
-            // 
-            timerKeepAlive.Interval = 1500;
-            timerKeepAlive.Tick += timerKeepAlive_Tick;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -382,7 +376,6 @@
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
-        private System.Windows.Forms.Timer timerKeepAlive;
         private Label lblMessageLength;
     }
 }
