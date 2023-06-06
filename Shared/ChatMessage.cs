@@ -128,6 +128,8 @@ public class ChatMessage
 
     public override string ToString()
     {
-        return $"{Sender.Login} :: {DateTime} :: {Message}";
+        var file = HasFile ? "\ud83d\udcc1" : "";
+
+        return $"{Sender.Login} :: {DateTime} :: {file} {Message}";
     }
 }
