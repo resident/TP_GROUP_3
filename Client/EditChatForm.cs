@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Collections;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,15 +21,23 @@ namespace Client
 
         private void EditChatForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm)
+            if (this.Owner is MainForm mainForm && mainForm.CurrentChat?.Users != null)
             {
-                lbUsers.DataSource = mainForm.CurrentChat?.Users;
+                lbUsers.DataSource = mainForm.RegisteredUsers;
+                tbChatTitle.Text = mainForm.CurrentChat.Title;
+
+                lbUsers.SelectedItems.Clear();
+                foreach (var user in mainForm.CurrentChat.Users)
+                {
+                    if(lbUsers.Items.Contains(user))
+                        lbUsers.SelectedItem = user;
+                }
             }
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            //if (lbUsers.SelectedItems.Count == 0) return;
 
             if (this.Owner is MainForm mainForm)
             {
@@ -36,10 +45,14 @@ namespace Client
 
                 List<User> users = lbUsers.SelectedItems.Cast<User>().ToList();
 
-                var request = new Request("RemoveUserInChat");
+                var request = new Request("UpdateChat");
 
-                request.Payload.Add("users", users!);
-                request.Payload.Add("chat", mainForm.CurrentChat);
+                mainForm.CurrentChat.Users.Clear();
+                mainForm.CurrentChat.Users.AddUsers(users);
+                mainForm.CurrentChat.Title = tbChatTitle.Text;
+                var chat = mainForm.CurrentChat.Clone();
+
+                request.Payload.Add("newChat", chat);
 
                 mainForm.Client.SendMessage(request.ToJson());
 
@@ -48,33 +61,11 @@ namespace Client
 
                 if (response.IsStatusOk())
                 {
-                    foreach (var user in users)
-                    {
-                        mainForm.CurrentChat.Users.RemoveById(user.Id);
-                        // для обновления списка в lb, иначе очень странно работает
-                        lbUsers.DataSource = mainForm.CurrentChat.Users;
-                    }
-
+                    this.Close();
                 }
                 else
                     Alert.Error(response.Message);
 
-                // lbUsers.DataSource = mainForm.CurrentChat.Users;
-            }
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            var form = new AddUserInChatForm();
-
-            form.Owner = this;
-
-            form.ShowDialog();
-
-            // для обновления списка в lb, иначе очень странно работает
-            if (this.Owner is MainForm mainForm)
-            {
-                lbUsers.DataSource = mainForm.CurrentChat?.Users;
             }
         }
     }

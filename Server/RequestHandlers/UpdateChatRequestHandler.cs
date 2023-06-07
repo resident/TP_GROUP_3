@@ -1,4 +1,5 @@
-﻿using Server.Exceptions;
+﻿using Collections;
+using Server.Exceptions;
 using Shared;
 using System;
 using System.Collections.Generic;
@@ -6,11 +7,10 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Collections;
 
 namespace Server.RequestHandlers
 {
-    internal class AddUserInChatRequestHandler : RequestHandler
+    internal class UpdateChatRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
         {
@@ -18,21 +18,19 @@ namespace Server.RequestHandlers
 
             try
             {
-                var users = request.Get<UsersCollection>("users");
-                var chat = request.Get<Chat>("chat");
+                var newChat = request.Get<Chat>("newChat");
 
-                chat = ChatsRepository.Items.GetById(chat.Id);
-
+                var chat = ChatsRepository.Items.GetById(newChat.Id);
+                
                 var generalChatSettings = Settings.Get<Dictionary<string, string>>("general_chat");
 
                 if (chat!.Id == generalChatSettings!["id"])
                     throw new RequestHandlerException("Can't add user in general chat");
 
-                foreach (var user in users)
-                {
-                    chat!.Users.Add(user);
-                }
-                
+                chat.Title = newChat.Title;
+                chat.Users.Clear();
+                chat.Users.AddUsers(newChat.Users);
+                chat.Save(true);
 
                 Sync.UpdateLastChangeTime();
 

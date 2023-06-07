@@ -5,10 +5,10 @@ using Collections;
 
 namespace Shared;
 
-public class Chat
+public class Chat : ICloneable, IEquatable<Chat>
 {
     public string Id;
-    public readonly string Title;
+    public string Title;
     public readonly UsersCollection Users;
     public List<ChatMessage> Messages;
     public DateTime CreatedAt = DateTime.Now;
@@ -21,6 +21,10 @@ public class Chat
         Messages = messages ?? new();
     }
 
+    public void ChangeTitle(string title)
+    {
+        Title = title;
+    }
     public void AddMessage(ChatMessage message)
     {
         Messages ??= new();
@@ -117,5 +121,15 @@ public class Chat
     public override string ToString()
     {
         return $"{Title} ({Messages.Count})";
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
+
+    public bool Equals(Chat? other)
+    {
+        throw new NotImplementedException();
     }
 }
