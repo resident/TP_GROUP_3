@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Collections;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,11 +23,16 @@ namespace Client
         {
             if (this.Owner is MainForm mainForm)
             {
-                lbUsers.DataSource = mainForm.CurrentChat?.Users;
+                lbUsers.DataSource = mainForm.RegisteredUsers;
+                foreach (var user in mainForm.CurrentChat.Users) 
+                {
+                    lbUsers.Items.Contains(user);
+                    lbUsers.SelectedItem = user;
+                }
             }
         }
 
-        private async void btnDelete_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             if (lbUsers.SelectedItems.Count == 0) return;
 
@@ -35,11 +41,15 @@ namespace Client
                 if (null == mainForm.CurrentChat) return;
 
                 List<User> users = lbUsers.SelectedItems.Cast<User>().ToList();
+                UsersCollection usersCollection = new UsersCollection();
+                usersCollection.AddUsers(users);
 
-                var request = new Request("RemoveUserInChat");
+                Chat chat = new Chat(tbChatTitle.Text, usersCollection, mainForm.CurrentChat.Messages);
 
-                request.Payload.Add("users", users!);
-                request.Payload.Add("chat", mainForm.CurrentChat);
+                var request = new Request("UpdateChat");
+
+                request.Payload.Add("newChat", chat);
+                request.Payload.Add("oldChat", mainForm.CurrentChat);
 
                 mainForm.Client.SendMessage(request.ToJson());
 
@@ -48,33 +58,14 @@ namespace Client
 
                 if (response.IsStatusOk())
                 {
-                    foreach (var user in users)
-                    {
-                        mainForm.CurrentChat.Users.RemoveById(user.Id);
-                        // для обновления списка в lb, иначе очень странно работает
-                        lbUsers.DataSource = mainForm.CurrentChat.Users;
-                    }
+                    mainForm.Chats.RemoveById(mainForm.CurrentChat.Id);
+                    mainForm.Chats.Add(chat);
+                    mainForm.CurrentChat = chat;
+                    lbUsers.DataSource = mainForm.RegisteredUsers;
 
                 }
                 else
                     Alert.Error(response.Message);
-
-                // lbUsers.DataSource = mainForm.CurrentChat.Users;
-            }
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            var form = new AddUserInChatForm();
-
-            form.Owner = this;
-
-            form.ShowDialog();
-
-            // для обновления списка в lb, иначе очень странно работает
-            if (this.Owner is MainForm mainForm)
-            {
-                lbUsers.DataSource = mainForm.CurrentChat?.Users;
             }
         }
     }

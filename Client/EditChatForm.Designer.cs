@@ -30,14 +30,15 @@
         {
             lblUsers = new Label();
             lbUsers = new ListBox();
-            btnAdd = new Button();
-            btnDelete = new Button();
+            btnSave = new Button();
+            lblChatTitle = new Label();
+            tbChatTitle = new TextBox();
             SuspendLayout();
             // 
             // lblUsers
             // 
             lblUsers.AutoSize = true;
-            lblUsers.Location = new Point(12, 14);
+            lblUsers.Location = new Point(12, 38);
             lblUsers.Name = "lblUsers";
             lblUsers.Size = new Size(35, 15);
             lblUsers.TabIndex = 3;
@@ -47,41 +48,50 @@
             // 
             lbUsers.FormattingEnabled = true;
             lbUsers.ItemHeight = 15;
-            lbUsers.Location = new Point(12, 32);
+            lbUsers.Location = new Point(12, 56);
             lbUsers.Name = "lbUsers";
             lbUsers.SelectionMode = SelectionMode.MultiSimple;
             lbUsers.Size = new Size(260, 304);
             lbUsers.TabIndex = 2;
             // 
-            // btnAdd
+            // btnSave
             // 
-            btnAdd.Location = new Point(12, 341);
-            btnAdd.Margin = new Padding(2);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(84, 31);
-            btnAdd.TabIndex = 16;
-            btnAdd.Text = "Add";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnAdd_Click;
+            btnSave.Location = new Point(100, 365);
+            btnSave.Margin = new Padding(2);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(84, 31);
+            btnSave.TabIndex = 18;
+            btnSave.Text = "Save";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
-            // btnDelete
+            // lblChatTitle
             // 
-            btnDelete.Location = new Point(190, 341);
-            btnDelete.Margin = new Padding(2);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(84, 31);
-            btnDelete.TabIndex = 17;
-            btnDelete.Text = "Delete";
-            btnDelete.UseVisualStyleBackColor = true;
-            btnDelete.Click += btnDelete_Click;
+            lblChatTitle.AutoSize = true;
+            lblChatTitle.Location = new Point(61, 11);
+            lblChatTitle.Margin = new Padding(2, 0, 2, 0);
+            lblChatTitle.Name = "lblChatTitle";
+            lblChatTitle.Size = new Size(29, 15);
+            lblChatTitle.TabIndex = 20;
+            lblChatTitle.Text = "Title";
+            // 
+            // tbChatTitle
+            // 
+            tbChatTitle.Location = new Point(61, 28);
+            tbChatTitle.Margin = new Padding(2);
+            tbChatTitle.MaxLength = 15;
+            tbChatTitle.Name = "tbChatTitle";
+            tbChatTitle.Size = new Size(180, 23);
+            tbChatTitle.TabIndex = 19;
             // 
             // EditChatForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(285, 389);
-            Controls.Add(btnDelete);
-            Controls.Add(btnAdd);
+            ClientSize = new Size(285, 405);
+            Controls.Add(lblChatTitle);
+            Controls.Add(tbChatTitle);
+            Controls.Add(btnSave);
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
             Name = "EditChatForm";
@@ -95,7 +105,8 @@
 
         private Label lblUsers;
         private ListBox lbUsers;
-        private Button btnAdd;
-        private Button btnDelete;
+        private Button btnSave;
+        private Label lblChatTitle;
+        private TextBox tbChatTitle;
     }
 }
