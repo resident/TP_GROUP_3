@@ -56,9 +56,10 @@ namespace Client
             get => _user;
             set
             {
-                if (_user != value)
+                if (!Equals(_user, value))
                 {
                     _user = value;
+
                     OnUserChanged();
                 }
             }
@@ -117,7 +118,7 @@ namespace Client
                 }
                 else
                 {
-                    Log.Write($"User '{User!.Login}' logged out", Log.TypeNotice);
+                    Log.Write($"User logged out", Log.TypeNotice);
                     File.Delete("user.json");
                 }
 
