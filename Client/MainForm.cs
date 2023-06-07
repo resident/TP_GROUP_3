@@ -307,7 +307,7 @@ namespace Client
             if (lbChats.SelectedItem is not Chat chat) return;
 
             var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
-            var chatMessage = new ChatMessage(User, chat, tbMessage.Text, chatFile);
+            var chatMessage = new ChatMessage(User, chat.Id, tbMessage.Text, chatFile);
 
             var request = new Request("SendChatMessage");
             request.Payload.Add("message", chatMessage);
