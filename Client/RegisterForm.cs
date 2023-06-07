@@ -26,27 +26,28 @@ namespace Client
                 return;
             }
 
-            if (this.Owner is MainForm mainForm)
+            if (this.Owner is not MainForm mainForm) return;
+
+            var request = new Request("registration");
+            var login = tbLogin.Text;
+            var password = tbPassword.Text;
+            var user = new User(login, password);
+            request.Payload.Add("user", user);
+            mainForm.Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusOk())
             {
-                var request = new Request("registration");
-                var login = tbLogin.Text;
-                var password = tbPassword.Text;
-                var user = new User(login, password);
-                request.Payload.Add("user", user);
-                mainForm.Client.SendMessage(request.ToJson());
+                Log.Write($"User '{user.Login}' registered", Log.TypeNotice);
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+                mainForm.User = user;
 
-                if (response.IsStatusOk())
-                {
-                    mainForm.User = user;
-
-                    Close();
-                }
-                else
-                {
-                    Alert.Error(response.Message);
-                }
+                Close();
+            }
+            else
+            {
+                Alert.Error(response.Message);
             }
         }
     }

@@ -25,6 +25,13 @@ namespace Server
                         {"id", Guid.NewGuid().ToString()},
                         {"title", "General"},
                     }
+                },
+                {
+                    "log", new Dictionary<string, object>
+                    {
+                        {"enabled", true},
+                        {"path", "server.log"}
+                    }
                 }
             });
 

@@ -88,6 +88,8 @@ namespace Client
                 statusLabelConnected.Text = Connecting ? "Connecting..." : Connected ? "Connected" : "Disconnected";
                 connectToolStripMenuItem.Enabled = !Connected && !Connecting;
                 disconnectToolStripMenuItem.Enabled = Connected || Connecting;
+
+                Log.Write(statusLabelConnected.Text, Log.TypeNotice);
             };
 
             ConnectionChanged += delegate
@@ -109,9 +111,15 @@ namespace Client
                 LoggedIn = User != null;
 
                 if (LoggedIn)
+                {
+                    Log.Write($"User '{User!.Login}' logged in", Log.TypeNotice);
                     File.WriteAllText("user.json", User!.ToJson());
+                }
                 else
+                {
+                    Log.Write($"User '{User!.Login}' logged out", Log.TypeNotice);
                     File.Delete("user.json");
+                }
 
                 statusLabelLoggedAs.Text = LoggedIn ? $"Logged in as: {User!.Login}" : "Not logged in";
 
@@ -416,6 +424,7 @@ namespace Client
             }
             catch
             {
+                Log.Write("Connection lost", Log.TypeWarning);
                 await Client.DisconnectAsync();
                 Connected = false;
                 connectToolStripMenuItem.PerformClick();

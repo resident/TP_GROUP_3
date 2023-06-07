@@ -51,6 +51,7 @@ namespace Client
 
                 if (response.IsStatusOk())
                 {
+                    Log.Write($"Chat '{chat.Title}' created", Log.TypeNotice);
                     mainForm.Chats.Add(chat);
 
                     Close();
