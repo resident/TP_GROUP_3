@@ -33,6 +33,7 @@
             btnApprove = new Button();
             btnRemove = new Button();
             btnBan = new Button();
+            btnUnban = new Button();
             SuspendLayout();
             // 
             // lbUsers
@@ -59,7 +60,7 @@
             btnApprove.Location = new Point(12, 344);
             btnApprove.Margin = new Padding(2);
             btnApprove.Name = "btnApprove";
-            btnApprove.Size = new Size(84, 31);
+            btnApprove.Size = new Size(60, 31);
             btnApprove.TabIndex = 15;
             btnApprove.Text = "Approve";
             btnApprove.UseVisualStyleBackColor = true;
@@ -67,10 +68,10 @@
             // 
             // btnRemove
             // 
-            btnRemove.Location = new Point(100, 344);
+            btnRemove.Location = new Point(76, 344);
             btnRemove.Margin = new Padding(2);
             btnRemove.Name = "btnRemove";
-            btnRemove.Size = new Size(84, 31);
+            btnRemove.Size = new Size(60, 31);
             btnRemove.TabIndex = 16;
             btnRemove.Text = "Remove";
             btnRemove.UseVisualStyleBackColor = true;
@@ -78,20 +79,32 @@
             // 
             // btnBan
             // 
-            btnBan.Location = new Point(188, 344);
+            btnBan.Location = new Point(140, 344);
             btnBan.Margin = new Padding(2);
             btnBan.Name = "btnBan";
-            btnBan.Size = new Size(84, 31);
+            btnBan.Size = new Size(60, 31);
             btnBan.TabIndex = 17;
             btnBan.Text = "Ban";
             btnBan.UseVisualStyleBackColor = true;
             btnBan.Click += btnBan_Click;
+            // 
+            // btnUnban
+            // 
+            btnUnban.Location = new Point(204, 344);
+            btnUnban.Margin = new Padding(2);
+            btnUnban.Name = "btnUnban";
+            btnUnban.Size = new Size(70, 31);
+            btnUnban.TabIndex = 18;
+            btnUnban.Text = "Unban";
+            btnUnban.UseVisualStyleBackColor = true;
+            btnUnban.Click += btnUnban_Click;
             // 
             // ManageUsersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(285, 389);
+            Controls.Add(btnUnban);
             Controls.Add(btnBan);
             Controls.Add(btnRemove);
             Controls.Add(btnApprove);
@@ -113,5 +126,6 @@
         private Button btnApprove;
         private Button btnRemove;
         private Button btnBan;
+        private Button btnUnban;
     }
 }

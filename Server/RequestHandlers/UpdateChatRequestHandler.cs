@@ -24,8 +24,8 @@ namespace Server.RequestHandlers
                 
                 var generalChatSettings = Settings.Get<Dictionary<string, string>>("general_chat");
 
-                if (chat!.Id == generalChatSettings!["id"])
-                    throw new RequestHandlerException("Can't add user in general chat");
+                if (chat!.Id == generalChatSettings["id"])
+                    throw new RequestHandlerException("Can't edit general chat");
 
                 chat.Title = newChat.Title;
                 chat.Users.Clear();
@@ -35,7 +35,7 @@ namespace Server.RequestHandlers
                 Sync.UpdateLastChangeTime();
 
                 response.Status = Response.StatusOk;
-                response.Message = "User Successfully added";
+                response.Message = "Chat Successfully updated";
             }
             catch (Exception ex)
             {
