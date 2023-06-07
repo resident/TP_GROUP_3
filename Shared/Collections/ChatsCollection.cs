@@ -1,7 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using Shared;
 
-namespace Shared;
+namespace Collections;
 
 public class ChatsCollection : Collection<Chat>
 {

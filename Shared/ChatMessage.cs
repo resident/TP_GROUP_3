@@ -1,36 +1,32 @@
-﻿using Newtonsoft.Json;
+﻿using System.Data;
+using Newtonsoft.Json;
 
 namespace Shared;
 
 public class ChatMessage
 {
     public string Id;
-    public string ChatId;
+    public Chat Chat;
     public User Sender;
-    public DateTime DateTime;
     public string Message;
     public bool HasFile;
     public ChatFile? ChatFile;
-    public DateTime CreatedAt = DateTime.Now;
-
-    public ChatMessage()
+    public DateTime CreatedAt;
+    
+    public ChatMessage(User sender, Chat chat, string message, ChatFile? chatFile = null)
     {
         Id = Guid.NewGuid().ToString();
-    }
-
-    public ChatMessage(User sender, Chat chat, string message, ChatFile? chatFile = null) : this()
-    {
-        ChatId = chat.Id;
+        Chat = chat;
         Sender = sender;
-        DateTime = DateTime.Now;
         Message = message;
         HasFile = null != chatFile;
         ChatFile = chatFile;
+        CreatedAt = DateTime.Now;
     }
 
     private string GetMessageDirectoryPath()
     {
-        return $"Chats/{ChatId}/Messages/{Id}";
+        return $"Chats/{Chat.Id}/Messages/{Id}";
     }
 
     private string GetMessageFilePath()
@@ -108,14 +104,12 @@ public class ChatMessage
 
     public string ToJson(bool full = false)
     {
-        var chatMessage = full ? this : new ChatMessage()
+        var chatMessage = full ? this : new ChatMessage(Sender, Chat, Message, ChatFile)
         {
             Id = Id,
-            ChatId = ChatId,
+            Chat = Chat,
             Sender = Sender,
-            DateTime = DateTime,
-            Message = Message,
-            HasFile = HasFile,
+            CreatedAt = CreatedAt,
         };
 
         return JsonConvert.SerializeObject(chatMessage);
@@ -123,13 +117,13 @@ public class ChatMessage
 
     public static ChatMessage FromJson(string json)
     {
-        return JsonConvert.DeserializeObject<ChatMessage>(json) ?? throw new ArgumentNullException("ChatMessage");
+        return JsonConvert.DeserializeObject<ChatMessage>(json) ?? throw new NoNullAllowedException();
     }
 
     public override string ToString()
     {
         var file = HasFile ? "\ud83d\udcc1" : "";
 
-        return $"{Sender.Login} :: {DateTime} :: {file} {Message}";
+        return $"{Sender.Login} :: {CreatedAt} :: {file} {Message}";
     }
 }

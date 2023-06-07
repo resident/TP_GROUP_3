@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,8 +15,8 @@ namespace Client
     {
         private readonly string _ipAddress;
         private readonly int _port;
-        private TcpClient _tcpClient = new TcpClient();
-        private IAsyncEnumerable<string> _responses;
+        private TcpClient _tcpClient = new();
+        private IAsyncEnumerable<string>? _responses;
 
         public ChatTcpClient(string ipAddress, int port)
         {
@@ -32,10 +33,26 @@ namespace Client
             _responses = NetworkMessageReader.Read(_tcpClient);
         }
 
+        public async Task ConnectAsync()
+        {
+            _tcpClient = new TcpClient();
+
+            await _tcpClient.ConnectAsync(_ipAddress, _port);
+
+            _responses = NetworkMessageReader.Read(_tcpClient);
+        }
+
         public void Disconnect()
         {
             _tcpClient.Client.Disconnect(false);
-            
+
+            _tcpClient.Close();
+        }
+
+        public async Task DisconnectAsync()
+        {
+            await _tcpClient.Client.DisconnectAsync(false);
+
             _tcpClient.Close();
         }
 
@@ -53,12 +70,14 @@ namespace Client
         {
             var stream = _tcpClient.GetStream();
             var data = Encoding.UTF8.GetBytes(message);
-            
+
             await stream.WriteAsync(data, 0, data.Length);
         }
 
         public async Task<string> ReceiveMessage()
         {
+            if (null == _responses) throw new NoNullAllowedException();
+
             await using var enumerator = _responses.GetAsyncEnumerator();
             await enumerator.MoveNextAsync();
 

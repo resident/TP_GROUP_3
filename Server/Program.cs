@@ -4,9 +4,9 @@ using Shared;
 
 namespace Server
 {
-    public class Program
+    public static class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Shared.Json.Settings.SetGlobalJsonSettings();
 
@@ -28,7 +28,7 @@ namespace Server
                 }
             });
 
-            var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials") ?? new();
+            var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials");
 
             Alert.Warning($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
 
@@ -47,8 +47,6 @@ namespace Server
             banTimer.Start();
 
             Sync.UpdateLastChangeTime();
-
-            RequestHandlersProvider.InitHandlers();
 
             var server = new TcpServer("127.0.0.1", 1234);
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Data;
 
 namespace Shared;
 
@@ -31,18 +32,21 @@ internal static class Settings
         File.WriteAllText(SettingsFilePath, ToJson());
     }
 
-    public static T? Get<T>(string key, bool throwIfNull = true)
+    public static T? GetNullable<T>(string key)
     {
         var value = _settings[key] is T ? (T) _settings[key] : JsonConvert.DeserializeObject<T>(_settings[key].ToString() ?? "{}");
-
-        if (throwIfNull && value == null) throw new ArgumentNullException(key);
 
         return value;
     }
 
+    public static T Get<T>(string key)
+    {
+        return GetNullable<T>(key) ?? throw new NoNullAllowedException();
+    }
+
     public static void Set<T>(string key, T value)
     {
-        _settings[key] = value;
+        _settings[key] = value ?? throw new NoNullAllowedException();
 
         Save();
     }

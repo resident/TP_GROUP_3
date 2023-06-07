@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Data;
+using Newtonsoft.Json;
 using System.Formats.Tar;
 using System.Reflection;
 
@@ -7,9 +8,8 @@ namespace Shared;
 public class ChatFile
 {
     public string Id;
-    public string Name;
+    public string Name = string.Empty;
     public byte[] FileContent = Array.Empty<byte>();
-
 
     public ChatFile()
     {
@@ -40,6 +40,6 @@ public class ChatFile
 
     public static ChatFile FromJson(string json)
     {
-        return JsonConvert.DeserializeObject<ChatFile>(json) ?? throw new ArgumentNullException("ChatFile");
+        return JsonConvert.DeserializeObject<ChatFile>(json) ?? throw new NoNullAllowedException();
     }
 }

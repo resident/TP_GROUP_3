@@ -10,6 +10,7 @@ using Shared;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class SendChatMessageRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
@@ -20,7 +21,7 @@ namespace Server.RequestHandlers
             {
                 var message = request.Get<ChatMessage>("message");
 
-                var chat = ChatsRepository.Items.GetById(message.ChatId) ?? throw new RequestHandlerException($"Chat '{message.ChatId}' not found in server");
+                var chat = ChatsRepository.Items.GetById(message.Chat.Id) ?? throw new RequestHandlerException($"Chat '{message.Chat.Id}' not found in server");
 
                 chat.Messages.Add(message);
                 chat.Sort();

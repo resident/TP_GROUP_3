@@ -6,9 +6,9 @@ namespace Server;
 
 public static class RequestHandlersProvider
 {
-    private static Dictionary<string, RequestHandler> Handlers { get; set; } = new Dictionary<string, RequestHandler>();
+    private static Dictionary<string, RequestHandler> Handlers { get; } = new();
 
-    public static void InitHandlers()
+    static RequestHandlersProvider()
     {
         var types = typeof(RequestHandler).Assembly.GetTypes().Where(t => t.BaseType == typeof(RequestHandler));
 

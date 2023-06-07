@@ -27,33 +27,33 @@ namespace Client
                 return;
             }
 
-            if (this.Owner is MainForm mainForm)
+            if (this.Owner is not MainForm mainForm) return;
+
+            var request = new Request("login");
+            var login = tbLogin.Text;
+            var password = tbPassword.Text;
+            var auth = new Dictionary<string, string>()
             {
-                var request = new Request("login");
-                var login = tbLogin.Text;
-                var password = tbPassword.Text;
-                var auth = new Dictionary<string, string>()
-                {
-                    {"login", login},
-                    {"password", password},
-                };
+                {"login", login},
+                {"password", password},
+            };
 
-                request.Payload.Add("auth", auth);
-                mainForm.Client.SendMessage(request.ToJson());
+            request.Payload.Add("auth", auth);
+            mainForm.Client.SendMessage(request.ToJson());
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
-                if (response.IsStatusOk())
-                {
-                    mainForm.User = response.Get<User>("user");
+            if (response.IsStatusOk())
+            {
+                Sync.ResetLastChangeTime();
 
-                    Alert.Successful(response.Message);
-                    Close();
-                }
-                else
-                {
-                    Alert.Error(response.Message);
-                }
+                mainForm.User = response.Get<User>("user");
+
+                Close();
+            }
+            else
+            {
+                Alert.Error(response.Message);
             }
         }
     }

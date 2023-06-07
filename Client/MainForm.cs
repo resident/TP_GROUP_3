@@ -1,23 +1,42 @@
+using System.Collections.Immutable;
+using System.Data;
 using Shared;
 using System.Windows.Forms;
+using Collections;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Client
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         internal ChatTcpClient Client;
+        private bool _connecting;
         private bool _connected;
+        private event EventHandler ConnectingChanged;
         private event EventHandler ConnectionChanged;
         private User? _user;
         private event EventHandler UserChanged;
         public bool LoggedIn;
         private string? _attachedFilePath;
-        public readonly UsersCollection RegisteredUsers = new UsersCollection();
-        public readonly ChatsCollection Chats = new ChatsCollection();
+        public readonly UsersCollection RegisteredUsers = new();
+        public readonly ChatsCollection Chats = new();
+        public readonly MessagesCollection Messages = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
-        public DateTime LastSyncTime = DateTime.MinValue;
+        
+
+        public bool Connecting
+        {
+            get => _connecting;
+            set
+            {
+                if (_connecting != value)
+                {
+                    _connecting = value;
+                    OnConnectingChanged();
+                }
+            }
+        }
 
         public bool Connected
         {
@@ -45,12 +64,17 @@ namespace Client
             }
         }
 
-        protected virtual void OnConnectionChanged()
+        private void OnConnectingChanged()
+        {
+            ConnectingChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnConnectionChanged()
         {
             ConnectionChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnUserChanged()
+        private void OnUserChanged()
         {
             UserChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -59,12 +83,19 @@ namespace Client
         {
             Client = GetFreshClient();
 
-            ConnectionChanged += (sender, args) =>
+            ConnectingChanged += delegate
+            {
+                statusLabelConnected.Text = Connecting ? "Connecting..." : Connected ? "Connected" : "Disconnected";
+                connectToolStripMenuItem.Enabled = !Connected && !Connecting;
+                disconnectToolStripMenuItem.Enabled = Connected || Connecting;
+            };
+
+            ConnectionChanged += delegate
             {
                 statusLabelConnected.Text = Connected ? "Connected" : "Disconnected";
 
-                connectToolStripMenuItem.Enabled = !Connected;
-                disconnectToolStripMenuItem.Enabled = Connected;
+                connectToolStripMenuItem.Enabled = !Connected && !Connecting;
+                disconnectToolStripMenuItem.Enabled = Connected || Connecting;
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 loginToolStripMenuItem.Enabled = Connected && !LoggedIn;
                 logoutToolStripMenuItem.Enabled = Connected && LoggedIn;
@@ -73,9 +104,15 @@ namespace Client
                 timerSync.Enabled = Connected;
             };
 
-            UserChanged += (sender, args) =>
+            UserChanged += delegate
             {
                 LoggedIn = User != null;
+
+                if (LoggedIn)
+                    File.WriteAllText("user.json", User!.ToJson());
+                else
+                    File.Delete("user.json");
+
                 statusLabelLoggedAs.Text = LoggedIn ? $"Logged in as: {User!.Login}" : "Not logged in";
 
                 registerToolStripMenuItem.Enabled = Connected && !LoggedIn;
@@ -89,16 +126,23 @@ namespace Client
                 userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
                 userBanned.Text = LoggedIn && User!.IsBanned ? "Banned" : "";
             };
-
+            
             InitializeComponent();
 
+            if (File.Exists("user.json")) User = User.Load("user.json");
+
             lbChats.DataSource = Chats;
+            lbMessages.DataSource = Messages;
+
+            lblMessageLength.Text = tbMessage.MaxLength.ToString();
+
+            connectToolStripMenuItem.PerformClick();
         }
 
         private ChatTcpClient GetFreshClient()
         {
-            var serverIpAddress = Settings.Get<string>("server_ip_address") ?? "127.0.0.1";
-            var serverPort = Settings.Get<int?>("server_port") ?? 1234;
+            var serverIpAddress = Settings.Get<string>("server_ip_address");
+            var serverPort = Settings.Get<int>("server_port");
 
             return new ChatTcpClient(serverIpAddress, serverPort);
         }
@@ -147,30 +191,41 @@ namespace Client
 
         private async void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (Client.IsConnected()) return;
+            if (Connecting) return;
 
-                Client = GetFreshClient();
+            Connecting = true;
 
-                Client.Connect();
-            }
-            catch
+            while(Connecting)
             {
-                // ignored
-            }
-            finally
-            {
-                Connected = Client.IsConnected();
+                try
+                {
+                    if (Client.IsConnected()) return;
+
+                    Client = GetFreshClient();
+
+                    await Client.ConnectAsync();
+                }
+                catch
+                {
+                    // ignored
+                }
+                finally
+                {
+                    Connected = Client.IsConnected();
+
+                    Connecting = Connecting ? !Connected : Connected;
+                }
             }
         }
 
-        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void disconnectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
+                Connecting = false;
+
                 if (Client.IsConnected())
-                    Client.Disconnect();
+                    await Client.DisconnectAsync();
             }
             catch
             {
@@ -209,7 +264,7 @@ namespace Client
         {
             User = null;
             Chats.Clear();
-            lbMessages.Items.Clear();
+            Messages.Clear();
         }
 
         private void manageUsersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -240,7 +295,8 @@ namespace Client
                 return;
             }
 
-            var chat = lbChats.SelectedItem as Chat ?? GeneralChat;
+            if (lbChats.SelectedItem is not Chat chat) return;
+
             var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
             var chatMessage = new ChatMessage(User, chat, tbMessage.Text, chatFile);
 
@@ -261,7 +317,7 @@ namespace Client
             {
                 chat.AddMessage(chatMessage);
 
-                lbMessages.Items.Add(chatMessage);
+                Messages.Add(chatMessage);
             }
             else
             {
@@ -273,37 +329,34 @@ namespace Client
         {
             CurrentChat = lbChats.SelectedItem as Chat ?? GeneralChat;
 
-            lbMessages.Items.Clear();
+            Messages.Clear();
 
             if (null == CurrentChat) return;
 
-            foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+            foreach (var message in CurrentChat.Messages) Messages.Add(message);
+
+            lbMessages.TopIndex = Messages.Count - 1;
         }
 
         private async void timerSync_Tick(object sender, EventArgs e)
         {
             if (!Connected) return;
-
+            
             try
             {
+                // KeepAlive
                 var request = new Request("KeepAlive");
 
                 Client.SendMessage(request.ToJson());
 
-                var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
-            }
-            catch
-            {
-                //ignored
-            }
+                _ = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
 
-            if (null == User) return;
+                if (null == User) return;
 
-            try
-            {
-                var request = new Request("Sync");
+                // Sync
+                request = new Request("Sync");
 
-                request.Payload.Add("lastSyncTime", LastSyncTime);
+                request.Payload.Add("lastSyncTime", Sync.GetLastChangeTime());
                 request.Payload.Add("user", User);
 
                 Client.SendMessage(request.ToJson());
@@ -328,11 +381,11 @@ namespace Client
                         var selectedChat = CurrentChat;
 
                         Chats.Clear();
-                        lbMessages.Items.Clear();
+                        Messages.Clear();
 
                         if (User is { IsActive: true, IsBanned: false })
                         {
-                            Chats.AddChats(chats!);
+                            Chats.AddChats(chats);
 
                             if (selectedChat != null) lbChats.SelectedItem = Chats.GetById(selectedChat.Id);
 
@@ -345,14 +398,16 @@ namespace Client
 
                                 lbChats.SelectedItem = CurrentChat;
 
-                                lbMessages.Items.Clear();
+                                Messages.Clear();
 
-                                foreach (var message in CurrentChat.Messages) lbMessages.Items.Add(message);
+                                foreach (var message in CurrentChat.Messages) Messages.Add(message);
+
+                                lbMessages.TopIndex = Messages.Count - 1;
                             }
                         }
                     }
 
-                    LastSyncTime = DateTime.Now;
+                    Sync.UpdateLastChangeTime();
                 }
                 else
                 {
@@ -361,7 +416,9 @@ namespace Client
             }
             catch
             {
-                //ignored
+                await Client.DisconnectAsync();
+                Connected = false;
+                connectToolStripMenuItem.PerformClick();
             }
         }
 
@@ -394,7 +451,7 @@ namespace Client
         {
             if (lbMessages.SelectedItem is not ChatMessage message) return;
 
-            var chatFile = message.ChatFile ?? new ChatFile();
+            var chatFile = message.ChatFile ?? throw new NoNullAllowedException();
 
             var saveFileDialog = new SaveFileDialog()
             {
@@ -438,7 +495,23 @@ namespace Client
 
         private void tbMessage_TextChanged(object sender, EventArgs e)
         {
-            lblMessageLength.Text = (50 - tbMessage.Text.Length).ToString();
+            lblMessageLength.Text = (tbMessage.MaxLength - tbMessage.Text.Length).ToString();
+        }
+
+        private void ChangeLocation()
+        {
+            btnAttachFile.Location = tbMessage.Location with {X = tbMessage.Location.X + tbMessage.Width + 2};
+            btnSend.Location = btnAttachFile.Location with {X = btnAttachFile.Location.X + btnAttachFile.Width + 2};
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            ChangeLocation();
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            ChangeLocation();
         }
 
         private void btnEdit_Click(object sender, EventArgs e)

@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Collections;
 using Shared;
 
 namespace Client
 {
     public partial class BanUsersForm : Form
     {
-        private bool _isOtherTimeSpanDays = false;
+        private bool _isOtherTimeSpanDays;
         private readonly UsersCollection _users;
 
         public BanUsersForm(UsersCollection users)
@@ -126,7 +127,7 @@ namespace Client
             {
                 try
                 {
-                    var x = int.Parse(tbOtherTimeSpan.Text);
+                    _ = int.Parse(tbOtherTimeSpan.Text);
                     btnBan.Enabled = true;
                 }
                 catch

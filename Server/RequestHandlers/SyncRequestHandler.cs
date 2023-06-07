@@ -10,6 +10,7 @@ using Shared;
 
 namespace Server.RequestHandlers
 {
+    // ReSharper disable once UnusedType.Global
     public class SyncRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)

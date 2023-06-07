@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Collections;
 using Shared;
 
 namespace Server
@@ -18,12 +19,17 @@ namespace Server
             const string chatsDirectoryPath = "Chats";
 
             if (Directory.Exists(chatsDirectoryPath))
-                foreach (var directory in Directory.GetDirectories(chatsDirectoryPath))
-                    Items.Add(Chat.Load($"{directory}/chat.json", true));
+            {
+                var chats = Directory.GetDirectories(chatsDirectoryPath).Select(directory => Chat.Load($"{directory}/chat.json", true)).ToList();
+
+                chats.Sort((c1, c2) => c1.CreatedAt.CompareTo(c2.CreatedAt));
+
+                Items.AddChats(chats);
+            }
             else
             {
                 // Add default chat for all messages
-                var generalChat = Settings.Get<Dictionary<string, string>>("general_chat") ?? throw new ArgumentNullException("general_chat");
+                var generalChat = Settings.Get<Dictionary<string, string>>("general_chat");
                 var chat = new Chat(generalChat["title"]){Id = generalChat["id"]};
 
                 chat.Save();
