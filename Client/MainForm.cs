@@ -369,7 +369,7 @@ namespace Client
         {
             if (e.Button != MouseButtons.Right) return;
 
-                var selectedIndex = lbMessages.IndexFromPoint(e.Location);
+            var selectedIndex = lbMessages.IndexFromPoint(e.Location);
 
             if (ListBox.NoMatches == selectedIndex) return;
 
@@ -439,6 +439,15 @@ namespace Client
         private void tbMessage_TextChanged(object sender, EventArgs e)
         {
             lblMessageLength.Text = (50 - tbMessage.Text.Length).ToString();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var form = new EditChatForm();
+
+            form.Owner = this;
+
+            form.ShowDialog();
         }
     }
 }

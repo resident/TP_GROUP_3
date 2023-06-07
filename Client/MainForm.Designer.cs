@@ -58,6 +58,7 @@
             pnlChat = new Panel();
             lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
+            btnEdit = new Button();
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -292,6 +293,7 @@
             // 
             // pnlChat
             // 
+            pnlChat.Controls.Add(btnEdit);
             pnlChat.Controls.Add(lblMessageLength);
             pnlChat.Controls.Add(lbMessages);
             pnlChat.Controls.Add(tbMessage);
@@ -322,6 +324,17 @@
             // 
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
+            // 
+            // btnEdit
+            // 
+            btnEdit.Location = new Point(13, 433);
+            btnEdit.Margin = new Padding(2);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(178, 31);
+            btnEdit.TabIndex = 17;
+            btnEdit.Text = "Edit";
+            btnEdit.UseVisualStyleBackColor = true;
+            btnEdit.Click += btnEdit_Click;
             // 
             // MainForm
             // 
@@ -377,5 +390,6 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
         private Label lblMessageLength;
+        private Button btnEdit;
     }
 }
