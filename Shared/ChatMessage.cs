@@ -65,7 +65,15 @@ public class ChatMessage
 
         if (flush) ChatFile.FileContent = Array.Empty<byte>();
     }
-    
+
+    public void Remove()
+    {
+        var messageDirectoryPath = GetMessageDirectoryPath();
+
+        if (Directory.Exists(messageDirectoryPath))
+            Directory.Delete(messageDirectoryPath, true);
+    }
+
     public static ChatMessage Load(string path, bool full = false)
     {
         var message = FromJson(File.ReadAllText(path));

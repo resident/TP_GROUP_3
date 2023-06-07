@@ -76,6 +76,7 @@
             lbMessages.Name = "lbMessages";
             lbMessages.Size = new Size(771, 409);
             lbMessages.TabIndex = 3;
+            lbMessages.KeyDown += lbMessages_KeyDown;
             lbMessages.MouseUp += lbMessages_MouseUp;
             // 
             // tbMessage

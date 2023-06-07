@@ -482,8 +482,15 @@ namespace Client
 
             var contextMenuStrip = new ContextMenuStrip();
 
-            if (lbMessages.SelectedItem is ChatMessage) (contextMenuStrip.Items.Add("Copy Message")).Click += CopyMessageMenuItem_Click;
-            if (lbMessages.SelectedItem is ChatMessage { HasFile: true }) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
+            if (lbMessages.SelectedItem is ChatMessage message)
+            {
+                (contextMenuStrip.Items.Add("Copy Message")).Click += CopyMessageMenuItem_Click;
+
+                if (User is not null && (User.IsAdmin || message.Sender.Id == User.Id))
+                    (contextMenuStrip.Items.Add("Delete Message")).Click += DeleteMessageMenuItem_Click;
+
+                if (message.HasFile) (contextMenuStrip.Items.Add("Save File")).Click += SaveChatFileMenuItem_Click;
+            }
 
             contextMenuStrip.Show(lbMessages, e.Location);
         }
@@ -493,6 +500,23 @@ namespace Client
             if (lbMessages.SelectedItem is not ChatMessage message) return;
 
             Clipboard.SetText(message.Message);
+        }
+
+        private async void DeleteMessageMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (lbMessages.SelectedItem is not ChatMessage message) return;
+
+            var request = new Request("DeleteMessage");
+
+            request.Payload.Add("user", User);
+            request.Payload.Add("message", message);
+
+            Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusError())
+                Alert.Error(response.Message);
         }
 
         private async void SaveChatFileMenuItem_Click(object? sender, EventArgs e)
@@ -581,6 +605,11 @@ namespace Client
         {
             if (null == e.Data || !e.Data.GetDataPresent(DataFormats.FileDrop)) return;
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files) AttachedFilePath = files.First();
+        }
+
+        private void lbMessages_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete) DeleteMessageMenuItem_Click(lbMessages, EventArgs.Empty);
         }
     }
 }
