@@ -6,17 +6,17 @@ namespace Shared;
 public class ChatMessage
 {
     public string Id;
-    public Chat Chat;
+    public string ChatId;
     public User Sender;
     public string Message;
     public bool HasFile;
     public ChatFile? ChatFile;
     public DateTime CreatedAt;
     
-    public ChatMessage(User sender, Chat chat, string message, ChatFile? chatFile = null)
+    public ChatMessage(User sender, string chatId, string message, ChatFile? chatFile = null)
     {
         Id = Guid.NewGuid().ToString();
-        Chat = chat;
+        ChatId = chatId;
         Sender = sender;
         Message = message;
         HasFile = null != chatFile;
@@ -26,7 +26,7 @@ public class ChatMessage
 
     private string GetMessageDirectoryPath()
     {
-        return $"Chats/{Chat.Id}/Messages/{Id}";
+        return $"Chats/{ChatId}/Messages/{Id}";
     }
 
     private string GetMessageFilePath()
@@ -104,10 +104,10 @@ public class ChatMessage
 
     public string ToJson(bool full = false)
     {
-        var chatMessage = full ? this : new ChatMessage(Sender, Chat, Message, ChatFile)
+        var chatMessage = full ? this : new ChatMessage(Sender, ChatId, Message, ChatFile)
         {
             Id = Id,
-            Chat = Chat,
+            ChatId = ChatId,
             Sender = Sender,
             CreatedAt = CreatedAt,
         };
