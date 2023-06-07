@@ -57,6 +57,7 @@
             userBanned = new ToolStripStatusLabel();
             pnlChat = new Panel();
             pnlBottom = new Panel();
+            btnEdit = new Button();
             lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
@@ -149,7 +150,7 @@
             btnCreateChat.Location = new Point(13, 0);
             btnCreateChat.Margin = new Padding(2);
             btnCreateChat.Name = "btnCreateChat";
-            btnCreateChat.Size = new Size(84, 32);
+            btnCreateChat.Size = new Size(60, 32);
             btnCreateChat.TabIndex = 14;
             btnCreateChat.Text = "Create";
             btnCreateChat.UseVisualStyleBackColor = true;
@@ -157,10 +158,10 @@
             // 
             // btnRemoveChat
             // 
-            btnRemoveChat.Location = new Point(113, 0);
+            btnRemoveChat.Location = new Point(134, 0);
             btnRemoveChat.Margin = new Padding(2);
             btnRemoveChat.Name = "btnRemoveChat";
-            btnRemoveChat.Size = new Size(78, 32);
+            btnRemoveChat.Size = new Size(60, 32);
             btnRemoveChat.TabIndex = 15;
             btnRemoveChat.Text = "Remove";
             btnRemoveChat.UseVisualStyleBackColor = true;
@@ -311,6 +312,7 @@
             // 
             // pnlBottom
             // 
+            pnlBottom.Controls.Add(btnEdit);
             pnlBottom.Controls.Add(tbMessage);
             pnlBottom.Controls.Add(lblMessageLength);
             pnlBottom.Controls.Add(btnAttachFile);
@@ -322,6 +324,17 @@
             pnlBottom.Name = "pnlBottom";
             pnlBottom.Size = new Size(984, 57);
             pnlBottom.TabIndex = 17;
+            // 
+            // btnEdit
+            // 
+            btnEdit.Location = new Point(77, 0);
+            btnEdit.Margin = new Padding(2);
+            btnEdit.Name = "btnEdit";
+            btnEdit.Size = new Size(53, 32);
+            btnEdit.TabIndex = 17;
+            btnEdit.Text = "Edit";
+            btnEdit.UseVisualStyleBackColor = true;
+            btnEdit.Click += btnEdit_Click;
             // 
             // lblMessageLength
             // 
@@ -396,6 +409,7 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripStatusLabel userBanned;
         private Label lblMessageLength;
+        private Button btnEdit;
         private Panel pnlBottom;
     }
 }

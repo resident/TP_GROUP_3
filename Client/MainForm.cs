@@ -23,7 +23,7 @@ namespace Client
         public readonly MessagesCollection Messages = new();
         public Chat? GeneralChat;
         public Chat? CurrentChat;
-        
+
 
         public bool Connecting
         {
@@ -126,7 +126,7 @@ namespace Client
                 userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
                 userBanned.Text = LoggedIn && User!.IsBanned ? "Banned" : "";
             };
-            
+
             InitializeComponent();
 
             if (File.Exists("user.json")) User = User.Load("user.json");
@@ -195,7 +195,7 @@ namespace Client
 
             Connecting = true;
 
-            while(Connecting)
+            while (Connecting)
             {
                 try
                 {
@@ -341,7 +341,7 @@ namespace Client
         private async void timerSync_Tick(object sender, EventArgs e)
         {
             if (!Connected) return;
-            
+
             try
             {
                 // KeepAlive
@@ -500,8 +500,8 @@ namespace Client
 
         private void ChangeLocation()
         {
-            btnAttachFile.Location = tbMessage.Location with {X = tbMessage.Location.X + tbMessage.Width + 2};
-            btnSend.Location = btnAttachFile.Location with {X = btnAttachFile.Location.X + btnAttachFile.Width + 2};
+            btnAttachFile.Location = tbMessage.Location with { X = tbMessage.Location.X + tbMessage.Width + 2 };
+            btnSend.Location = btnAttachFile.Location with { X = btnAttachFile.Location.X + btnAttachFile.Width + 2 };
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -512,6 +512,15 @@ namespace Client
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
             ChangeLocation();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var form = new EditChatForm();
+
+            form.Owner = this;
+
+            form.ShowDialog();
         }
     }
 }
