@@ -10,10 +10,10 @@ public class Chat : ICloneable, IEquatable<Chat>
     public string Id;
     public string Title;
     public readonly UsersCollection Users;
-    public List<ChatMessage> Messages;
+    public MessagesCollection Messages;
     public DateTime CreatedAt = DateTime.Now;
     
-    public Chat(string title, UsersCollection? users = null, List<ChatMessage>? messages = null)
+    public Chat(string title, UsersCollection? users = null, MessagesCollection? messages = null)
     {
         Id = Guid.NewGuid().ToString();
         Title = title;
@@ -68,7 +68,7 @@ public class Chat : ICloneable, IEquatable<Chat>
     {
         Save(force);
 
-        Messages.ForEach(m => m.Save(force));
+        foreach (var message in Messages) message.Save(true);
     }
 
     public void Remove()
@@ -100,7 +100,9 @@ public class Chat : ICloneable, IEquatable<Chat>
 
     public void Sort()
     {
-        Messages.Sort((m1, m2) => m1.CreatedAt.CompareTo(m2.CreatedAt));
+        var sorted = Messages.OrderBy(m => m.CreatedAt).ToList();
+        Messages.Clear();
+        Messages.AddMessages(sorted);
     }
 
     public string ToJson(bool full = false)
