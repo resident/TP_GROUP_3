@@ -353,6 +353,7 @@
             // 
             // MainForm
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 561);
@@ -367,6 +368,8 @@
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             SizeChanged += MainForm_SizeChanged;
+            DragDrop += MainForm_DragDrop;
+            DragEnter += MainForm_DragEnter;
             menu.ResumeLayout(false);
             menu.PerformLayout();
             status.ResumeLayout(false);
