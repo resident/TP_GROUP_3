@@ -31,10 +31,26 @@ namespace Client
             Settings.Load(new Dictionary<string, object>
             {
                 {"server_ip_address", "127.0.0.1"},
-                {"server_port", 1234}
+                {"server_port", 1234},
+                {
+                    "log", new Dictionary<string, object>
+                    {
+                        {"enabled", true},
+                        {"path", "client.log"}
+                    }
+                }
             });
 
+            var user1 = new User() { Id = "123" };
+            var user2 = new User() { Id = "123" };
+            var res = user1.Equals(user2);
+
+            Alert.Show($"{user1.Id} == {user2.Id} => {res.ToString()}");
+            Environment.Exit(0);
+
             Application.Run(MainForm);
+
+            
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)

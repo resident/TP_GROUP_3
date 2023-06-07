@@ -22,7 +22,7 @@ namespace Client
         {
             if (this.Owner is MainForm mainForm)
             {
-                lbUsers.DataSource = mainForm.CurrentChat.Users;
+                lbUsers.DataSource = mainForm.CurrentChat?.Users;
             }
         }
 
@@ -74,7 +74,7 @@ namespace Client
             // для обновления списка в lb, иначе очень странно работает
             if (this.Owner is MainForm mainForm)
             {
-                lbUsers.DataSource = mainForm.CurrentChat.Users;
+                lbUsers.DataSource = mainForm.CurrentChat?.Users;
             }
         }
     }

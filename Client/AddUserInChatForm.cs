@@ -20,7 +20,7 @@ namespace Client
 
         private void AddUserInChatForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner.Owner is MainForm mainForm)
+            if (this.Owner?.Owner is MainForm mainForm)
             {
                 lbUsers.DataSource = mainForm.RegisteredUsers;
             }
@@ -30,30 +30,28 @@ namespace Client
         {
             if (lbUsers.SelectedItems.Count == 0) return;
 
-            if (this.Owner.Owner is MainForm mainForm)
+            if (this.Owner?.Owner is not MainForm mainForm) return;
+            if (null == mainForm.CurrentChat) return;
+
+            var users = lbUsers.SelectedItems.Cast<User>().ToList();
+
+            var request = new Request("AddUserInChat");
+
+            request.Payload.Add("users", users);
+            request.Payload.Add("chat", mainForm.CurrentChat);
+
+            mainForm.Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+
+
+            if (response.IsStatusOk())
             {
-                if (null == mainForm.CurrentChat) return;
-
-                List<User> users = lbUsers.SelectedItems.Cast<User>().ToList();
-
-                var request = new Request("AddUserInChat");
-
-                request.Payload.Add("users", users);
-                request.Payload.Add("chat", mainForm.CurrentChat);
-
-                mainForm.Client.SendMessage(request.ToJson());
-
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
-
-
-                if (response.IsStatusOk())
-                {
-                    mainForm.CurrentChat.Users.AddUsers(users);
-                    lbUsers.DataSource = mainForm.RegisteredUsers;
-                }
-                else
-                    Alert.Error(response.Message);
+                mainForm.CurrentChat.Users.AddUsers(users);
+                lbUsers.DataSource = mainForm.RegisteredUsers;
             }
+            else
+                Alert.Error(response.Message);
         }
     }
 }

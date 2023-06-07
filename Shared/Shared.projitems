@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Converters\SynchronizedDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Request.cs" />

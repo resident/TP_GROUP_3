@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Server
 {
@@ -22,24 +23,32 @@ namespace Server
             Console.BackgroundColor = oldBackgroundColor;
         }
 
-        public static void Show(string message)
+        public static void Show(string message, bool log = true)
         {
             Message(message);
+
+            if (log) Log.Write(message);
         }
 
-        public static void Successful(string message)
+        public static void Successful(string message, bool log = true)
         {
             Message(message, ConsoleColor.Green);
+
+            if (log) Log.Write(message, Log.TypeNotice);
         }
 
-        public static void Warning(string message)
+        public static void Warning(string message, bool log = true)
         {
             Message(message, ConsoleColor.Yellow);
+
+            if (log) Log.Write(message, Log.TypeWarning);
         }
 
-        public static void Error(string message)
+        public static void Error(string message, bool log = true)
         {
             Message(message, ConsoleColor.Red);
+
+            if (log) Log.Write(message, Log.TypeError);
         }
     }
 }
