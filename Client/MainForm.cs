@@ -18,6 +18,8 @@ namespace Client
         private event EventHandler UserChanged;
         public bool LoggedIn;
         private string? _attachedFilePath;
+        private bool _fileAttached;
+        private event EventHandler AttachedFilePathChanged;
         public readonly UsersCollection RegisteredUsers = new();
         public readonly ChatsCollection Chats = new();
         public readonly MessagesCollection Messages = new();
@@ -65,6 +67,19 @@ namespace Client
             }
         }
 
+        public string? AttachedFilePath
+        {
+            get => _attachedFilePath;
+            set
+            {
+                if (_attachedFilePath != value)
+                {
+                    _attachedFilePath = value;
+                    OnAttachedFilePathChanged();
+                }
+            }
+        }
+
         private void OnConnectingChanged()
         {
             ConnectingChanged?.Invoke(this, EventArgs.Empty);
@@ -78,6 +93,11 @@ namespace Client
         private void OnUserChanged()
         {
             UserChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnAttachedFilePathChanged()
+        {
+            AttachedFilePathChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public MainForm()
@@ -134,6 +154,16 @@ namespace Client
 
                 userStatus.Text = LoggedIn ? User!.IsActive ? "Status Active" : "Status Inactive" : "";
                 userBanned.Text = LoggedIn && User!.IsBanned ? "Banned" : "";
+            };
+
+            AttachedFilePathChanged += delegate
+            {
+                _fileAttached = !string.IsNullOrWhiteSpace(AttachedFilePath);
+
+                tbMessage.ReadOnly = _fileAttached;
+                tbMessage.Text = _fileAttached ? Path.GetFileName(AttachedFilePath) : string.Empty;
+
+                btnAttachFile.Text = _fileAttached ? "Detach file" : "Attach file";
             };
 
             InitializeComponent();
@@ -287,11 +317,19 @@ namespace Client
 
         private void btnAttachFile_Click(object sender, EventArgs e)
         {
-            var openFileDialog = new OpenFileDialog();
+            if (_fileAttached)
+            {
+                AttachedFilePath = null;
+            }
+            else
+            {
 
-            openFileDialog.Multiselect = false;
+                var openFileDialog = new OpenFileDialog();
 
-            _attachedFilePath = openFileDialog.ShowDialog() == DialogResult.OK ? openFileDialog.FileName : null;
+                openFileDialog.Multiselect = false;
+
+                AttachedFilePath = openFileDialog.ShowDialog() == DialogResult.OK ? openFileDialog.FileName : null;
+            }
         }
 
         private async void btnSend_Click(object sender, EventArgs e)
@@ -306,7 +344,7 @@ namespace Client
 
             if (lbChats.SelectedItem is not Chat chat) return;
 
-            var chatFile = _attachedFilePath != null ? new ChatFile(_attachedFilePath) : null;
+            var chatFile = AttachedFilePath != null ? new ChatFile(AttachedFilePath) : null;
             var chatMessage = new ChatMessage(User, chat.Id, tbMessage.Text, chatFile);
 
             var request = new Request("SendChatMessage");
@@ -318,7 +356,7 @@ namespace Client
 
             tbMessage.Text = string.Empty;
 
-            _attachedFilePath = null;
+            AttachedFilePath = null;
 
             var response = Response.FromJson(await Client.ReceiveMessage()) ?? new Response();
 
@@ -531,6 +569,18 @@ namespace Client
             form.Owner = this;
 
             form.ShowDialog();
+        }
+
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            if (null == e.Data) return;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            if (null == e.Data || !e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] files) AttachedFilePath = files.First();
         }
     }
 }
