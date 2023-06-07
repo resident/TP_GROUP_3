@@ -21,35 +21,38 @@ namespace Client
 
         private void EditChatForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm)
+            if (this.Owner is MainForm mainForm && mainForm.CurrentChat?.Users != null)
             {
                 lbUsers.DataSource = mainForm.RegisteredUsers;
-                foreach (var user in mainForm.CurrentChat.Users) 
+                tbChatTitle.Text = mainForm.CurrentChat.Title;
+
+                lbUsers.SelectedItems.Clear();
+                foreach (var user in mainForm.CurrentChat.Users)
                 {
-                    lbUsers.Items.Contains(user);
-                    lbUsers.SelectedItem = user;
+                    if(lbUsers.Items.Contains(user))
+                        lbUsers.SelectedItem = user;
                 }
             }
         }
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            //if (lbUsers.SelectedItems.Count == 0) return;
 
             if (this.Owner is MainForm mainForm)
             {
                 if (null == mainForm.CurrentChat) return;
 
                 List<User> users = lbUsers.SelectedItems.Cast<User>().ToList();
-                UsersCollection usersCollection = new UsersCollection();
-                usersCollection.AddUsers(users);
-
-                Chat chat = new Chat(tbChatTitle.Text, usersCollection, mainForm.CurrentChat.Messages);
 
                 var request = new Request("UpdateChat");
 
+                mainForm.CurrentChat.Users.Clear();
+                mainForm.CurrentChat.Users.AddUsers(users);
+                mainForm.CurrentChat.Title = tbChatTitle.Text;
+                var chat = mainForm.CurrentChat.Clone();
+
                 request.Payload.Add("newChat", chat);
-                request.Payload.Add("oldChat", mainForm.CurrentChat);
 
                 mainForm.Client.SendMessage(request.ToJson());
 
@@ -58,14 +61,11 @@ namespace Client
 
                 if (response.IsStatusOk())
                 {
-                    mainForm.Chats.RemoveById(mainForm.CurrentChat.Id);
-                    mainForm.Chats.Add(chat);
-                    mainForm.CurrentChat = chat;
-                    lbUsers.DataSource = mainForm.RegisteredUsers;
-
+                    this.Close();
                 }
                 else
                     Alert.Error(response.Message);
+
             }
         }
     }

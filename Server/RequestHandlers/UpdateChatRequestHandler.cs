@@ -19,18 +19,18 @@ namespace Server.RequestHandlers
             try
             {
                 var newChat = request.Get<Chat>("newChat");
-                var oldChat = request.Get<Chat>("oldChat");
 
-                oldChat = ChatsRepository.Items.GetById(oldChat.Id);
+                var chat = ChatsRepository.Items.GetById(newChat.Id);
                 
                 var generalChatSettings = Settings.Get<Dictionary<string, string>>("general_chat");
 
-                if (newChat!.Id == generalChatSettings!["id"])
+                if (chat!.Id == generalChatSettings!["id"])
                     throw new RequestHandlerException("Can't add user in general chat");
 
-                ChatsRepository.Items.RemoveById(oldChat.Id);
-                ChatsRepository.Items.AddChat(newChat);
-                newChat.Save();
+                chat.Title = newChat.Title;
+                chat.Users.Clear();
+                chat.Users.AddUsers(newChat.Users);
+                chat.Save(true);
 
                 Sync.UpdateLastChangeTime();
 

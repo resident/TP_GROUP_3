@@ -94,8 +94,10 @@
             Controls.Add(btnSave);
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "EditChatForm";
-            Text = "EditChatForm";
+            StartPosition = FormStartPosition.CenterParent;
+            Text = "Edit chat";
             Load += EditChatForm_Load;
             ResumeLayout(false);
             PerformLayout();
