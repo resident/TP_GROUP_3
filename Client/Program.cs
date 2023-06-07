@@ -41,16 +41,7 @@ namespace Client
                 }
             });
 
-            var user1 = new User() { Id = "123" };
-            var user2 = new User() { Id = "123" };
-            var res = user1.Equals(user2);
-
-            Alert.Show($"{user1.Id} == {user2.Id} => {res.ToString()}");
-            Environment.Exit(0);
-
             Application.Run(MainForm);
-
-            
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
