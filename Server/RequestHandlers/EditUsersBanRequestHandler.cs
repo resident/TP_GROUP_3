@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.RequestHandlers
 {
-    internal class UnbanUsersRequestHandler : RequestHandler
+    internal class EditUsersBanRequestHandler : RequestHandler
     {
         public override void Handle(TcpClient client, Request request)
         {
@@ -18,24 +18,27 @@ namespace Server.RequestHandlers
             try
             {
                 var users = request.Get<UsersCollection>("users");
-                var unbannedUsersCount = 0;
+                var banExpirations = request.Get<List<DateTime>>("banExpirations");
 
-                foreach (var user in users)
-                {
-                    var registeredUser = UsersRepository.RegisteredUsers.GetById(user.Id);
+                var editedUsersCount = 0;
+
+                for (int i = 0; i < users.Count; i++)
+                {               
+                    var registeredUser = UsersRepository.RegisteredUsers.GetById(users[i].Id);
 
                     if (registeredUser == null || registeredUser.IsAdmin) continue;
 
-                    registeredUser.IsBanned = false;
+                    registeredUser.IsBanned = true;
+                    registeredUser.BanExpiration = banExpirations[i];
                     registeredUser.Save(true);
 
-                    unbannedUsersCount++;
+                    editedUsersCount++;
                 }
 
                 Sync.UpdateLastChangeTime();
 
                 response.Status = Response.StatusOk;
-                response.Message = $"Unbanned {unbannedUsersCount} users";
+                response.Message = $"Edited {editedUsersCount} users";
             }
             catch (Exception ex)
             {

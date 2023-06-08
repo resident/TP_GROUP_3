@@ -85,22 +85,57 @@ namespace Client
 
         private async void btnUnban_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            if (this.Owner is not MainForm form) return;
 
-            if (this.Owner is MainForm mainForm)
+            var users = new UsersCollection();
+            users.AddUsers(lbUsers.SelectedItems.Cast<User>());
+
+            var request = new Request("UnbanUsers");
+            request.Payload.Add("users", users);
+            form.Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await form.Client.ReceiveMessage()) ?? new Response();
+
+            if (response.IsStatusOk())
+                Alert.Show(response.Message);
+            else
+                Alert.Error(response.Message);
+        }
+
+        private void btnEditBan_Click(object sender, EventArgs e)
+        {
+            bool isEveryOneBanned(UsersCollection users)
             {
-                var request = new Request("UnbanUsers");
+                bool ok = true;
 
-                request.Payload.Add("users", lbUsers.SelectedItems);
+                foreach(var user in users)
+                {
+                    if(!user.IsBanned)
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
 
-                mainForm.Client.SendMessage(request.ToJson());
+                return ok;
+            }
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+            if (this.Owner is not MainForm) return;
 
-                if (response.IsStatusOk())
-                    Alert.Successful(response.Message);
-                else
-                    Alert.Error(response.Message);
+            var users = new UsersCollection();
+
+            users.AddUsers(lbUsers.SelectedItems.Cast<User>());
+
+            if (isEveryOneBanned(users))
+            {
+                var editUsersBanForm = new EditBanForm(users);
+
+                editUsersBanForm.Owner = this;
+                editUsersBanForm.ShowDialog();
+            }
+            else
+            {
+                Alert.Error("Not all selected users are banned");
             }
         }
     }
