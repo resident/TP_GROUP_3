@@ -110,7 +110,7 @@ namespace Client
                     banExpirations.Add(_users[i].BanExpiration.AddSeconds(addToBan));
                 }
 
-                var request = new Request("BanUsers");
+                var request = new Request("EditUsersBan");
 
                 request.Payload.Add("users", _users);
                 request.Payload.Add("banExpirations", banExpirations);
@@ -150,7 +150,7 @@ namespace Client
             }
         }
 
-        private void rbAddToCurrent_CheckedChanged(object sender, EventArgs e)
+        private void rbAddToCurrent_Click(object sender, EventArgs e)
         {
             if (rbAddToCurrent.Checked)
             {
@@ -168,7 +168,7 @@ namespace Client
             }
         }
 
-        private void rbSetNew_CheckedChanged(object sender, EventArgs e)
+        private void rbSetNew_Click(object sender, EventArgs e)
         {
             if (rbSetNew.Checked)
             {

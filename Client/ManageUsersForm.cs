@@ -104,7 +104,39 @@ namespace Client
 
         private void btnEditBan_Click(object sender, EventArgs e)
         {
+            bool isEveryOneBanned(UsersCollection users)
+            {
+                bool ok = true;
+
+                foreach(var user in users)
+                {
+                    if(!user.IsBanned)
+                    {
+                        ok = false;
+                        break;
+                    }
+                }
+
+                return ok;
+            }
+
             if (this.Owner is not MainForm) return;
+
+            var users = new UsersCollection();
+
+            users.AddUsers(lbUsers.SelectedItems.Cast<User>());
+
+            if (isEveryOneBanned(users))
+            {
+                var editUsersBanForm = new EditBanForm(users);
+
+                editUsersBanForm.Owner = this;
+                editUsersBanForm.ShowDialog();
+            }
+            else
+            {
+                Alert.Error("Not all selected users are banned");
+            }
         }
     }
 }

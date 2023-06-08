@@ -180,6 +180,7 @@
             rbForever.TabStop = true;
             rbForever.Text = "forever";
             rbForever.UseVisualStyleBackColor = true;
+            rbForever.CheckedChanged += RadioButtonChanged;
             // 
             // rb6Month
             // 
@@ -191,6 +192,7 @@
             rb6Month.TabStop = true;
             rb6Month.Text = "6 month";
             rb6Month.UseVisualStyleBackColor = true;
+            rb6Month.CheckedChanged += RadioButtonChanged;
             // 
             // rb3Year
             // 
@@ -202,6 +204,7 @@
             rb3Year.TabStop = true;
             rb3Year.Text = "3 year";
             rb3Year.UseVisualStyleBackColor = true;
+            rb3Year.CheckedChanged += RadioButtonChanged;
             // 
             // rb1Year
             // 
@@ -213,6 +216,7 @@
             rb1Year.TabStop = true;
             rb1Year.Text = "1 year";
             rb1Year.UseVisualStyleBackColor = true;
+            rb1Year.CheckedChanged += RadioButtonChanged;
             // 
             // rb3Month
             // 
@@ -224,6 +228,7 @@
             rb3Month.TabStop = true;
             rb3Month.Text = "3 month";
             rb3Month.UseVisualStyleBackColor = true;
+            rb3Month.CheckedChanged += RadioButtonChanged;
             // 
             // rb1Month
             // 
@@ -235,6 +240,7 @@
             rb1Month.TabStop = true;
             rb1Month.Text = "1 month";
             rb1Month.UseVisualStyleBackColor = true;
+            rb1Month.CheckedChanged += RadioButtonChanged;
             // 
             // rb1Week
             // 
@@ -246,6 +252,7 @@
             rb1Week.TabStop = true;
             rb1Week.Text = "1 week";
             rb1Week.UseVisualStyleBackColor = true;
+            rb1Week.CheckedChanged += RadioButtonChanged;
             // 
             // rb1Day
             // 
@@ -257,6 +264,7 @@
             rb1Day.TabStop = true;
             rb1Day.Text = "1 day";
             rb1Day.UseVisualStyleBackColor = true;
+            rb1Day.CheckedChanged += RadioButtonChanged;
             // 
             // rb12H
             // 
@@ -268,6 +276,7 @@
             rb12H.TabStop = true;
             rb12H.Text = "12 h";
             rb12H.UseVisualStyleBackColor = true;
+            rb12H.CheckedChanged += RadioButtonChanged;
             // 
             // rb1H
             // 
@@ -279,6 +288,7 @@
             rb1H.TabStop = true;
             rb1H.Text = "1 h";
             rb1H.UseVisualStyleBackColor = true;
+            rb1H.CheckedChanged += RadioButtonChanged;
             // 
             // rb30Min
             // 
@@ -290,6 +300,7 @@
             rb30Min.TabStop = true;
             rb30Min.Text = "30 min";
             rb30Min.UseVisualStyleBackColor = true;
+            rb30Min.CheckedChanged += RadioButtonChanged;
             // 
             // rb15Min
             // 
@@ -301,6 +312,7 @@
             rb15Min.TabStop = true;
             rb15Min.Text = "15 min";
             rb15Min.UseVisualStyleBackColor = true;
+            rb15Min.CheckedChanged += RadioButtonChanged;
             // 
             // rb10Min
             // 
@@ -312,6 +324,7 @@
             rb10Min.TabStop = true;
             rb10Min.Text = "10 min";
             rb10Min.UseVisualStyleBackColor = true;
+            rb10Min.CheckedChanged += RadioButtonChanged;
             // 
             // rb5Min
             // 
@@ -323,6 +336,7 @@
             rb5Min.TabStop = true;
             rb5Min.Text = "5 min";
             rb5Min.UseVisualStyleBackColor = true;
+            rb5Min.CheckedChanged += RadioButtonChanged;
             // 
             // rb45Sec
             // 
@@ -334,6 +348,7 @@
             rb45Sec.TabStop = true;
             rb45Sec.Text = "45 sec";
             rb45Sec.UseVisualStyleBackColor = true;
+            rb45Sec.CheckedChanged += RadioButtonChanged;
             // 
             // btnApply
             // 
@@ -455,6 +470,7 @@
             rbAdd6Month.TabStop = true;
             rbAdd6Month.Text = "+6 month";
             rbAdd6Month.UseVisualStyleBackColor = true;
+            rbAdd6Month.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd3Year
             // 
@@ -466,6 +482,7 @@
             rbAdd3Year.TabStop = true;
             rbAdd3Year.Text = "+3 year";
             rbAdd3Year.UseVisualStyleBackColor = true;
+            rbAdd3Year.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd1Year
             // 
@@ -477,6 +494,7 @@
             rbAdd1Year.TabStop = true;
             rbAdd1Year.Text = "+1 year";
             rbAdd1Year.UseVisualStyleBackColor = true;
+            rbAdd1Year.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd3Month
             // 
@@ -488,6 +506,7 @@
             rbAdd3Month.TabStop = true;
             rbAdd3Month.Text = "+3 month";
             rbAdd3Month.UseVisualStyleBackColor = true;
+            rbAdd3Month.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd1Month
             // 
@@ -499,6 +518,7 @@
             rbAdd1Month.TabStop = true;
             rbAdd1Month.Text = "+1 month";
             rbAdd1Month.UseVisualStyleBackColor = true;
+            rbAdd1Month.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd1Week
             // 
@@ -510,6 +530,7 @@
             rbAdd1Week.TabStop = true;
             rbAdd1Week.Text = "+1 week";
             rbAdd1Week.UseVisualStyleBackColor = true;
+            rbAdd1Week.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd1Day
             // 
@@ -521,6 +542,7 @@
             rbAdd1Day.TabStop = true;
             rbAdd1Day.Text = "+1 day";
             rbAdd1Day.UseVisualStyleBackColor = true;
+            rbAdd1Day.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd12H
             // 
@@ -532,6 +554,7 @@
             rbAdd12H.TabStop = true;
             rbAdd12H.Text = "+12 h";
             rbAdd12H.UseVisualStyleBackColor = true;
+            rbAdd12H.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd1H
             // 
@@ -543,6 +566,7 @@
             rbAdd1H.TabStop = true;
             rbAdd1H.Text = "+1 h";
             rbAdd1H.UseVisualStyleBackColor = true;
+            rbAdd1H.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd30Min
             // 
@@ -554,6 +578,7 @@
             rbAdd30Min.TabStop = true;
             rbAdd30Min.Text = "+30 min";
             rbAdd30Min.UseVisualStyleBackColor = true;
+            rbAdd30Min.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd15Min
             // 
@@ -565,6 +590,7 @@
             rbAdd15Min.TabStop = true;
             rbAdd15Min.Text = "+15 min";
             rbAdd15Min.UseVisualStyleBackColor = true;
+            rbAdd15Min.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd10Min
             // 
@@ -576,6 +602,7 @@
             rbAdd10Min.TabStop = true;
             rbAdd10Min.Text = "+10 min";
             rbAdd10Min.UseVisualStyleBackColor = true;
+            rbAdd10Min.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd5Min
             // 
@@ -587,6 +614,7 @@
             rbAdd5Min.TabStop = true;
             rbAdd5Min.Text = "+5 min";
             rbAdd5Min.UseVisualStyleBackColor = true;
+            rbAdd5Min.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAdd45Sec
             // 
@@ -598,6 +626,7 @@
             rbAdd45Sec.TabStop = true;
             rbAdd45Sec.Text = "+45 sec";
             rbAdd45Sec.UseVisualStyleBackColor = true;
+            rbAdd45Sec.CheckedChanged += RadioButtonAddChanged;
             // 
             // rbAddToCurrent
             // 
@@ -609,7 +638,7 @@
             rbAddToCurrent.TabIndex = 18;
             rbAddToCurrent.TabStop = true;
             rbAddToCurrent.UseVisualStyleBackColor = true;
-            rbAddToCurrent.CheckedChanged += rbAddToCurrent_CheckedChanged;
+            rbAddToCurrent.Click += rbAddToCurrent_Click;
             // 
             // rbSetNew
             // 
@@ -619,7 +648,7 @@
             rbSetNew.Size = new Size(14, 13);
             rbSetNew.TabIndex = 19;
             rbSetNew.UseVisualStyleBackColor = true;
-            rbSetNew.CheckedChanged += rbSetNew_CheckedChanged;
+            rbSetNew.Click += rbSetNew_Click;
             // 
             // EditBanForm
             // 
