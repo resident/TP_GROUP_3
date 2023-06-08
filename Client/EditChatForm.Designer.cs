@@ -95,6 +95,7 @@
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "EditChatForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Edit chat";

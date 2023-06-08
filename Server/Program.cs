@@ -42,6 +42,8 @@ namespace Server
                 }
             });
 
+            DateTimeSync.UpdateTimeSpan();
+
             var adminCredentials = Settings.Get<Dictionary<string, string>>("default_admin_credentials");
 
             Alert.Warning($"Default admin account: {adminCredentials["login"]}:{adminCredentials["password"]}");
@@ -62,7 +64,7 @@ namespace Server
 
             var dateTimeSyncTimer = new System.Timers.Timer();
 
-            dateTimeSyncTimer.Interval = 2000;
+            dateTimeSyncTimer.Interval = 1000 * 60 * 10;
             dateTimeSyncTimer.Elapsed += new ElapsedEventHandler(delegate {DateTimeSync.UpdateTimeSpan();});
             dateTimeSyncTimer.AutoReset = true;
             dateTimeSyncTimer.Start();

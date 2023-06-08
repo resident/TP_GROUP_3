@@ -24,8 +24,6 @@ namespace Client
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            
-
             Shared.Json.Settings.SetGlobalJsonSettings();
 
             Settings.Load(new Dictionary<string, object>
@@ -47,6 +45,8 @@ namespace Client
                     }
                 }
             });
+
+            DateTimeSync.UpdateTimeSpan();
 
             Application.Run(MainForm);
         }

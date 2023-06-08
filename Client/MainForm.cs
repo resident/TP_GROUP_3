@@ -197,7 +197,7 @@ namespace Client
 
         private async void btnRemoveChat_Click(object sender, EventArgs e)
         {
-            if (null == CurrentChat) return;
+            if (CurrentChat is null) return;
 
             var request = new Request("RemoveChat");
 
@@ -389,8 +389,6 @@ namespace Client
         {
             try
             {
-                DateTimeSync.UpdateTimeSpan();
-
                 if (!Connected) return;
 
                 // KeepAlive
@@ -590,6 +588,8 @@ namespace Client
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            if (CurrentChat is null) return;
+
             var form = new EditChatForm();
 
             form.Owner = this;
@@ -612,6 +612,11 @@ namespace Client
         private void lbMessages_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete) DeleteMessageMenuItem_Click(lbMessages, EventArgs.Empty);
+        }
+
+        private void timerNtpSync_Tick(object sender, EventArgs e)
+        {
+            DateTimeSync.UpdateTimeSpan();
         }
     }
 }

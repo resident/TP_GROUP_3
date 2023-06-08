@@ -26,7 +26,7 @@ namespace Client
             lbUsers.DataSource = _users;
         }
 
-        private DateTime getNewExpirationDateSetNew()
+        private DateTime GetNewExpirationDateSetNew()
         {
             DateTime banExpiration;
 
@@ -34,31 +34,31 @@ namespace Client
             {
                 var timeSpan = int.Parse(tbOtherTimeSpan.Text);
 
-                banExpiration = _isOtherTimeSpanDays ? DateTime.Now.AddDays(timeSpan) : DateTime.Now.AddSeconds(timeSpan);
+                banExpiration = _isOtherTimeSpanDays ? DateTimeSync.UtcNow.AddDays(timeSpan) : DateTimeSync.UtcNow.AddSeconds(timeSpan);
             }
             else
             {
-                if (rb45Sec.Checked) banExpiration = DateTime.Now.AddSeconds(45);
-                else if (rb5Min.Checked) banExpiration = DateTime.Now.AddMinutes(5);
-                else if (rb10Min.Checked) banExpiration = DateTime.Now.AddMinutes(10);
-                else if (rb15Min.Checked) banExpiration = DateTime.Now.AddMinutes(15);
-                else if (rb30Min.Checked) banExpiration = DateTime.Now.AddMinutes(30);
-                else if (rb1H.Checked) banExpiration = DateTime.Now.AddHours(1);
-                else if (rb12H.Checked) banExpiration = DateTime.Now.AddHours(12);
-                else if (rb1Day.Checked) banExpiration = DateTime.Now.AddDays(1);
-                else if (rb1Week.Checked) banExpiration = DateTime.Now.AddDays(7);
-                else if (rb1Month.Checked) banExpiration = DateTime.Now.AddMonths(1);
-                else if (rb3Month.Checked) banExpiration = DateTime.Now.AddMonths(3);
-                else if (rb6Month.Checked) banExpiration = DateTime.Now.AddMonths(6);
-                else if (rb1Year.Checked) banExpiration = DateTime.Now.AddYears(1);
-                else if (rb3Year.Checked) banExpiration = DateTime.Now.AddYears(1);
+                if (rb45Sec.Checked) banExpiration = DateTimeSync.UtcNow.AddSeconds(45);
+                else if (rb5Min.Checked) banExpiration = DateTimeSync.UtcNow.AddMinutes(5);
+                else if (rb10Min.Checked) banExpiration = DateTimeSync.UtcNow.AddMinutes(10);
+                else if (rb15Min.Checked) banExpiration = DateTimeSync.UtcNow.AddMinutes(15);
+                else if (rb30Min.Checked) banExpiration = DateTimeSync.UtcNow.AddMinutes(30);
+                else if (rb1H.Checked) banExpiration = DateTimeSync.UtcNow.AddHours(1);
+                else if (rb12H.Checked) banExpiration = DateTimeSync.UtcNow.AddHours(12);
+                else if (rb1Day.Checked) banExpiration = DateTimeSync.UtcNow.AddDays(1);
+                else if (rb1Week.Checked) banExpiration = DateTimeSync.UtcNow.AddDays(7);
+                else if (rb1Month.Checked) banExpiration = DateTimeSync.UtcNow.AddMonths(1);
+                else if (rb3Month.Checked) banExpiration = DateTimeSync.UtcNow.AddMonths(3);
+                else if (rb6Month.Checked) banExpiration = DateTimeSync.UtcNow.AddMonths(6);
+                else if (rb1Year.Checked) banExpiration = DateTimeSync.UtcNow.AddYears(1);
+                else if (rb3Year.Checked) banExpiration = DateTimeSync.UtcNow.AddYears(1);
                 else banExpiration = DateTime.MaxValue;
             }
 
             return banExpiration;
         }
 
-        private long getAddToBan()
+        private long GetAddToBan()
         {
             long addToBan;
 
@@ -95,7 +95,7 @@ namespace Client
 
             if (rbAddToCurrent.Checked)
             {
-                long addToBan = getAddToBan();
+                var addToBan = GetAddToBan();
 
                 if (addToBan < 0)
                 {
@@ -103,7 +103,7 @@ namespace Client
                     return;
                 }
 
-                List<DateTime> banExpirations = new List<DateTime>();
+                var banExpirations = new List<DateTime>();
 
                 for (int i = 0; i < _users.Count; i++)
                 {
@@ -129,12 +129,12 @@ namespace Client
             }
             else
             {
-                DateTime _newBanExpirationDate = getNewExpirationDateSetNew();
+                var newBanExpirationDate = GetNewExpirationDateSetNew();
 
                 var request = new Request("BanUsers");
 
                 request.Payload.Add("users", _users);
-                request.Payload.Add("banExpiration", _newBanExpirationDate);
+                request.Payload.Add("banExpiration", newBanExpirationDate);
 
                 form.Client.SendMessage(request.ToJson());
 

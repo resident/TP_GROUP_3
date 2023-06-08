@@ -34,16 +34,16 @@ namespace Client
 
         private async void BanUsers(DateTime banExpiration)
         {
-            if (this.Owner?.Owner is not MainForm form) return;
+            if (this.Owner?.Owner is not MainForm mainForm) return;
 
             var request = new Request("BanUsers");
 
             request.Payload.Add("users", _users);
             request.Payload.Add("banExpiration", banExpiration);
 
-            form.Client.SendMessage(request.ToJson());
+            mainForm.Client.SendMessage(request.ToJson());
 
-            var response = Response.FromJson(await form.Client.ReceiveMessage()) ?? new Response();
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
             if (response.IsStatusOk())
                 Alert.Show(response.Message);
