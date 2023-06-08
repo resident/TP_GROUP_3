@@ -85,23 +85,26 @@ namespace Client
 
         private async void btnUnban_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            if (this.Owner is not MainForm form) return;
 
-            if (this.Owner is MainForm mainForm)
-            {
-                var request = new Request("UnbanUsers");
+            var users = new UsersCollection();
+            users.AddUsers(lbUsers.SelectedItems.Cast<User>());
 
-                request.Payload.Add("users", lbUsers.SelectedItems);
+            var request = new Request("UnbanUsers");
+            request.Payload.Add("users", users);
+            form.Client.SendMessage(request.ToJson());
 
-                mainForm.Client.SendMessage(request.ToJson());
+            var response = Response.FromJson(await form.Client.ReceiveMessage()) ?? new Response();
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+            if (response.IsStatusOk())
+                Alert.Show(response.Message);
+            else
+                Alert.Error(response.Message);
+        }
 
-                if (response.IsStatusOk())
-                    Alert.Successful(response.Message);
-                else
-                    Alert.Error(response.Message);
-            }
+        private void btnEditBan_Click(object sender, EventArgs e)
+        {
+            if (this.Owner is not MainForm) return;
         }
     }
 }
