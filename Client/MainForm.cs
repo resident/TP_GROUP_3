@@ -197,7 +197,7 @@ namespace Client
 
         private async void btnRemoveChat_Click(object sender, EventArgs e)
         {
-            if (null == CurrentChat) return;
+            if (CurrentChat is null) return;
 
             var request = new Request("RemoveChat");
 
@@ -588,6 +588,8 @@ namespace Client
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            if (CurrentChat is null) return;
+
             var form = new EditChatForm();
 
             form.Owner = this;
