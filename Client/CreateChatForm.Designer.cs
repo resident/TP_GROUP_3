@@ -98,6 +98,7 @@
             Controls.Add(lbUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(2);
+            MaximizeBox = false;
             Name = "CreateChatForm";
             StartPosition = FormStartPosition.CenterParent;
             Load += CreateChatForm_Load;

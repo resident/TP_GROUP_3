@@ -21,10 +21,10 @@ namespace Client
 
         private void CreateChatForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm)
-            {
-                lbUsers.DataSource = mainForm.RegisteredUsers;
-            }
+            if (this.Owner is not MainForm mainForm) return;
+
+            lbUsers.DataSource = mainForm.RegisteredUsers;
+            lbUsers.SelectedItems.Clear();
         }
 
         private async void btnCreateChat_Click(object sender, EventArgs e)

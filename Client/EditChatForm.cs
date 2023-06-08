@@ -21,52 +21,45 @@ namespace Client
 
         private void EditChatForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm && mainForm.CurrentChat?.Users != null)
-            {
-                lbUsers.DataSource = mainForm.RegisteredUsers;
-                tbChatTitle.Text = mainForm.CurrentChat.Title;
+            if (this.Owner is not MainForm {CurrentChat.Users: not null} mainForm) return;
 
-                lbUsers.SelectedItems.Clear();
-                foreach (var user in mainForm.CurrentChat.Users)
-                {
-                    if(lbUsers.Items.Contains(user))
-                        lbUsers.SelectedItem = user;
-                }
+            lbUsers.DataSource = mainForm.RegisteredUsers;
+            tbChatTitle.Text = mainForm.CurrentChat.Title;
+
+            lbUsers.SelectedItems.Clear();
+            foreach (var user in mainForm.CurrentChat.Users)
+            {
+                if (lbUsers.Items.Contains(user))
+                    lbUsers.SelectedItem = user;
             }
         }
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            //if (lbUsers.SelectedItems.Count == 0) return;
+            if (this.Owner is not MainForm {CurrentChat: not null} mainForm) return;
 
-            if (this.Owner is MainForm mainForm)
+            var users = lbUsers.SelectedItems.Cast<User>().ToList();
+
+            var request = new Request("UpdateChat");
+
+            mainForm.CurrentChat.Users.Clear();
+            mainForm.CurrentChat.Users.AddUsers(users);
+            mainForm.CurrentChat.Title = tbChatTitle.Text;
+            var chat = mainForm.CurrentChat.Clone();
+
+            request.Payload.Add("newChat", chat);
+
+            mainForm.Client.SendMessage(request.ToJson());
+
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+
+
+            if (response.IsStatusOk())
             {
-                if (null == mainForm.CurrentChat) return;
-
-                List<User> users = lbUsers.SelectedItems.Cast<User>().ToList();
-
-                var request = new Request("UpdateChat");
-
-                mainForm.CurrentChat.Users.Clear();
-                mainForm.CurrentChat.Users.AddUsers(users);
-                mainForm.CurrentChat.Title = tbChatTitle.Text;
-                var chat = mainForm.CurrentChat.Clone();
-
-                request.Payload.Add("newChat", chat);
-
-                mainForm.Client.SendMessage(request.ToJson());
-
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
-
-
-                if (response.IsStatusOk())
-                {
-                    this.Close();
-                }
-                else
-                    Alert.Error(response.Message);
-
+                this.Close();
             }
+            else
+                Alert.Error(response.Message);
         }
     }
 }

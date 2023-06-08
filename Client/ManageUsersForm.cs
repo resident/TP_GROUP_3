@@ -21,57 +21,51 @@ namespace Client
 
         private void ManageUsersForm_Load(object sender, EventArgs e)
         {
-            if (this.Owner is MainForm mainForm)
-            {
-                lbUsers.DataSource = mainForm.RegisteredUsers;
-            }
+            if (this.Owner is not MainForm mainForm) return;
+
+            lbUsers.DataSource = mainForm.RegisteredUsers;
+            lbUsers.ClearSelected();
         }
 
         private async void btnApprove_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            if (lbUsers.SelectedItems.Count == 0 || this.Owner is not MainForm mainForm) return;
 
-            if (this.Owner is MainForm mainForm)
-            {
-                var request = new Request("ActivateUsers");
+            var request = new Request("ActivateUsers");
 
-                request.Payload.Add("users", lbUsers.SelectedItems);
+            request.Payload.Add("users", lbUsers.SelectedItems);
 
-                mainForm.Client.SendMessage(request.ToJson());
+            mainForm.Client.SendMessage(request.ToJson());
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
-                if (response.IsStatusOk())
-                    Alert.Successful(response.Message);
-                else
-                    Alert.Error(response.Message);
-            }
+            if (response.IsStatusOk())
+                Alert.Successful(response.Message);
+            else
+                Alert.Error(response.Message);
         }
 
         private async void btnRemove_Click(object sender, EventArgs e)
         {
-            if (lbUsers.SelectedItems.Count == 0) return;
+            if (lbUsers.SelectedItems.Count == 0 || this.Owner is not MainForm mainForm) return;
 
-            if (this.Owner is MainForm mainForm)
-            {
-                var request = new Request("RemoveUsers");
+            var request = new Request("RemoveUsers");
 
-                request.Payload.Add("users", lbUsers.SelectedItems);
+            request.Payload.Add("users", lbUsers.SelectedItems);
 
-                mainForm.Client.SendMessage(request.ToJson());
+            mainForm.Client.SendMessage(request.ToJson());
 
-                var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
+            var response = Response.FromJson(await mainForm.Client.ReceiveMessage()) ?? new Response();
 
-                if (response.IsStatusOk())
-                    Alert.Successful(response.Message);
-                else
-                    Alert.Error(response.Message);
-            }
+            if (response.IsStatusOk())
+                Alert.Successful(response.Message);
+            else
+                Alert.Error(response.Message);
         }
 
         private void btnBan_Click(object sender, EventArgs e)
         {
-            if (this.Owner is not MainForm) return;
+            if (lbUsers.SelectedItems.Count == 0 || this.Owner is not MainForm) return;
 
             var users = new UsersCollection();
 
@@ -85,7 +79,7 @@ namespace Client
 
         private async void btnUnban_Click(object sender, EventArgs e)
         {
-            if (this.Owner is not MainForm form) return;
+            if (lbUsers.SelectedItems.Count == 0 || this.Owner is not MainForm form) return;
 
             var users = new UsersCollection();
             users.AddUsers(lbUsers.SelectedItems.Cast<User>());
@@ -104,13 +98,15 @@ namespace Client
 
         private void btnEditBan_Click(object sender, EventArgs e)
         {
+            if (lbUsers.SelectedItems.Count == 0 || this.Owner is not MainForm form) return;
+
             bool isEveryOneBanned(UsersCollection users)
             {
                 bool ok = true;
 
-                foreach(var user in users)
+                foreach (var user in users)
                 {
-                    if(!user.IsBanned)
+                    if (!user.IsBanned)
                     {
                         ok = false;
                         break;
@@ -119,8 +115,6 @@ namespace Client
 
                 return ok;
             }
-
-            if (this.Owner is not MainForm) return;
 
             var users = new UsersCollection();
 

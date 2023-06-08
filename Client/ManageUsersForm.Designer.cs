@@ -124,6 +124,7 @@
             Controls.Add(lblUsers);
             Controls.Add(lbUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "ManageUsersForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Manage Users";
