@@ -387,10 +387,12 @@ namespace Client
 
         private async void timerSync_Tick(object sender, EventArgs e)
         {
-            if (!Connected) return;
-
             try
             {
+                DateTimeSync.UpdateTimeSpan();
+
+                if (!Connected) return;
+
                 // KeepAlive
                 var request = new Request("KeepAlive");
 

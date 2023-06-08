@@ -32,6 +32,13 @@ namespace Server
                         {"enabled", true},
                         {"path", "server.log"}
                     }
+                },
+                {
+                    "ntp", new Dictionary<string, object>
+                    {
+                        {"host", "pool.ntp.org"},
+                        {"port", 123}
+                    }
                 }
             });
 
@@ -53,6 +60,13 @@ namespace Server
             banTimer.AutoReset = true;
             banTimer.Start();
 
+            var dateTimeSyncTimer = new System.Timers.Timer();
+
+            dateTimeSyncTimer.Interval = 2000;
+            dateTimeSyncTimer.Elapsed += new ElapsedEventHandler(delegate {DateTimeSync.UpdateTimeSpan();});
+            dateTimeSyncTimer.AutoReset = true;
+            dateTimeSyncTimer.Start();
+
             Sync.UpdateLastChangeTime();
 
             var server = new TcpServer("127.0.0.1", 1234);
@@ -64,7 +78,7 @@ namespace Server
         {
             foreach (var user in UsersRepository.RegisteredUsers)
             {
-                if (!user.IsBanned || user.BanExpiration > DateTime.Now) continue;
+                if (!user.IsBanned || user.BanExpiration > DateTimeSync.UtcNow) continue;
 
                 user.IsBanned = false;
                 user.BanExpiration = DateTime.MinValue;

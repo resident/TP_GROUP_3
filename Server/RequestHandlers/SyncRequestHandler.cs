@@ -19,7 +19,7 @@ namespace Server.RequestHandlers
 
             try
             {
-                var lastSyncTime = DateTime.Parse(request.GetString("lastSyncTime"));
+                var lastSyncTime = request.Get<DateTime>("lastSyncTime");
                 var user = request.Get<User>("user");
 
                 if (lastSyncTime < Sync.GetLastChangeTime())

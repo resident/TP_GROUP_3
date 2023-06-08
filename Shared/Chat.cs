@@ -11,7 +11,7 @@ public class Chat : ICloneable, IEquatable<Chat>
     public string Title;
     public readonly UsersCollection Users;
     public MessagesCollection Messages;
-    public DateTime CreatedAt = DateTime.Now;
+    public DateTime CreatedAt = DateTimeSync.UtcNow;
     
     public Chat(string title, UsersCollection? users = null, MessagesCollection? messages = null)
     {
