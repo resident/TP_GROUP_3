@@ -389,8 +389,6 @@ namespace Client
         {
             try
             {
-                DateTimeSync.UpdateTimeSpan();
-
                 if (!Connected) return;
 
                 // KeepAlive
@@ -612,6 +610,11 @@ namespace Client
         private void lbMessages_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete) DeleteMessageMenuItem_Click(lbMessages, EventArgs.Empty);
+        }
+
+        private void timerNtpSync_Tick(object sender, EventArgs e)
+        {
+            DateTimeSync.UpdateTimeSpan();
         }
     }
 }

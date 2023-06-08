@@ -60,6 +60,7 @@
             btnEdit = new Button();
             lblMessageLength = new Label();
             timerSync = new System.Windows.Forms.Timer(components);
+            timerNtpSync = new System.Windows.Forms.Timer(components);
             menu.SuspendLayout();
             status.SuspendLayout();
             pnlChat.SuspendLayout();
@@ -352,6 +353,12 @@
             timerSync.Interval = 2000;
             timerSync.Tick += timerSync_Tick;
             // 
+            // timerNtpSync
+            // 
+            timerNtpSync.Enabled = true;
+            timerNtpSync.Interval = 600000;
+            timerNtpSync.Tick += timerNtpSync_Tick;
+            // 
             // MainForm
             // 
             AllowDrop = true;
@@ -415,5 +422,6 @@
         private Label lblMessageLength;
         private Button btnEdit;
         private Panel pnlBottom;
+        private System.Windows.Forms.Timer timerNtpSync;
     }
 }
