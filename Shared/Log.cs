@@ -42,7 +42,7 @@ public static class Log
     {
         if (!Enabled || LogStream is null) return;
 
-        var log = $"{DateTime.Now} [{type}] {message}{Environment.NewLine}";
+        var log = $"{DateTimeSync.Now} [{type}] {message}{Environment.NewLine}";
 
         await LogStream.WriteAsync(Encoding.UTF8.GetBytes(log));
         await LogStream.FlushAsync();

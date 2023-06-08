@@ -19,6 +19,6 @@ public static class Sync
 
     public static void UpdateLastChangeTime()
     {
-        Storage.Set("lastChangeTime", DateTime.Now);
+        Storage.Set("lastChangeTime", DateTimeSync.UtcNow);
     }
 }

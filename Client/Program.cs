@@ -38,6 +38,13 @@ namespace Client
                         {"enabled", true},
                         {"path", "client.log"}
                     }
+                },
+                {
+                    "ntp", new Dictionary<string, object>
+                    {
+                        {"host", "pool.ntp.org"},
+                        {"port", 123}
+                    }
                 }
             });
 

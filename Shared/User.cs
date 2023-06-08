@@ -15,7 +15,7 @@ public class User : ICloneable, IEquatable<User>
     public bool IsActive = false;
     public DateTime BannedAt;
     public DateTime BanExpiration;
-    public DateTime CreatedAt = DateTime.Now;
+    public DateTime CreatedAt = DateTimeSync.UtcNow;
 
     public User()
     {

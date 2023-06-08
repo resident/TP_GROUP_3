@@ -33,6 +33,10 @@
             lblServerPort = new Label();
             tbServerPort = new TextBox();
             btnSave = new Button();
+            lblNtpPort = new Label();
+            tbNtpPort = new TextBox();
+            lblNtpHost = new Label();
+            tbNtpHost = new TextBox();
             SuspendLayout();
             // 
             // tbServerIpAddress
@@ -75,7 +79,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(8, 110);
+            btnSave.Location = new Point(8, 232);
             btnSave.Margin = new Padding(2);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(78, 33);
@@ -84,11 +88,53 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
+            // lblNtpPort
+            // 
+            lblNtpPort.AutoSize = true;
+            lblNtpPort.Location = new Point(8, 167);
+            lblNtpPort.Margin = new Padding(2, 0, 2, 0);
+            lblNtpPort.Name = "lblNtpPort";
+            lblNtpPort.Size = new Size(54, 15);
+            lblNtpPort.TabIndex = 13;
+            lblNtpPort.Text = "NTP Port";
+            // 
+            // tbNtpPort
+            // 
+            tbNtpPort.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNtpPort.Location = new Point(8, 183);
+            tbNtpPort.Margin = new Padding(2);
+            tbNtpPort.Name = "tbNtpPort";
+            tbNtpPort.Size = new Size(199, 32);
+            tbNtpPort.TabIndex = 12;
+            // 
+            // lblNtpHost
+            // 
+            lblNtpHost.AutoSize = true;
+            lblNtpHost.Location = new Point(8, 116);
+            lblNtpHost.Margin = new Padding(2, 0, 2, 0);
+            lblNtpHost.Name = "lblNtpHost";
+            lblNtpHost.Size = new Size(57, 15);
+            lblNtpHost.TabIndex = 11;
+            lblNtpHost.Text = "NTP Host";
+            // 
+            // tbNtpHost
+            // 
+            tbNtpHost.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            tbNtpHost.Location = new Point(8, 133);
+            tbNtpHost.Margin = new Padding(2);
+            tbNtpHost.Name = "tbNtpHost";
+            tbNtpHost.Size = new Size(199, 32);
+            tbNtpHost.TabIndex = 10;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(228, 153);
+            ClientSize = new Size(228, 276);
+            Controls.Add(lblNtpPort);
+            Controls.Add(tbNtpPort);
+            Controls.Add(lblNtpHost);
+            Controls.Add(tbNtpHost);
             Controls.Add(btnSave);
             Controls.Add(lblServerPort);
             Controls.Add(tbServerPort);
@@ -111,5 +157,9 @@
         private Label lblServerPort;
         private TextBox tbServerPort;
         private Button btnSave;
+        private Label lblNtpPort;
+        private TextBox tbNtpPort;
+        private Label lblNtpHost;
+        private TextBox tbNtpHost;
     }
 }

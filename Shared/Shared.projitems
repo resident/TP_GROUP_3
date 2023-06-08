@@ -15,12 +15,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ChatsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Collection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\MessagesCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DateTimeSync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Converters\SynchronizedDateTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Json\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkMessageReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ntp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Request.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Response.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />

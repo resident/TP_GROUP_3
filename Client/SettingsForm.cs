@@ -22,12 +22,22 @@ namespace Client
         {
             tbServerIpAddress.Text = Settings.Get<string>("server_ip_address");
             tbServerPort.Text = Settings.Get<int>("server_port").ToString();
+
+            var ntpSettings = Settings.Get<Dictionary<string, object>>("ntp");
+
+            tbNtpHost.Text = ntpSettings["host"].ToString();
+            tbNtpPort.Text = ntpSettings["port"].ToString();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             Settings.Set("server_ip_address", tbServerIpAddress.Text);
             Settings.Set("server_port", int.Parse(tbServerPort.Text));
+            Settings.Set("ntp", new Dictionary<string, object>
+            {
+                {"host", tbNtpHost.Text},
+                {"port", int.Parse(tbNtpPort.Text)},
+            });
             Settings.Save();
             Close();
         }

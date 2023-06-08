@@ -31,7 +31,7 @@ namespace Server.RequestHandlers
                     if (registeredUser == null || registeredUser.IsAdmin) continue;
 
                     registeredUser.IsBanned = true;
-                    registeredUser.BannedAt = DateTime.Now;
+                    registeredUser.BannedAt = DateTimeSync.UtcNow;
                     registeredUser.BanExpiration = banExpiration;
                     registeredUser.Save(true);
 

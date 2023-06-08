@@ -11,7 +11,7 @@ public class ChatMessage
     public string Message;
     public bool HasFile;
     public ChatFile? ChatFile;
-    public DateTime CreatedAt;
+    public DateTime CreatedAt = DateTimeSync.UtcNow;
     
     public ChatMessage(User sender, string chatId, string message, ChatFile? chatFile = null)
     {
@@ -21,7 +21,6 @@ public class ChatMessage
         Message = message;
         HasFile = null != chatFile;
         ChatFile = chatFile;
-        CreatedAt = DateTime.Now;
     }
 
     private string GetMessageDirectoryPath()
@@ -132,6 +131,6 @@ public class ChatMessage
     {
         var file = HasFile ? "\ud83d\udcc1" : "";
 
-        return $"{Sender.Login} :: {CreatedAt} :: {file} {Message}";
+        return $"{Sender.Login} :: {CreatedAt.ToLocalTime()} :: {file} {Message}";
     }
 }
